@@ -12,7 +12,7 @@ navbar:
       text: Applications
       menu:
         - text: "Transcriptome of macrophage response to six immune stimuli"
-          href: ../pkgdown/articles/TiDEomics_application_1.html
+          href: docs/articles/TiDEomics_application_1.html
 
 
 # home:
