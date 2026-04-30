@@ -1,0 +1,114 @@
+url: https://hte123.github.io/TiDEomics/
+# url: ~
+
+destination: docs
+
+navbar:
+  structure:
+    left: [intro, reference, articles] # tutorials, news
+    right: [search, github, lightswitch]
+  components:
+    articles:
+      text: Applications
+      menu:
+        - text: "Transcriptome of macrophage response to six immune stimuli"
+          href: ../pkgdown/articles/TiDEomics_application_1.html
+
+
+# home:
+#   title: "mypkg: Short tagline"
+#   tagline: "What the package does, in one line"
+#   splash: true
+#   contents:
+#     - text: |
+#         <p>One-paragraph description and installation instructions.</p>
+#     - image: "man/figures/home-figure.png"
+#       href: articles/getting-started.html
+
+reference:
+  - title: Data preparation
+    contents:
+      - create_input
+      - normalise_to_start
+      - split_groups
+      - merge_groups
+      - merge_replicates
+      - impute_groups
+
+  - title: Quality control
+    contents:
+      - plot_distribution
+      - plot_missing
+      - plot_ID
+      - plot_cv
+
+  - title: Feature properties
+    contents:
+      - calc_mean_sd
+      - plot_trend
+      - calc_feature_property
+      - summarise_feature_property
+      - group_specific_features
+      - decomp_variance
+      - plot_variance
+
+  - title: Sample relationship
+    contents:
+      - plot_cor_matrix
+      - plot_pca
+      - plot_pca_3D
+      - plot_pca_arrows
+      - plot_pca_by_group
+      - plot_pca_by_group_list
+      - plot_umap
+      - plot_umap_by_group
+      - plot_umap_by_group_list
+
+  - title: Pairwise differential expression
+    contents:
+      - DE_between_group
+      - DE_between_time
+      - plot_DE_between_time
+      - plot_volcano
+
+  - title: Segmented regression with Trendy
+    contents:
+      - run_Trendy
+      - summarise_Trendy
+      - extract_segment_trends
+      - plot_segments
+      - plot_breakpoints
+
+  - title: Temporal module identification with WGCNA
+    contents:
+      - prepare_WGCNA
+      - run_WGCNA
+      - plot_WGCNA
+      - plot_modules_h
+      - plot_modules_v
+      - summarise_module_pattern
+
+  - title: Functional enrichment
+    contents:
+      - enrichGO_rank
+      - enrichGO_list
+      - enrich_drug_list
+      - plot_GO
+
+  - title: Visualization settings
+    contents:
+      - set_custom_palette
+      - get_custom_palette
+
+  - title: Data sets in tutorial and examples
+    contents:
+      - example_net
+      - example_obj
+      - example_res_list
+      - tutorial_data
+      - tutorial_sample_info
+
+template:
+  bootstrap: 5
+  light-switch: true
+  theme: tango
