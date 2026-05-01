@@ -227,11 +227,11 @@ This package was developed using
 
 ## Data sets in tutorial and examples
 
-- [`example_net`](https://hte123.github.io/TiDEomics/reference/example_net.md)
-  :
+- [`tutorial_data`](https://hte123.github.io/TiDEomics/reference/tutorial_data.md)
+  : Dataset for TiDEomics tutorial, expression matrix
 
-  [`run_WGCNA()`](https://hte123.github.io/TiDEomics/reference/run_WGCNA.md)
-  output object for runnable examples
+- [`tutorial_sample_info`](https://hte123.github.io/TiDEomics/reference/tutorial_sample_info.md)
+  : Dataset for TiDEomics tutorial, sample information
 
 - [`example`](https://hte123.github.io/TiDEomics/reference/example_obj.md)
   : SummarizedExperiment object for runnable examples
@@ -241,11 +241,11 @@ This package was developed using
 
   `run_Trendy` output object for runnable examples
 
-- [`tutorial_data`](https://hte123.github.io/TiDEomics/reference/tutorial_data.md)
-  : Dataset for TiDEomics tutorial, expression matrix
+- [`example_net`](https://hte123.github.io/TiDEomics/reference/example_net.md)
+  :
 
-- [`tutorial_sample_info`](https://hte123.github.io/TiDEomics/reference/tutorial_sample_info.md)
-  : Dataset for TiDEomics tutorial, sample information
+  [`run_WGCNA()`](https://hte123.github.io/TiDEomics/reference/run_WGCNA.md)
+  output object for runnable examples
 
 # Articles
 

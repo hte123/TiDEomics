@@ -102,11 +102,11 @@ reference:
 
   - title: Data sets in tutorial and examples
     contents:
-      - example_net
-      - example_obj
-      - example_res_list
       - tutorial_data
       - tutorial_sample_info
+      - example_obj
+      - example_res_list
+      - example_net
 
 template:
   bootstrap: 5
