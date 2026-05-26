@@ -4,6 +4,8 @@ Plot the distribution of coefficient of variation (CV) for each feature
 with replicates. The CV is calculated as the standard deviation divided
 by the mean of the abundance values.
 
+Note: CV is only meaningful for positive-valued data.
+
 ## Usage
 
 ``` r
@@ -35,6 +37,7 @@ message will be printed indicating that CV cannot be calculated.
 ``` r
 data("example")
 plot_cv(example_obj)
+#> Data contains non-positive values. CV is only meaningful for positive data.
 #> Warning: no non-missing arguments to min; returning Inf
 #> Warning: no non-missing arguments to max; returning -Inf
 #> Warning: no non-missing arguments to min; returning Inf

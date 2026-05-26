@@ -13,6 +13,7 @@ DE_between_time(
   assay = c(1, 2),
   adjP_thres = 0.05,
   logFC_thres = 1,
+  trend = FALSE,
   fontsize = 8
 )
 ```
@@ -49,6 +50,15 @@ DE_between_time(
   (Optional) Threshold for log2 fold change to consider a feature as
   differentially expressed (default is 1)
 
+- trend:
+
+  (Optional) Logical, passed to
+  [`limma::eBayes()`](https://rdrr.io/pkg/limma/man/ebayes.html). Set to
+  `TRUE` for RNA-seq count-derived data to model the mean-variance
+  trend. Leave as `FALSE` (default) for microarray, proteomics,
+  metabolomics, or other log-intensity data where the mean-variance
+  relationship is typically flat.
+
 - fontsize:
 
   (Optional) Font size for the heatmap of DE numbers (default is 8)
@@ -65,6 +75,7 @@ thresholds including only significant features.
 ``` r
 data("example")
 example_obj <- normalise_to_start(example_obj)
+#> Normalising to group baseline at each feature's first non-NA time point.
 
 DE_between_time_out <- DE_between_time(example_obj, assay = 1)
 #> Non-NA replicate number filter not specified. Using minimum number of replicates across all groups and time points: 0
@@ -167,12 +178,6 @@ DE_between_time_out <- DE_between_time(example_obj, assay = 1)
 plot_DE_between_time(example_obj,
     de_list = DE_between_time_out$de_list,
     fontsize = 8, value = TRUE, nrow = 1, heatmap_width = 3)
-#> Warning: The input is a data frame-like object, convert it to a matrix.
-#> Warning: The input is a data frame-like object, convert it to a matrix.
-#> Warning: The input is a data frame-like object, convert it to a matrix.
-#> Warning: The input is a data frame-like object, convert it to a matrix.
-#> Warning: Note: not all columns in the data frame are numeric. The data frame
-#> will be converted into a character matrix.
 #> Registered S3 method overwritten by 'car':
 #>   method           from
 #>   na.action.merMod lme4

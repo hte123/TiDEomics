@@ -47,20 +47,18 @@ Key features covered:
 - *Module identification with WGCNA* - Identify co-expression modules
   with different temporal and group-specific patterns.
 
-- *Functional enrichment (gene ontology, drugs)* - Interpret biological
-  meaning of identified DE features and modules.
+- *Functional enrichment (gene ontology, drugs, etc.)* - Interpret
+  biological meaning of identified DE features and modules.
 
 ## Installation
 
 ``` r
-
 if (!require("remotes", quietly = TRUE)) install.packages("remotes")
 
 remotes::install_github("hte123/TiDEomics")
 ```
 
 ``` r
-
 library(TiDEomics)
 library(magrittr)
 library(SummarizedExperiment)
@@ -100,6 +98,9 @@ library(SummarizedExperiment)
 #> The following objects are masked from 'package:stats':
 #> 
 #>     IQR, mad, sd, var, xtabs
+#> The following object is masked from 'package:utils':
+#> 
+#>     data
 #> The following objects are masked from 'package:base':
 #> 
 #>     anyDuplicated, aperm, append, as.data.frame, basename, cbind,
@@ -145,6 +146,8 @@ library(SummarizedExperiment)
 #>     anyMissing, rowMedians
 library(org.Mm.eg.db)
 #> Loading required package: AnnotationDbi
+#> Warning: replacing previous import 'utils::data' by 'BiocGenerics::data' when
+#> loading 'Biostrings'
 #> 
 ```
 
@@ -159,8 +162,10 @@ TiDEomics expects:
   - `Sample`: sample names, match column names of `data`
   - `Group`: experimental group
   - `Time`: numeric time point
-  - `Replicate`: replicate ID (optional)
+  - `Replicate`: replicate ID (optional, auto-generated if absent)
   - `Batch`: batch ID (optional)
+  - `Subject`: biological subject ID for repeated-measures designs
+    (optional, set via `subject_col`)
 
 Example: subset of
 [GSE263759](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE263759)
@@ -176,16 +181,17 @@ Code for preparing the example data is available in
 `data/tutorial_sample_info.rda` and `data/tutorial_data.rda`.
 
 ``` r
-
 data("tutorial_sample_info", package = "TiDEomics")
 data("tutorial_data", package = "TiDEomics")
 
 data_obj <- create_input(
     data = tutorial_data, 
     sample_ann = tutorial_sample_info)
+#> No Subject column specified. Samples treated as independent. For repeated-measures designs, set subject_col to the column identifying biological subjects.
 #> Converting 'Group' column to factor. Default order is alphabetical.
 #> Converting 'Replicate' column to factor. Default order is numerical.
 #> Converting 'Batch' column to factor. Default order is numerical.
+
 # Log-transform the data when not already done
 assays(data_obj)[[1]] <- log2(assays(data_obj)[[1]] + 1) # + 1 to avoid log(0)
 
@@ -205,7 +211,6 @@ data_obj
 ```
 
 ``` r
-
 assays(data_obj)[[1]] %>% head() # first few rows of the data matrix
 ```
 
@@ -304,7 +309,6 @@ assays(data_obj)[[1]] %>% head() # first few rows of the data matrix
 ```
 
 ``` r
-
 colData(data_obj) # sample annotation
 ```
 
@@ -354,7 +358,6 @@ which will be used in all subsequent plotting functions where
 applicable.
 
 ``` r
-
 custom_palette <- c(
     "untreated" = "#1b9e77", "IFNbeta" = "#d95f02",
     "IFNgamma" = "#7570b3", "LPS" = "#e7298a"
@@ -366,7 +369,6 @@ set_custom_palette(custom_palette)
 ### Quality control
 
 ``` r
-
 plot_distribution(data_obj, facet_by = "Group")
 #> Picking joint bandwidth of 0.876
 #> Picking joint bandwidth of 0.885
@@ -388,13 +390,23 @@ can be used to check missingness patterns.
 ### Normalisation to Time 0
 
 [`normalise_to_start()`](https://hte123.github.io/TiDEomics/reference/normalise_to_start.md)
-subtracts the mean of the time-0 replicates (or the first available time
-point if the feature is missing at time point 0). Use this when aiming
-to study *relative changes* from baseline.
+subtracts the baseline value from each feature (at time 0 or the first
+available time point if the feature is missing at time 0). Two modes are
+available for defining the baseline:
+
+- `by_subject = FALSE` (default): group-level baseline, mean of all
+  samples at time 0 in the group. This is used when no subject-level
+  information is available or when between-subject baseline differences
+  are of interest.
+
+- `by_subject = TRUE`: subject-level baseline, mean of all samples at
+  time 0 for each subject. This is used when subject-level information
+  is available and the focus is on subject-specific changes from
+  baseline.
 
 ``` r
-
-data_obj <- normalise_to_start(data_obj)
+data_obj <- normalise_to_start(data_obj) 
+#> Normalising to group baseline at each feature's first non-NA time point.
 ```
 
 Both original and time-0 normalised data are stored in the
@@ -421,17 +433,14 @@ and
 [`plot_modules_h()`](https://hte123.github.io/TiDEomics/reference/plot_modules_h.md).
 
 ``` r
-
 data_obj_list <- split_groups(data_obj)
 ```
 
 ``` r
-
 data_obj_merged_list <- merge_replicates(data_obj_list)
 ```
 
 ``` r
-
 data_obj_merged <- merge_groups(data_obj_merged_list)
 ```
 
@@ -442,7 +451,6 @@ Correlation matrix can be plotted with
 to check sample relationships and potential batch effects.
 
 ``` r
-
 plot_cor_matrix(data_obj,
     method = "spearman",
     label_rep = TRUE, label_batch = TRUE,
@@ -484,7 +492,6 @@ and
 to include features with missing values in PCA and UMAP.
 
 ``` r
-
 PC <- plot_pca(data_obj,
     plot = TRUE,
     # pc1 = 1, pc2 = 2, # default to plot PC1 and PC2
@@ -533,7 +540,6 @@ PC <- plot_pca(data_obj,
 ![](TiDEomics_files/figure-html/pca-3.png)
 
 ``` r
-
 plot_pca_3D(PC, pcs = 1:3)
 #> Warning: `line.width` does not currently support multiple values.
 #> Warning: `line.width` does not currently support multiple values.
@@ -545,7 +551,6 @@ Note: the 3D plot may not display properly in some html, but should work
 in an interactive R session.
 
 ``` r
-
 PCAtools::eigencorplot(PC,
     metavars = c("Group", "Time"),
     components = paste0("PC", 1:5),
@@ -560,7 +565,6 @@ PCAtools::eigencorplot(PC,
 ![](TiDEomics_files/figure-html/pca-eigencor-1.png)
 
 ``` r
-
 umap_layout <- plot_umap(data_obj, seed = 1234)
 #> Using n_neighbors = 8
 ```
@@ -579,27 +583,15 @@ show the trajectory of samples along time course. Set `circle = FALSE`
 or `arrow = FALSE` to remove circles and arrows.
 
 ``` r
-
-plot_pca_by_group(data_obj, circle = TRUE, arrow = TRUE)
-#> Warning: Removed 1 row containing missing values or values outside the scale range
-#> (`geom_segment()`).
-#> Removed 1 row containing missing values or values outside the scale range
-#> (`geom_segment()`).
-#> Removed 1 row containing missing values or values outside the scale range
-#> (`geom_segment()`).
-#> Removed 1 row containing missing values or values outside the scale range
-#> (`geom_segment()`).
-#> Removed 1 row containing missing values or values outside the scale range
-#> (`geom_segment()`).
+plot_pca_by_group(data_obj, circle = TRUE, arrow = TRUE, legend_pos = "top")
 ```
 
 ![](TiDEomics_files/figure-html/pca-umap-group-1.png)
 
 ``` r
+# also accepts a list: plot_pca_by_group(data_obj_list)
 
-# same as plot_pca_by_group_list(data_obj_list, circle = TRUE, arrow = TRUE)
-
-plot_umap_by_group(data_obj, seed = 1234) 
+plot_umap_by_group(data_obj, seed = 1234, legend_pos = "top")
 #> Using n_neighbors = 5
 #> Using n_neighbors = 5
 #> Using n_neighbors = 5
@@ -609,8 +601,7 @@ plot_umap_by_group(data_obj, seed = 1234)
 ![](TiDEomics_files/figure-html/pca-umap-group-2.png)
 
 ``` r
-
-# same as plot_umap_by_group_list(data_obj_list)
+# also accepts a list: plot_umap_by_group(data_obj_list)
 ```
 
 ### Pairwise differential expression
@@ -647,6 +638,11 @@ Common parameters for both functions:
   have at least 1 non-NA value at both time points in the specific
   group, or in both groups at the specific time point).
 
+- `trend`: passed to `limma::eBayes(trend=)`. Set to `TRUE` for RNA-seq
+  count-derived data to model the mean-variance trend. Leave as `FALSE`
+  (default) for proteomics, metabolomics, or other log-intensity data
+  where the mean-variance relationship is typically flat.
+
 - Default thresholds for DE are `p.adj < 0.05` and `|log2FC| > 1`.
 
 Please note that the example data only has two replicates per time
@@ -655,8 +651,7 @@ point. More replicates are recommended for robust pairwise DE analysis.
 DE_between_time():
 
 ``` r
-
-DE_between_time_out <- DE_between_time(data_obj, assay = 1, filter = 1)
+DE_between_time_out <- DE_between_time(data_obj, assay = 1, filter = 1, trend = TRUE)
 #> Comparing group IFNbeta time 2 to 0: keeping 500 of 500 features (100.0%)
 #> Comparing group IFNbeta time 4 to 0: keeping 500 of 500 features (100.0%)
 #> Comparing group IFNbeta time 6 to 0: keeping 500 of 500 features (100.0%)
@@ -708,7 +703,6 @@ DE_between_time_out <- DE_between_time(data_obj, assay = 1, filter = 1)
 ```
 
 ``` r
-
 DE_between_time_out$all_list$IFNbeta$`t2-t0` %>% head()
 ```
 
@@ -728,36 +722,29 @@ DE_between_time_out$all_list$IFNbeta$`t2-t0` %>% head()
 #> 5            0.000000            0.000000                   0  0.000000
 #> 6            4.954196            1.584963                   2 -2.638062
 #>      P.Value adj.P.Val
-#> 1 0.37354008 0.6997161
+#> 1 0.34389063 0.6642677
 #> 2 1.00000000 1.0000000
 #> 3 1.00000000 1.0000000
 #> 4 1.00000000 1.0000000
 #> 5 1.00000000 1.0000000
-#> 6 0.02497426 0.2656975
+#> 6 0.03117987 0.2887025
 ```
 
 ``` r
-
 DE_between_time_out$de_list$IFNbeta$`t2-t0` %>% head()
 ```
 
 ```
-#>    Feature Comparison   Group Cond1 Cond2     logFC    adj.P.Val
-#> 1 Snord83b      t2-t0 IFNbeta     0     2 -1.584963 0.0005228236
+#>    Feature Comparison   Group Cond1 Cond2     logFC   adj.P.Val
+#> 1     Ccnf      t2-t0 IFNbeta     0     2 -2.640492 0.041082586
+#> 2 Snord83b      t2-t0 IFNbeta     0     2 -1.584963 0.001071043
 ```
 
 ``` r
-
 plot_DE_between_time(data_obj,
     de_list = DE_between_time_out$de_list,
     fontsize = 8, value = FALSE, nrow = 1, heatmap_width = 3
 )
-#> Warning: The input is a data frame-like object, convert it to a matrix.
-#> Warning: The input is a data frame-like object, convert it to a matrix.
-#> Warning: The input is a data frame-like object, convert it to a matrix.
-#> Warning: The input is a data frame-like object, convert it to a matrix.
-#> Warning: Note: not all columns in the data frame are numeric. The data frame
-#> will be converted into a character matrix.
 ```
 
 ![](TiDEomics_files/figure-html/de-between-time-plot-1.png)
@@ -765,8 +752,7 @@ plot_DE_between_time(data_obj,
 DE_between_group():
 
 ``` r
-
-DE_between_group_out <- DE_between_group(data_obj, assay = 2, filter = 1)
+DE_between_group_out <- DE_between_group(data_obj, assay = 2, filter = 1, trend = TRUE)
 #> Comparing group IFNgamma to IFNbeta at Time 0: keeping 500 of 500 features (100.0%)
 #> Warning: Zero sample variances detected, have been offset away from zero
 #> Comparing group IFNgamma to IFNbeta at Time 2: keeping 500 of 500 features (100.0%)
@@ -791,6 +777,7 @@ DE_between_group_out <- DE_between_group(data_obj, assay = 2, filter = 1)
 #> Warning: Zero sample variances detected, have been offset away from zero
 #> Comparing group LPS to IFNbeta at Time 24: keeping 500 of 500 features (100.0%)
 #> Warning: Zero sample variances detected, have been offset away from zero
+#> Comparing untreated vs IFNbeta: time points only in IFNbeta: 2, 4, 6; only in untreated: none.
 #> Comparing group untreated to IFNbeta at Time 0: keeping 500 of 500 features (100.0%)
 #> Warning: Zero sample variances detected, have been offset away from zero
 #> Comparing group untreated to IFNbeta at Time 8: keeping 500 of 500 features (100.0%)
@@ -821,6 +808,7 @@ DE_between_group_out <- DE_between_group(data_obj, assay = 2, filter = 1)
 #> Warning: Zero sample variances detected, have been offset away from zero
 #> Comparing group LPS to IFNgamma at Time 24: keeping 500 of 500 features (100.0%)
 #> Warning: Zero sample variances detected, have been offset away from zero
+#> Comparing untreated vs IFNgamma: time points only in IFNgamma: 2, 4, 6; only in untreated: none.
 #> Comparing group untreated to IFNgamma at Time 0: keeping 500 of 500 features (100.0%)
 #> Warning: Zero sample variances detected, have been offset away from zero
 #> Comparing group untreated to IFNgamma at Time 8: keeping 500 of 500 features (100.0%)
@@ -851,24 +839,28 @@ DE_between_group_out <- DE_between_group(data_obj, assay = 2, filter = 1)
 #> Warning: Zero sample variances detected, have been offset away from zero
 #> Comparing group IFNgamma to LPS at Time 24: keeping 500 of 500 features (100.0%)
 #> Warning: Zero sample variances detected, have been offset away from zero
+#> Comparing untreated vs LPS: time points only in LPS: 2, 4, 6; only in untreated: none.
 #> Comparing group untreated to LPS at Time 0: keeping 500 of 500 features (100.0%)
 #> Warning: Zero sample variances detected, have been offset away from zero
 #> Comparing group untreated to LPS at Time 8: keeping 500 of 500 features (100.0%)
 #> Warning: Zero sample variances detected, have been offset away from zero
 #> Comparing group untreated to LPS at Time 24: keeping 500 of 500 features (100.0%)
 #> Warning: Zero sample variances detected, have been offset away from zero
+#> Comparing IFNbeta vs untreated: time points only in untreated: none; only in IFNbeta: 2, 4, 6.
 #> Comparing group IFNbeta to untreated at Time 0: keeping 500 of 500 features (100.0%)
 #> Warning: Zero sample variances detected, have been offset away from zero
 #> Comparing group IFNbeta to untreated at Time 8: keeping 500 of 500 features (100.0%)
 #> Warning: Zero sample variances detected, have been offset away from zero
 #> Comparing group IFNbeta to untreated at Time 24: keeping 500 of 500 features (100.0%)
 #> Warning: Zero sample variances detected, have been offset away from zero
+#> Comparing IFNgamma vs untreated: time points only in untreated: none; only in IFNgamma: 2, 4, 6.
 #> Comparing group IFNgamma to untreated at Time 0: keeping 500 of 500 features (100.0%)
 #> Warning: Zero sample variances detected, have been offset away from zero
 #> Comparing group IFNgamma to untreated at Time 8: keeping 500 of 500 features (100.0%)
 #> Warning: Zero sample variances detected, have been offset away from zero
 #> Comparing group IFNgamma to untreated at Time 24: keeping 500 of 500 features (100.0%)
 #> Warning: Zero sample variances detected, have been offset away from zero
+#> Comparing LPS vs untreated: time points only in untreated: none; only in LPS: 2, 4, 6.
 #> Comparing group LPS to untreated at Time 0: keeping 500 of 500 features (100.0%)
 #> Warning: Zero sample variances detected, have been offset away from zero
 #> Comparing group LPS to untreated at Time 8: keeping 500 of 500 features (100.0%)
@@ -880,7 +872,6 @@ DE_between_group_out <- DE_between_group(data_obj, assay = 2, filter = 1)
 ![](TiDEomics_files/figure-html/de-between-group-1.png)![](TiDEomics_files/figure-html/de-between-group-2.png)![](TiDEomics_files/figure-html/de-between-group-3.png)![](TiDEomics_files/figure-html/de-between-group-4.png)
 
 ``` r
-
 DE_between_group_out$all_list$`IFNgamma-untreated`$`24` %>% head()
 ```
 
@@ -903,24 +894,23 @@ DE_between_group_out$all_list$`IFNgamma-untreated`$`24` %>% head()
 #> 1             -0.500000 -1.665335e-16 1.0000000 1.0000000
 #> 2              1.000000  0.000000e+00 1.0000000 1.0000000
 #> 3              0.000000  0.000000e+00 1.0000000 1.0000000
-#> 4              0.000000 -5.000000e-01 0.3712106 0.7365967
+#> 4              0.000000 -5.000000e-01 0.3678870 0.7452269
 #> 5              0.000000  0.000000e+00 1.0000000 1.0000000
-#> 6             -1.845581 -1.089804e+00 0.1636461 0.6234187
+#> 6             -1.845581 -1.089804e+00 0.1609203 0.6171701
 ```
 
 ``` r
-
 DE_between_group_out$de_list$`IFNgamma-untreated` %>% head()
 ```
 
 ```
 #>         Feature         Comparison Time     Cond1    Cond2     logFC  adj.P.Val
-#> 1 1700003E16Rik IFNgamma-untreated    8 untreated IFNgamma -1.000000 0.01628919
-#> 2 3110009E18Rik IFNgamma-untreated    8 untreated IFNgamma -1.169925 0.01628919
-#> 3 4930447F24Rik IFNgamma-untreated    8 untreated IFNgamma -1.000000 0.01628919
-#> 4         Acta1 IFNgamma-untreated    8 untreated IFNgamma -2.321928 0.01628919
-#> 5          Cd69 IFNgamma-untreated    8 untreated IFNgamma  4.906762 0.01799269
-#> 6          Ctsh IFNgamma-untreated    8 untreated IFNgamma  1.112589 0.03569877
+#> 1 1700003E16Rik IFNgamma-untreated    8 untreated IFNgamma -1.000000 0.02030747
+#> 2 3110009E18Rik IFNgamma-untreated    8 untreated IFNgamma -1.169925 0.02030747
+#> 3 4930447F24Rik IFNgamma-untreated    8 untreated IFNgamma -1.000000 0.02030747
+#> 4         Acta1 IFNgamma-untreated    8 untreated IFNgamma -2.321928 0.02030747
+#> 5       Gm22247 IFNgamma-untreated    8 untreated IFNgamma -2.584963 0.02030747
+#> 6       Gm26143 IFNgamma-untreated    8 untreated IFNgamma  1.584963 0.02030747
 ```
 
 Output of
@@ -931,13 +921,37 @@ can be plotted with
 to visualise DE features of selected group(s) and time point(s).
 
 ``` r
-
 plot_volcano(DE_between_group_out,
     group1 = "untreated", group2 = "IFNgamma", time = 24,
     logFC_thres = 0.5, adjP_thres = 0.05, label = TRUE)
 ```
 
 ![](TiDEomics_files/figure-html/volcano-1.png)
+
+#### Statistical notes
+
+Both DE functions use
+[`limma::lmFit()`](https://rdrr.io/pkg/limma/man/lmFit.html) followed by
+[`limma::eBayes()`](https://rdrr.io/pkg/limma/man/ebayes.html) with
+empirical Bayes variance moderation, which stabilises variance estimates
+when the number of replicates is small. The input data should be
+log-transformed and normalised before analysis.
+
+For **RNA-seq** data with log-transformed counts (e.g.,
+`log2(count + 1)` as used in this tutorial), set `trend = TRUE` to let
+limma model the mean-variance relationship - low-abundance features
+typically have higher variance. For **proteomics** (log₂ intensity) and
+many other data, the mean-variance trend is typically weak or absent, so
+`trend = FALSE` (default) is commonly appropriate. However, this should
+be verified (e.g. with
+[`limma::plotSA()`](https://rdrr.io/pkg/limma/man/plotSA.html)).
+
+When a Subject column is provided via `subject_col` in
+[`create_input()`](https://hte123.github.io/TiDEomics/reference/create_input.md),
+[`DE_between_time()`](https://hte123.github.io/TiDEomics/reference/DE_between_time.md)
+automatically uses a paired design via
+`limma::duplicateCorrelation(block = Subject)`. For independent-sample
+designs (no Subject), all replicates are treated as independent.
 
 ### Feature properties and classification
 
@@ -988,7 +1002,6 @@ Note:
   calculate `P_trend`.
 
 ``` r
-
 data_obj_merged_list <- calc_feature_property(data_obj_merged_list,
     threshold = 0)
 property_tb <- summarise_feature_property(data_obj_merged_list)
@@ -1005,12 +1018,12 @@ head(property_tb)
 #> 5 1700100I10Rik IFNbeta             0     1       6         NA 0.7924813
 #> 6 2900005J15Rik IFNbeta             0     5       6 0.09452103 4.4305435
 #>   Max_FC_time Exp_ratio
-#> 1          -1 0.1666667
-#> 2           4 0.3333333
+#> 1          -2 0.1666667
+#> 2           8 0.3333333
 #> 3          NA 0.0000000
-#> 4           5 0.3333333
-#> 5           4 0.1666667
-#> 6          -3 0.8333333
+#> 4          24 0.3333333
+#> 5           8 0.1666667
+#> 6          -6 0.8333333
 ```
 
 Features expressed in only a subset of groups can be extracted with
@@ -1019,7 +1032,6 @@ based on the output table of
 [`summarise_feature_property()`](https://hte123.github.io/TiDEomics/reference/summarise_feature_property.md).
 
 ``` r
-
 group_specific_features(property_tb, groups = c("untreated"),
     genename = FALSE, GO = FALSE
 )
@@ -1044,8 +1056,9 @@ for details.
 - The function requires complete input (no NA). When data contains
   missing values (e.g. proteomics), use
   [`impute_groups()`](https://hte123.github.io/TiDEomics/reference/impute_groups.md)
-  to impute with group-specific minimum value, or restrict to features
-  with complete data.
+  to impute (default: group minimum; pass `fun = function(x) min(x) / 2`
+  for half-minimum, `fun = median` for median imputation, etc.), or
+  restrict to features with complete data.
 
 - If `feature` is not specified, the function will run on all features
   filtered by expression / missing rate, which requires running
@@ -1058,8 +1071,11 @@ for details.
   and minNumInSeg = 2, at least 4 time points are needed.
 
 ``` r
-
 data_obj_merged_imp_list <- impute_groups(data_obj_merged_list)
+#> Group IFNbeta: no missing values.
+#> Group IFNgamma: no missing values.
+#> Group LPS: no missing values.
+#> Group untreated: no missing values.
 ```
 
 A subset of features is used for demonstration as
@@ -1067,7 +1083,6 @@ A subset of features is used for demonstration as
 can be time-consuming.
 
 ``` r
-
 set.seed(1234)
 random_features <- sample(rownames(data_obj_merged_imp_list[[1]]), 50)
 
@@ -1120,7 +1135,6 @@ Use
 plot the fitted segments and breakpoints for selected features.
 
 ``` r
-
 plot_segments(data_obj_merged_imp_list,
     example_res_list,
     feature = c("Zfp639", "Tk1"), # example features
@@ -1148,7 +1162,6 @@ and
 [`extract_segment_trends()`](https://hte123.github.io/TiDEomics/reference/extract_segment_trends.md).
 
 ``` r
-
 plot_breakpoints(example_res_list)
 #> Warning in (function (..., deparse.level = 1) : number of columns of result is
 #> not a multiple of vector length (arg 3)
@@ -1161,7 +1174,6 @@ plot_breakpoints(example_res_list)
 ![](TiDEomics_files/figure-html/trendy-summary-1.png)
 
 ``` r
-
 
 trendy_summary <- summarise_Trendy(example_res_list)
 #> Warning in (function (..., deparse.level = 1) : number of columns of result is
@@ -1205,7 +1217,6 @@ trendy_summary %>% head()
 ```
 
 ``` r
-
 trendy_list <- extract_segment_trends(trendy_summary)
 trendy_list$IFNbeta
 ```
@@ -1232,30 +1243,42 @@ trendy_list$IFNbeta
 
 ### Variance decomposition
 
-Variance of each protein is decomposed into `Time`, `Group` and
-`Residual` contributions to characterise their differential expression
-patterns.
+Variance of each feature is decomposed by linear mixed models (LMM) into
+contributions from `Group`, `Subject` (when present), `Time`,
+`Residual`, and optionally `Group:Time` (or `Subject:Time`) interaction,
+which captures group-specific temporal patterns. This helps to identify
+time-dependent features, group-dependent features, and “noisy” features
+with high residual variance.
 
-- High `Time` contribution: time-dependent features, dynamic along time
-  course consistently across groups. May be good candidates for
+**Interpreting the components:**
+
+- High `Time`: time-dependent features, dynamic along time course
+  consistently across groups. Good candidates for
   [`run_Trendy()`](https://hte123.github.io/TiDEomics/reference/run_Trendy.md)
   or other time-focused analysis.
 
-- High `Group` contribution: group-dependent features, stable along time
-  but differentially expressed between groups. May be baseline
-  biological markers.
+- High `Group`: group-dependent features, stable along time but
+  differentially expressed between groups. May be baseline biological
+  markers.
 
-- High `Residual`: noisy, consider excluding for further analysis
-  (e.g. WGCNA) or interpretation.
+- High `Subject` (when present): features with baseline differences
+  between individuals, biologically meaningful in patient studies.
+
+- High `Residual`: unexplained variation, consider excluding for
+  downstream analysis.
 
 The function
 [`decomp_variance()`](https://hte123.github.io/TiDEomics/reference/decomp_variance.md)
-is based on `PALMO::lmeVariance()`(Vasaikar et al. 2023) to return a
-table of variance decomposition results.
+is inspired by `PALMO::lmeVariance()`(Vasaikar et al. 2023). Group and
+Time are always included (auto-skipped if only 1 group or time point
+present). `Subject` is included when present in colData. Set
+`interaction = TRUE` to add `Group:Time` (or `Subject:Time` with
+Subject) as a variance component capturing group-specific temporal
+patterns. Sufficient replicates per combination are required for stable
+estimates.
 
 ``` r
-
-# filter genes for variance decomposition: 
+# filter genes for variance decomposition:
 # at least 50% values > 0 (raw count > 0) in at least 2 groups
 decomp_filter_genes <- group_specific_features(property_tb,
     filter_ratio = 0.5,
@@ -1266,9 +1289,9 @@ decomp_filter_genes <- group_specific_features(property_tb,
 
 var_decomp <- decomp_variance(data_obj,
     features = decomp_filter_genes,
-    variables = c("Time", "Group"), # default
     assay = 1, core = 2
 )
+#> LMM: exp ~ (1|Group) + (1|Time)  |  Output: Group, Time, Residual
 
 plot_variance(var_decomp, rank = "Time", top_n = 20)
 #> Features not specified. Plotting top 20 features ranked by Time.
@@ -1277,7 +1300,6 @@ plot_variance(var_decomp, rank = "Time", top_n = 20)
 ![](TiDEomics_files/figure-html/variance-decomposition-1.png)
 
 ``` r
-
 plot_variance(var_decomp, rank = "Group", top_n = 20)
 #> Features not specified. Plotting top 20 features ranked by Group.
 ```
@@ -1314,10 +1336,9 @@ with TiDEomics functions.
   FAQ](https://edo98811.github.io/WGCNA_official_documentation/faq.html).
 
 ``` r
-
 # Example filtering by residual variance < Q3
 var_res_q3 <- quantile(var_decomp$Residual, 0.75, na.rm = TRUE)
-filter_wgcna <- var_decomp %>% dplyr::filter(Residual < var_res_q3) %>% 
+filter_wgcna <- var_decomp %>% dplyr::filter(Residual < var_res_q3) %>%
     dplyr::pull(Feature)
 
 data_obj_wgcna <- data_obj[filter_wgcna, ]
@@ -1338,8 +1359,7 @@ FAQ](https://edo98811.github.io/WGCNA_official_documentation/faq.html)
 for details.
 
 ``` r
-
-WGCNA_input <- prepare_WGCNA(data_obj_wgcna, assay = 2,
+wgcna_input <- prepare_WGCNA(data_obj_wgcna, assay = 2,
     powers = seq(1, 30),
     networkType = "signed", RsquaredCut = 0.8
 )
@@ -1386,8 +1406,7 @@ WGCNA_input <- prepare_WGCNA(data_obj_wgcna, assay = 2,
 ![](TiDEomics_files/figure-html/choose-power-1.png)
 
 ``` r
-
-WGCNA_input$fitIndices
+wgcna_input$fitIndices
 ```
 
 ```
@@ -1453,7 +1472,7 @@ WGCNA_input$fitIndices
 #> 28   3.572347
 #> 29   3.299886
 #> 30   3.053470
-picked_power <- WGCNA_input$powerEstimate
+picked_power <- wgcna_input$powerEstimate
 picked_power
 ```
 
@@ -1481,8 +1500,7 @@ can be set with
 e.g., `corType` for correlation method.
 
 ``` r
-
-net <- run_WGCNA(WGCNA_input,
+net <- run_WGCNA(wgcna_input,
     power = picked_power,
     # corType = "pearson", # other option is "bicor"
     numericLabels = TRUE
@@ -1493,7 +1511,6 @@ net <- run_WGCNA(WGCNA_input,
 #> Allowing multi-threading with up to 24 threads.
 
 plot_WGCNA(net, fontsize = 8)
-#> Warning: The input is a data frame-like object, convert it to a matrix.
 ```
 
 ![](TiDEomics_files/figure-html/run-wgcna-1.png)![](TiDEomics_files/figure-html/run-wgcna-2.png)
@@ -1535,10 +1552,7 @@ plot_WGCNA(net, fontsize = 8)
 **Extract modules**: show module sizes
 
 ``` r
-
-gene_module <- data.frame(Module = as.factor(net$colors)) %>%
-    tibble::rownames_to_column("Feature") %>%
-    dplyr::arrange(Module)
+gene_module <- WGCNA_module(net, exclude_grey = TRUE)
 
 gene_module %>%
     dplyr::group_by(Module) %>%
@@ -1546,23 +1560,21 @@ gene_module %>%
 ```
 
 ```
-#> # A tibble: 7 × 2
+#> # A tibble: 6 × 2
 #>   Module     n
 #>   <fct>  <int>
-#> 1 0         31
-#> 2 1         47
-#> 3 2         47
-#> 4 3         45
-#> 5 4         36
-#> 6 5         29
-#> 7 6         23
+#> 1 1         47
+#> 2 2         47
+#> 3 3         45
+#> 4 4         36
+#> 5 5         29
+#> 6 6         23
 ```
 
 **Plot module profiles**:
 
 ``` r
-
-plot_modules_v(gene_module %>% dplyr::filter(Module != 0), 
+plot_modules_v(gene_module,
     data_obj_merged, scale = TRUE,
     ylabel = "Z-score of log2 (raw count + 1)",
     height_ratio = 2
@@ -1573,7 +1585,7 @@ plot_modules_v(gene_module %>% dplyr::filter(Module != 0),
 
 ![](TiDEomics_files/figure-html/plot-wgcna-modules-1.png)
 
-### Enrichment of GO terms and drugs
+### Functional enrichment
 
 Functions in TiDEomics wrap
 [`clusterProfiler::enrichGO()`](https://rdrr.io/pkg/clusterProfiler/man/enrichGO.html)
@@ -1589,7 +1601,6 @@ and plot with
 [`enrichplot::gseaplot2()`](https://rdrr.io/pkg/enrichplot/man/gseaplot2.html).
 
 ``` r
-
 gse_group <- enrichGO_rank(var_decomp, 
     gene_rank_by = "Group", 
     OrgDb = org.Mm.eg.db,
@@ -1624,15 +1635,10 @@ Optionally, use `simplify = TRUE` with
 to simplify the GO results by removing redundant terms (default: FALSE).
 
 ``` r
-
 background_wgcna <- gene_module$Feature
-module_list <- gene_module %>%
-    dplyr::filter(Module != 0) %>%
-    split(as.character(.$Module)) %>%
-    lapply(`[[`, "Feature")
 
 go_list <- enrichGO_list(
-    gene_list = module_list, OrgDb = org.Mm.eg.db,
+    gene_list = gene_module, OrgDb = org.Mm.eg.db,
     universe = background_wgcna,
     pvalueCutoff = 0.9, # get more results for demonstration
     qvalueCutoff = 0.9,
@@ -1645,100 +1651,100 @@ go_list <- enrichGO_list(
 #> 'select()' returned 1:1 mapping between keys and columns
 #> 'select()' returned 1:1 mapping between keys and columns
 #> Warning in bitr(gene, fromType = fromType, toType = "ENTREZID", OrgDb = OrgDb):
-#> 0.78% of input gene IDs are fail to map...
+#> 0.88% of input gene IDs are fail to map...
 #> Processing gene list: 2
 #> 'select()' returned 1:1 mapping between keys and columns
 #> 'select()' returned 1:1 mapping between keys and columns
 #> Warning in bitr(gene, fromType = fromType, toType = "ENTREZID", OrgDb = OrgDb):
-#> 0.78% of input gene IDs are fail to map...
+#> 0.88% of input gene IDs are fail to map...
 #> Processing gene list: 3
 #> 'select()' returned 1:1 mapping between keys and columns
 #> Warning in bitr(gene, fromType = fromType, toType = "ENTREZID", OrgDb = OrgDb):
 #> 4.44% of input gene IDs are fail to map...
 #> 'select()' returned 1:1 mapping between keys and columns
 #> Warning in bitr(gene, fromType = fromType, toType = "ENTREZID", OrgDb = OrgDb):
-#> 0.78% of input gene IDs are fail to map...
+#> 0.88% of input gene IDs are fail to map...
 #> Processing gene list: 4
 #> 'select()' returned 1:1 mapping between keys and columns
 #> 'select()' returned 1:1 mapping between keys and columns
 #> Warning in bitr(gene, fromType = fromType, toType = "ENTREZID", OrgDb = OrgDb):
-#> 0.78% of input gene IDs are fail to map...
+#> 0.88% of input gene IDs are fail to map...
 #> Processing gene list: 5
 #> 'select()' returned 1:1 mapping between keys and columns
 #> 'select()' returned 1:1 mapping between keys and columns
 #> Warning in bitr(gene, fromType = fromType, toType = "ENTREZID", OrgDb = OrgDb):
-#> 0.78% of input gene IDs are fail to map...
+#> 0.88% of input gene IDs are fail to map...
 #> Processing gene list: 6
 #> 'select()' returned 1:1 mapping between keys and columns
 #> 'select()' returned 1:1 mapping between keys and columns
 #> Warning in bitr(gene, fromType = fromType, toType = "ENTREZID", OrgDb = OrgDb):
-#> 0.78% of input gene IDs are fail to map...
+#> 0.88% of input gene IDs are fail to map...
 #> Performing GO enrichment for category: MF
 #> Processing gene list: 1
 #> 'select()' returned 1:1 mapping between keys and columns
 #> 'select()' returned 1:1 mapping between keys and columns
 #> Warning in bitr(gene, fromType = fromType, toType = "ENTREZID", OrgDb = OrgDb):
-#> 0.78% of input gene IDs are fail to map...
+#> 0.88% of input gene IDs are fail to map...
 #> Processing gene list: 2
 #> 'select()' returned 1:1 mapping between keys and columns
 #> 'select()' returned 1:1 mapping between keys and columns
 #> Warning in bitr(gene, fromType = fromType, toType = "ENTREZID", OrgDb = OrgDb):
-#> 0.78% of input gene IDs are fail to map...
+#> 0.88% of input gene IDs are fail to map...
 #> Processing gene list: 3
 #> 'select()' returned 1:1 mapping between keys and columns
 #> Warning in bitr(gene, fromType = fromType, toType = "ENTREZID", OrgDb = OrgDb):
 #> 4.44% of input gene IDs are fail to map...
 #> 'select()' returned 1:1 mapping between keys and columns
 #> Warning in bitr(gene, fromType = fromType, toType = "ENTREZID", OrgDb = OrgDb):
-#> 0.78% of input gene IDs are fail to map...
+#> 0.88% of input gene IDs are fail to map...
 #> Processing gene list: 4
 #> 'select()' returned 1:1 mapping between keys and columns
 #> 'select()' returned 1:1 mapping between keys and columns
 #> Warning in bitr(gene, fromType = fromType, toType = "ENTREZID", OrgDb = OrgDb):
-#> 0.78% of input gene IDs are fail to map...
+#> 0.88% of input gene IDs are fail to map...
 #> Processing gene list: 5
 #> 'select()' returned 1:1 mapping between keys and columns
 #> 'select()' returned 1:1 mapping between keys and columns
 #> Warning in bitr(gene, fromType = fromType, toType = "ENTREZID", OrgDb = OrgDb):
-#> 0.78% of input gene IDs are fail to map...
+#> 0.88% of input gene IDs are fail to map...
 #> Processing gene list: 6
 #> 'select()' returned 1:1 mapping between keys and columns
 #> 'select()' returned 1:1 mapping between keys and columns
 #> Warning in bitr(gene, fromType = fromType, toType = "ENTREZID", OrgDb = OrgDb):
-#> 0.78% of input gene IDs are fail to map...
+#> 0.88% of input gene IDs are fail to map...
 #> Performing GO enrichment for category: CC
 #> Processing gene list: 1
 #> 'select()' returned 1:1 mapping between keys and columns
 #> 'select()' returned 1:1 mapping between keys and columns
 #> Warning in bitr(gene, fromType = fromType, toType = "ENTREZID", OrgDb = OrgDb):
-#> 0.78% of input gene IDs are fail to map...
+#> 0.88% of input gene IDs are fail to map...
 #> Processing gene list: 2
 #> 'select()' returned 1:1 mapping between keys and columns
 #> 'select()' returned 1:1 mapping between keys and columns
 #> Warning in bitr(gene, fromType = fromType, toType = "ENTREZID", OrgDb = OrgDb):
-#> 0.78% of input gene IDs are fail to map...
+#> 0.88% of input gene IDs are fail to map...
 #> Processing gene list: 3
 #> 'select()' returned 1:1 mapping between keys and columns
 #> Warning in bitr(gene, fromType = fromType, toType = "ENTREZID", OrgDb = OrgDb):
 #> 4.44% of input gene IDs are fail to map...
 #> 'select()' returned 1:1 mapping between keys and columns
 #> Warning in bitr(gene, fromType = fromType, toType = "ENTREZID", OrgDb = OrgDb):
-#> 0.78% of input gene IDs are fail to map...
+#> 0.88% of input gene IDs are fail to map...
 #> Processing gene list: 4
 #> 'select()' returned 1:1 mapping between keys and columns
 #> 'select()' returned 1:1 mapping between keys and columns
 #> Warning in bitr(gene, fromType = fromType, toType = "ENTREZID", OrgDb = OrgDb):
-#> 0.78% of input gene IDs are fail to map...
+#> 0.88% of input gene IDs are fail to map...
 #> Processing gene list: 5
 #> 'select()' returned 1:1 mapping between keys and columns
 #> 'select()' returned 1:1 mapping between keys and columns
 #> Warning in bitr(gene, fromType = fromType, toType = "ENTREZID", OrgDb = OrgDb):
-#> 0.78% of input gene IDs are fail to map...
+#> 0.88% of input gene IDs are fail to map...
 #> Processing gene list: 6
 #> 'select()' returned 1:1 mapping between keys and columns
 #> 'select()' returned 1:1 mapping between keys and columns
 #> Warning in bitr(gene, fromType = fromType, toType = "ENTREZID", OrgDb = OrgDb):
-#> 0.78% of input gene IDs are fail to map...
+#> 0.88% of input gene IDs are fail to map...
 #> Merging GO enrichment results across gene lists for each category.
 plot_GO(go_list$all, plot_dotplot = TRUE, 
     plot_emapplot = FALSE,
@@ -1757,12 +1763,11 @@ top enriched GO terms. The plotting function is adapted from ClusterGVis
 package (Zhang et al. 2026).
 
 ``` r
-
-plot_modules_h(gene_module %>% dplyr::filter(Module != 0), 
+plot_modules_h(gene_module,
     data_obj_merged, scale = TRUE,
     ylabel = "Z-score of log2 (raw count + 1)",
-    go_list = go_list$all,
-    go_category = "BP",
+    enrich_list = go_list$all,
+    enrich_category = "BP",
     heatmap_width = 6,
     heatmap_height = 8
 )
@@ -1782,10 +1787,15 @@ plot_modules_h(gene_module %>% dplyr::filter(Module != 0),
 
 ![](TiDEomics_files/figure-html/plot-wgcna-modules-go-1.png)
 
-With human genes, use
-[`enrich_drug_list()`](https://hte123.github.io/TiDEomics/reference/enrich_drug_list.md)
-for drug enrichment with `enrichR` package. Input should be gene
-symbols. Available drug databases can be checked with
+Enrichment of other gene sets (e.g., drug signatures, TF targets,
+pathways) can be performed with
+[`enrichR_list()`](https://hte123.github.io/TiDEomics/reference/enrichR_list.md),
+which wraps
+[`enrichR::enrichr()`](https://rdrr.io/pkg/enrichR/man/enrichr.html). It
+returns a named list of data.frames (one per database) with `Cluster`
+and `Description` columns, compatible with
+[`plot_modules_h()`](https://hte123.github.io/TiDEomics/reference/plot_modules_h.md).
+Available databases can be checked with
 [`enrichR::listEnrichrDbs()`](https://rdrr.io/pkg/enrichR/man/listEnrichrDbs.html).
 
 ### Universal: plot features of interest
@@ -1799,12 +1809,11 @@ which calculates the mean and standard deviation of replicates for each
 feature at each time point.
 
 ``` r
-
 table_mean_sd_list <- calc_mean_sd(data_obj)
 table_mean_sd_orig <- table_mean_sd_list$orig
 table_mean_sd_norm <- table_mean_sd_list$norm0
 
-plot_trend(table_mean_sd_orig, features = c("Fosb", "Il23a", "Cd69", "Actb"),
+plot_trend(table_mean_sd_orig, features = c("Actb", "Cd69", "Fosb", "Il23a"),
     title = "Example features")
 #> Group not specified. Plotting all groups: IFNbeta, IFNgamma, LPS, untreated
 #> Warning: Removed 12 rows containing missing values or values outside the scale range
@@ -1814,8 +1823,7 @@ plot_trend(table_mean_sd_orig, features = c("Fosb", "Il23a", "Cd69", "Actb"),
 ![](TiDEomics_files/figure-html/plot-feature-1.png)
 
 ``` r
-
-plot_trend(table_mean_sd_norm, features = c("Fosb", "Il23a", "Cd69", "Actb"),
+plot_trend(table_mean_sd_norm, features = c("Actb", "Cd69", "Fosb", "Il23a"),
     title = "Example features with time 0 normalisation")
 #> Group not specified. Plotting all groups: IFNbeta, IFNgamma, LPS, untreated
 #> Warning: Removed 12 rows containing missing values or values outside the scale range
@@ -1828,7 +1836,6 @@ Visualisation of features with high & low residual variance justify the
 filtering strategy for WGCNA input.
 
 ``` r
-
 plot_trend(table_mean_sd_orig,
     features = var_decomp %>%
         dplyr::arrange(Residual) %>% head(12) %>% dplyr::pull(Feature),
@@ -1843,10 +1850,9 @@ plot_trend(table_mean_sd_orig,
 
 ``` r
 
-
 plot_trend(table_mean_sd_orig,
     features = var_decomp %>%
-        dplyr::arrange(desc(Residual)) %>% head(12) %>% dplyr::pull(Feature),
+        dplyr::arrange(dplyr::desc(Residual)) %>% head(12) %>% dplyr::pull(Feature),
     title = "Features with highest residual variance"
 )
 #> Group not specified. Plotting all groups: IFNbeta, IFNgamma, LPS, untreated
@@ -1858,28 +1864,50 @@ plot_trend(table_mean_sd_orig,
 
 ## Common usage scenarios
 
-- Which features change over time in each sample group? →
+TiDEomics supports two experimental designs, auto-detected from the
+sample annotation:
+
+- **Cell culture / independent samples**:
+  `create_input(data, sample_ann)` – each sample is independent. LMM
+  uses `(1|Group) + (1|Time)`. DE uses unpaired designs.
+- **Patient / repeated-measures**:
+  `create_input(data, sample_ann, subject_col = "PatientID")` – same
+  subjects tracked across time points. LMM adds `(1|Subject)`.
+  [`DE_between_time()`](https://hte123.github.io/TiDEomics/reference/DE_between_time.md)
+  uses paired design via
+  [`limma::duplicateCorrelation()`](https://rdrr.io/pkg/limma/man/dupcor.html).
+  `normalise_to_start(by_subject = TRUE)` subtracts each subject’s own
+  baseline.
+  [`merge_replicates()`](https://hte123.github.io/TiDEomics/reference/merge_replicates.md)
+  and
+  [`calc_mean_sd()`](https://hte123.github.io/TiDEomics/reference/calc_mean_sd.md)
+  compute statistics across subjects.
+
+Users can ask different biological questions and use different functions
+in TiDEomics to answer them. For example:
+
+- Which features change over time in each sample group? -\>
   [`DE_between_time()`](https://hte123.github.io/TiDEomics/reference/DE_between_time.md),
   [`calc_feature_property()`](https://hte123.github.io/TiDEomics/reference/calc_feature_property.md),
   [`run_Trendy()`](https://hte123.github.io/TiDEomics/reference/run_Trendy.md).
 
-- Which features differ between groups at the same time point? →
+- Which features differ between groups at the same time point? -\>
   [`DE_between_group()`](https://hte123.github.io/TiDEomics/reference/DE_between_group.md)
   (For time 0, use `assay = 1`; for later time points, use `assay = 1`
   for original input data, or use `assay = 2` for change-from-baseline).
 
-- What is the temporal pattern for individual features? →
+- What is the temporal pattern for individual features? -\>
   [`run_Trendy()`](https://hte123.github.io/TiDEomics/reference/run_Trendy.md) +
   [`summarise_Trendy()`](https://hte123.github.io/TiDEomics/reference/summarise_Trendy.md) +
   [`extract_segment_trends()`](https://hte123.github.io/TiDEomics/reference/extract_segment_trends.md).
 
-- Which features are noisy vs biologically driven? →
+- Which features are noisy vs biologically driven? -\>
   [`decomp_variance()`](https://hte123.github.io/TiDEomics/reference/decomp_variance.md) +
   [`plot_variance()`](https://hte123.github.io/TiDEomics/reference/plot_variance.md),
   noisiness can be represented by `Residual` variance.
 
 - What co-expression modules are present and what are their temporal
-  profiles? →
+  profiles? -\>
   [`prepare_WGCNA()`](https://hte123.github.io/TiDEomics/reference/prepare_WGCNA.md) +
   [`run_WGCNA()`](https://hte123.github.io/TiDEomics/reference/run_WGCNA.md) +
   [`plot_modules_v()`](https://hte123.github.io/TiDEomics/reference/plot_modules_v.md)
@@ -1888,21 +1916,21 @@ plot_trend(table_mean_sd_orig,
 
 - What biological processes are associated with the genes of interest
   (e.g. co-expression modules, differentially expressed genes in each
-  sample group)? →
+  sample group)? -\>
   [`enrichGO_list()`](https://hte123.github.io/TiDEomics/reference/enrichGO_list.md) +
   [`plot_GO()`](https://hte123.github.io/TiDEomics/reference/plot_GO.md).
 
 - What biological processes are associated with the genes ranked by
-  their property (e.g. time or group contributed variance)? →
+  their property (e.g. time or group contributed variance)? -\>
   [`enrichGO_rank()`](https://hte123.github.io/TiDEomics/reference/enrichGO_rank.md).
 
-- How to normalise the data? →
+- How to normalise the data? -\>
   [`normalise_to_start()`](https://hte123.github.io/TiDEomics/reference/normalise_to_start.md)
   to focus on changes from baseline; apply global normalisation
   (quantile, median) and batch correction when appropriate, before
   [`create_input()`](https://hte123.github.io/TiDEomics/reference/create_input.md).
 
-- How to handle missing values? →
+- How to handle missing values? -\>
   [`impute_groups()`](https://hte123.github.io/TiDEomics/reference/impute_groups.md)
   for `run_Trendy`.
   [`plot_pca()`](https://hte123.github.io/TiDEomics/reference/plot_pca.md)
@@ -1915,7 +1943,6 @@ plot_trend(table_mean_sd_orig,
 ## Session information
 
 ``` r
-
 sessionInfo()
 ```
 
@@ -1943,10 +1970,10 @@ sessionInfo()
 #> 
 #> other attached packages:
 #>  [1] org.Mm.eg.db_3.23.0         AnnotationDbi_1.75.0       
-#>  [3] SummarizedExperiment_1.43.0 Biobase_2.73.0             
+#>  [3] SummarizedExperiment_1.43.0 Biobase_2.73.1             
 #>  [5] GenomicRanges_1.65.0        Seqinfo_1.3.0              
-#>  [7] IRanges_2.47.0              S4Vectors_0.51.0           
-#>  [9] BiocGenerics_0.59.0         generics_0.1.4             
+#>  [7] IRanges_2.47.1              S4Vectors_0.51.2           
+#>  [9] BiocGenerics_0.59.3         generics_0.1.4             
 #> [11] MatrixGenerics_1.25.0       matrixStats_1.5.0          
 #> [13] magrittr_2.0.5              TiDEomics_0.99.0           
 #> [15] BiocStyle_2.41.0           
@@ -1969,8 +1996,8 @@ sessionInfo()
 #>  [29] pkgdown_2.2.0             systemfonts_1.3.2        
 #>  [31] yulab.utils_0.2.4         gson_0.1.0               
 #>  [33] foreign_0.8-91            DOSE_4.7.0               
-#>  [35] limma_3.69.0              rstudioapi_0.18.0        
-#>  [37] impute_1.87.0             RSQLite_2.4.6            
+#>  [35] limma_3.69.1              rstudioapi_0.18.0        
+#>  [37] impute_1.87.0             RSQLite_3.52.0           
 #>  [39] gridGraphics_0.5-1        shape_1.4.6.1            
 #>  [41] gtools_3.9.5              crosstalk_1.2.2          
 #>  [43] car_3.1-5                 dplyr_1.2.1              
@@ -1978,133 +2005,139 @@ sessionInfo()
 #>  [47] abind_1.4-8               PCAtools_2.25.0          
 #>  [49] lifecycle_1.0.5           yaml_2.3.12              
 #>  [51] carData_3.0-6             qvalue_2.45.0            
-#>  [53] gplots_3.3.0              SparseArray_1.13.0       
+#>  [53] gplots_3.3.0              SparseArray_1.13.2       
 #>  [55] grid_4.6.0                blob_1.3.0               
 #>  [57] promises_1.5.0            dqrng_0.4.1              
 #>  [59] crayon_1.5.3              ggtangle_0.1.2           
 #>  [61] lattice_0.22-9            beachmat_2.29.0          
 #>  [63] cowplot_1.2.0             KEGGREST_1.53.0          
-#>  [65] pillar_1.11.1             knitr_1.51               
-#>  [67] ComplexHeatmap_2.29.0     rjson_0.2.23             
-#>  [69] boot_1.3-32               codetools_0.2-20         
-#>  [71] glue_1.8.1                ggiraph_0.9.6            
-#>  [73] fontLiberation_0.1.0      ggfun_0.2.0              
-#>  [75] data.table_1.18.2.1       treeio_1.37.0            
-#>  [77] vctrs_0.7.3               png_0.1-9                
-#>  [79] Rdpack_2.6.6              gtable_0.3.6             
-#>  [81] cachem_1.1.0              xfun_0.57                
-#>  [83] rbibutils_2.4.1           S4Arrays_1.13.0          
-#>  [85] mime_0.13                 reformulas_0.4.4         
-#>  [87] survival_3.8-6            aisdk_1.1.0              
-#>  [89] iterators_1.0.14          statmod_1.5.1            
-#>  [91] nlme_3.1-169              ggtree_4.3.0             
-#>  [93] fontquiver_0.2.1          bit64_4.8.0              
-#>  [95] bslib_0.10.0              irlba_2.3.7              
-#>  [97] KernSmooth_2.23-26        otel_0.2.0               
-#>  [99] rpart_4.1.27              colorspace_2.1-2         
-#> [101] DBI_1.3.0                 Hmisc_5.2-5              
-#> [103] nnet_7.3-20               tidyselect_1.2.1         
-#> [105] processx_3.9.0            bit_4.6.0                
-#> [107] compiler_4.6.0            httr2_1.2.2              
-#> [109] htmlTable_2.5.0           fontBitstreamVera_0.1.1  
-#> [111] randtests_1.0.2           desc_1.4.3               
-#> [113] DelayedArray_0.39.0       plotly_4.12.0            
-#> [115] bookdown_0.46             checkmate_2.3.4          
-#> [117] scales_1.4.0              caTools_1.18.3           
-#> [119] callr_3.7.6               rappdirs_0.3.4           
-#> [121] stringr_1.6.0             digest_0.6.39            
-#> [123] minqa_1.2.8               rmarkdown_2.31           
-#> [125] XVector_0.53.0            htmltools_0.5.9          
-#> [127] pkgconfig_2.0.3           base64enc_0.1-6          
-#> [129] lme4_2.0-1                umap_0.2.10.0            
-#> [131] sparseMatrixStats_1.25.0  fastmap_1.2.0            
-#> [133] rlang_1.2.0               GlobalOptions_0.1.4      
-#> [135] htmlwidgets_1.6.4         shiny_1.13.0             
-#> [137] DelayedMatrixStats_1.35.0 ggh4x_0.3.1              
-#> [139] farver_2.1.2              jquerylib_0.1.4          
-#> [141] jsonlite_2.0.0            BiocParallel_1.47.0      
-#> [143] GOSemSim_2.39.0           BiocSingular_1.29.0      
-#> [145] Formula_1.2-5             ggplotify_0.1.3          
-#> [147] patchwork_1.3.2           Rcpp_1.1.1-1.1           
-#> [149] gdtools_0.5.0             ape_5.8-1                
-#> [151] ggnewscale_0.5.2          reticulate_1.46.0        
-#> [153] stringi_1.8.7             MASS_7.3-65              
-#> [155] plyr_1.8.9                shinyFiles_0.9.3         
-#> [157] parallel_4.6.0            ggrepel_0.9.8            
-#> [159] Biostrings_2.81.0         splines_4.6.0            
-#> [161] circlize_0.4.18           igraph_2.3.0             
-#> [163] ggpubr_0.6.3              fastcluster_1.3.0        
-#> [165] enrichit_0.1.4            ggsignif_0.6.4           
-#> [167] reshape2_1.4.5            ScaledMatrix_1.21.0      
-#> [169] evaluate_1.0.5            BiocManager_1.30.27      
-#> [171] nloptr_2.2.1              foreach_1.5.2            
-#> [173] tweenr_2.0.3              httpuv_1.6.17            
-#> [175] tidyr_1.3.2               openssl_2.4.0            
-#> [177] purrr_1.2.2               polyclip_1.10-7          
-#> [179] clue_0.3-68               ggplot2_4.0.3            
-#> [181] Trendy_1.35.0             ggforce_0.5.0            
-#> [183] rsvd_1.0.5                broom_1.0.12             
-#> [185] xtable_1.8-8              tidytree_0.4.7           
-#> [187] RSpectra_0.16-2           tidydr_0.0.6             
-#> [189] rstatix_0.7.3             later_1.4.8              
-#> [191] viridisLite_0.4.3         ragg_1.5.2               
-#> [193] tibble_3.3.1              aplot_0.2.9              
-#> [195] clusterProfiler_4.21.0    memoise_2.0.1            
-#> [197] cluster_2.1.8.2
+#>  [65] magick_2.9.1              pillar_1.11.1            
+#>  [67] knitr_1.51                ComplexHeatmap_2.29.0    
+#>  [69] rjson_0.2.23              boot_1.3-32              
+#>  [71] codetools_0.2-20          glue_1.8.1               
+#>  [73] ggiraph_0.9.6             fontLiberation_0.1.0     
+#>  [75] ggfun_0.2.0               data.table_1.18.4        
+#>  [77] treeio_1.37.0             vctrs_0.7.3              
+#>  [79] png_0.1-9                 Rdpack_2.6.6             
+#>  [81] gtable_0.3.6              cachem_1.1.0             
+#>  [83] xfun_0.57                 rbibutils_2.4.1          
+#>  [85] S4Arrays_1.13.0           mime_0.13                
+#>  [87] reformulas_0.4.4          survival_3.8-6           
+#>  [89] aisdk_1.1.0               iterators_1.0.14         
+#>  [91] statmod_1.5.2             nlme_3.1-169             
+#>  [93] ggtree_4.3.0              fontquiver_0.2.1         
+#>  [95] bit64_4.8.2               bslib_0.11.0             
+#>  [97] irlba_2.3.7               KernSmooth_2.23-26       
+#>  [99] otel_0.2.0                rpart_4.1.27             
+#> [101] colorspace_2.1-2          DBI_1.3.0                
+#> [103] Hmisc_5.2-5               nnet_7.3-20              
+#> [105] processx_3.9.0            tidyselect_1.2.1         
+#> [107] bit_4.6.0                 compiler_4.6.0           
+#> [109] httr2_1.2.2               htmlTable_2.5.0          
+#> [111] fontBitstreamVera_0.1.1   randtests_1.0.2          
+#> [113] desc_1.4.3                DelayedArray_0.39.2      
+#> [115] plotly_4.12.0             bookdown_0.46            
+#> [117] checkmate_2.3.4           scales_1.4.0             
+#> [119] caTools_1.18.3            callr_3.7.6              
+#> [121] rappdirs_0.3.4            stringr_1.6.0            
+#> [123] digest_0.6.39             minqa_1.2.8              
+#> [125] rmarkdown_2.31            XVector_0.53.0           
+#> [127] htmltools_0.5.9           pkgconfig_2.0.3          
+#> [129] base64enc_0.1-6           lme4_2.0-1               
+#> [131] umap_0.2.10.0             sparseMatrixStats_1.25.0 
+#> [133] fastmap_1.2.0             rlang_1.2.0              
+#> [135] GlobalOptions_0.1.4       htmlwidgets_1.6.4        
+#> [137] shiny_1.13.0              DelayedMatrixStats_1.35.0
+#> [139] ggh4x_0.3.1               farver_2.1.2             
+#> [141] jquerylib_0.1.4           jsonlite_2.0.0           
+#> [143] BiocParallel_1.47.0       GOSemSim_2.39.0          
+#> [145] BiocSingular_1.29.0       Formula_1.2-5            
+#> [147] ggplotify_0.1.3           patchwork_1.3.2          
+#> [149] Rcpp_1.1.1-1.1            gdtools_0.5.0            
+#> [151] ape_5.8-1                 ggnewscale_0.5.2         
+#> [153] reticulate_1.46.0         stringi_1.8.7            
+#> [155] MASS_7.3-65               plyr_1.8.9               
+#> [157] shinyFiles_0.9.3          parallel_4.6.0           
+#> [159] ggrepel_0.9.8             Biostrings_2.81.1        
+#> [161] splines_4.6.0             circlize_0.4.18          
+#> [163] igraph_2.3.1              ggpubr_0.6.3             
+#> [165] fastcluster_1.3.0         enrichit_0.1.4           
+#> [167] ggsignif_0.6.4            reshape2_1.4.5           
+#> [169] ScaledMatrix_1.21.0       evaluate_1.0.5           
+#> [171] BiocManager_1.30.27       nloptr_2.2.1             
+#> [173] foreach_1.5.2             tweenr_2.0.3             
+#> [175] httpuv_1.6.17             tidyr_1.3.2              
+#> [177] openssl_2.4.1             purrr_1.2.2              
+#> [179] polyclip_1.10-7           clue_0.3-68              
+#> [181] ggplot2_4.0.3             Trendy_1.35.0            
+#> [183] ggforce_0.5.0             rsvd_1.0.5               
+#> [185] broom_1.0.13              xtable_1.8-8             
+#> [187] tidytree_0.4.7            RSpectra_0.16-2          
+#> [189] tidydr_0.0.6              rstatix_0.7.3            
+#> [191] later_1.4.8               viridisLite_0.4.3        
+#> [193] ragg_1.5.2                tibble_3.3.1             
+#> [195] aplot_0.2.9               clusterProfiler_4.21.0   
+#> [197] memoise_2.0.1             cluster_2.1.8.2
 ```
 
 ## References
 
-Bacher, Rhonda, Ning Leng, Li-Fang Chu, et al. 2018. “Trendy: Segmented
+Bacher, Rhonda, Ning Leng, Li-Fang Chu, Zijian Ni, James A. Thomson,
+Christina Kendziorski, and Ron M. Stewart. 2018. “Trendy: Segmented
 Regression Analysis of Expression Dynamics in High-Throughput Ordered
 Profiling Experiments.” *BMC Bioinformatics*.
 <https://bmcbioinformatics.biomedcentral.com/articles/10.1186/s12859-018-2405-x>.
 
-Gu, Zuguang. 2022. “Complex Heatmap Visualization.” *iMeta*, ahead of
-print. <https://doi.org/10.1002/imt2.43>.
+Gu, Zuguang. 2022. “Complex Heatmap Visualization.” *iMeta*.
+<https://doi.org/10.1002/imt2.43>.
 
 Gu, Zuguang, Roland Eils, and Matthias Schlesner. 2016. “Complex
 Heatmaps Reveal Patterns and Correlations in Multidimensional Genomic
-Data.” *Bioinformatics*, ahead of print.
+Data.” *Bioinformatics*.
 <https://doi.org/10.1093/bioinformatics/btw313>.
 
-Huber, W., Carey, et al. 2015. “Orchestrating High-Throughput Genomic
-Analysis with Bioconductor.” *Nature Methods* 12 (2): 115–21.
+Huber, W., Carey, V. J., Gentleman, R., Anders, et al. 2015.
+“Orchestrating High-Throughput Genomic Analysis with Bioconductor.”
+*Nature Methods* 12 (2): 115–21.
 [http://www.nature.com/nmeth/journal/v12/n2/full/nmeth.3252.html](http://www.nature.com/nmeth/journal/v12/n2/full/nmeth.3252.md).
 
 Langfelder, Peter, and Steve Horvath. 2008. “WGCNA: An r Package for
 Weighted Correlation Network Analysis.” *BMC Bioinformatics*, no. 1:
 559. <https://link.springer.com/article/10.1186/1471-2105-9-559>.
 
-Langfelder, Peter, and Steve Horvath. 2012. “Fast R Functions for Robust
-Correlations and Hierarchical Clustering.” *Journal of Statistical
-Software* 46 (11): 1–17. <https://www.jstatsoft.org/v46/i11/>.
+———. 2012. “Fast R Functions for Robust Correlations and Hierarchical
+Clustering.” *Journal of Statistical Software* 46 (11): 1–17.
+<https://www.jstatsoft.org/v46/i11/>.
 
-Ritchie, Matthew E, Belinda Phipson, Di Wu, et al. 2015. “limma Powers
-Differential Expression Analyses for RNA-Sequencing and Microarray
-Studies.” *Nucleic Acids Research* 43 (7): e47.
-<https://doi.org/10.1093/nar/gkv007>.
+Ritchie, Matthew E, Belinda Phipson, Di Wu, Yifang Hu, Charity W Law,
+Wei Shi, and Gordon K Smyth. 2015. “limma Powers Differential Expression
+Analyses for RNA-Sequencing and Microarray Studies.” *Nucleic Acids
+Research* 43 (7): e47. <https://doi.org/10.1093/nar/gkv007>.
 
-Traxler, Peter, Stephan Reichl, Lukas Folkman, et al. 2025. “Integrated
-Time-Series Analysis and High-Content CRISPR Screening Delineate the
-Dynamics of Macrophage Immune Regulation.” *Cell Systems* 16 (8):
-101346. https://doi.org/<https://doi.org/10.1016/j.cels.2025.101346>.
+Traxler, Peter, Stephan Reichl, Lukas Folkman, Lisa Shaw, Victoria Fife,
+Amelie Nemc, Djurdja Pasajlic, et al. 2025. “Integrated Time-Series
+Analysis and High-Content CRISPR Screening Delineate the Dynamics of
+Macrophage Immune Regulation.” *Cell Systems* 16 (8): 101346.
+https://doi.org/<https://doi.org/10.1016/j.cels.2025.101346>.
 
-Vasaikar, Suhas V, Adam K Savage, Qiuyu Gong, et al. 2023. “A
-Comprehensive Platform for Analyzing Longitudinal Multi-Omics Data.”
-*Nature Communications* 14 (1): 1684.
+Vasaikar, Suhas V, Adam K Savage, Qiuyu Gong, Elliott Swanson, Aarthi
+Talla, Cara Lord, Alexander T Heubeck, et al. 2023. “A Comprehensive
+Platform for Analyzing Longitudinal Multi-Omics Data.” *Nature
+Communications* 14 (1): 1684.
 <https://www.nature.com/articles/s41467-023-37432-w>.
 
 Wickham, Hadley. 2016. *Ggplot2: Elegant Graphics for Data Analysis*.
 Springer-Verlag New York. <https://ggplot2.tidyverse.org>.
 
-Wu, Tianzhi, Erqiang Hu, Shuangbin Xu, et al. 2021. “clusterProfiler
-4.0: A Universal Enrichment Tool for Interpreting Omics Data.” *The
-Innovation* 2 (3): 100141. <https://doi.org/10.1016/j.xinn.2021.100141>.
+Wu, Tianzhi, Erqiang Hu, Shuangbin Xu, Meijun Chen, Pingfan Guo, Zehan
+Dai, Tingze Feng, et al. 2021. “clusterProfiler 4.0: A Universal
+Enrichment Tool for Interpreting Omics Data.” *The Innovation* 2 (3):
+100141. <https://doi.org/10.1016/j.xinn.2021.100141>.
 
-Xu, Shuangbin, Erqiang Hu, Yantong Cai, et al. 2024. “Using
-clusterProfiler to Characterize Multiomics Data.” *Nature Protocols* 19
-(11): 3292–320. <https://doi.org/10.1038/s41596-024-01020-z>.
+Xu, Shuangbin, Erqiang Hu, Yantong Cai, Zijing Xie, Xiao Luo, Li Zhan,
+Wenli Tang, et al. 2024. “Using clusterProfiler to Characterize
+Multiomics Data.” *Nature Protocols* 19 (11): 3292–3320.
+<https://doi.org/10.1038/s41596-024-01020-z>.
 
 Yu, Guangchuang. 2024. “Thirteen Years of clusterProfiler.” *The
 Innovation* 5 (6): 100722. <https://doi.org/10.1016/j.xinn.2024.100722>.

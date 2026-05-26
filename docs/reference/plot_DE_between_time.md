@@ -64,6 +64,7 @@ features.
 ``` r
 data("example")
 example_obj <- normalise_to_start(example_obj)
+#> Normalising to group baseline at each feature's first non-NA time point.
 
 DE_between_time_out <- DE_between_time(example_obj, assay = 1)
 #> Non-NA replicate number filter not specified. Using minimum number of replicates across all groups and time points: 0
@@ -166,10 +167,4 @@ DE_between_time_out <- DE_between_time(example_obj, assay = 1)
 plot_DE_between_time(example_obj,
     de_list = DE_between_time_out$de_list,
     fontsize = 8, value = TRUE, nrow = 1, heatmap_width = 3)
-#> Warning: The input is a data frame-like object, convert it to a matrix.
-#> Warning: The input is a data frame-like object, convert it to a matrix.
-#> Warning: The input is a data frame-like object, convert it to a matrix.
-#> Warning: The input is a data frame-like object, convert it to a matrix.
-#> Warning: Note: not all columns in the data frame are numeric. The data frame
-#> will be converted into a character matrix.
 ```

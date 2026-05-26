@@ -38,7 +38,6 @@ module
 ## Examples
 
 ``` r
-library(dplyr)
 data("example_res_list")
 trendy_summary <- summarise_Trendy(example_res_list)
 #> Warning: number of columns of result is not a multiple of vector length (arg 9)
@@ -46,8 +45,7 @@ trendy_summary <- summarise_Trendy(example_res_list)
 #> Warning: number of columns of result is not a multiple of vector length (arg 5)
 
 data(example_net)
-example_module <- data.frame(Module = as.factor(example_net$colors)) %>%
-    tibble::rownames_to_column("Feature") %>% arrange(Module)
+example_module <- WGCNA_module(example_net) 
 summarise_module_pattern(example_module, trendy_summary)
 #> Most common pattern in each module (IFNbeta, IFNgamma, LPS):
 #> Module 1: down_up, NA, NA
@@ -74,7 +72,7 @@ summarise_module_pattern(example_module, trendy_summary)
 #> 3 NA, stable_up, stable_stable     1
 #> 4        down, NA, down_stable     1
 #> 5      down, NA, stable_stable     1
-#> [[1]]
+#> $`1`
 #>                     IFNbeta, IFNgamma, LPS Count
 #> 1                          down_up, NA, NA     5
 #> 2               down_up, NA, stable_stable     2
@@ -91,7 +89,7 @@ summarise_module_pattern(example_module, trendy_summary)
 #> 13              stable_up, NA, down_stable     1
 #> 14            stable_up, stable_stable, NA     1
 #> 
-#> [[2]]
+#> $`2`
 #>             IFNbeta, IFNgamma, LPS Count
 #> 1            NA, NA, stable_stable     2
 #> 2            stable_stable, NA, NA     2
@@ -99,7 +97,7 @@ summarise_module_pattern(example_module, trendy_summary)
 #> 4                     down, NA, NA     1
 #> 5 stable_stable, down_stable, down     1
 #> 
-#> [[3]]
+#> $`3`
 #>               IFNbeta, IFNgamma, LPS Count
 #> 1              NA, NA, stable_stable     1
 #> 2                       NA, down, NA     1

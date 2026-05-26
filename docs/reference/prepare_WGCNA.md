@@ -14,6 +14,7 @@ prepare_WGCNA(
   RsquaredCut = 0.8,
   MeanConnectivity = 100,
   powers = NULL,
+  fontsize = 8,
   ...
 )
 ```
@@ -58,6 +59,10 @@ prepare_WGCNA(
   [`WGCNA::pickSoftThreshold()`](https://rdrr.io/pkg/WGCNA/man/pickSoftThreshold.html)
   (default is `c(seq(1, 10, by = 1), seq(12, 20, by = 2))`)
 
+- fontsize:
+
+  Base font size for diagnostic plots (default: 8).
+
 - ...:
 
   Additional parameters to be passed to
@@ -79,6 +84,7 @@ https://github.com/edo98811/WGCNA_official_documentation/
 ``` r
 data("example")
 example_obj <- normalise_to_start(example_obj)
+#> Normalising to group baseline at each feature's first non-NA time point.
 
 wgcna_input <- prepare_WGCNA(example_obj, assay = 2, powers = seq(1, 30),
     networkType = "signed", RsquaredCut = 0.8)

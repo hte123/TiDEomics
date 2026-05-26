@@ -1,7 +1,8 @@
-# UMAP by group (one object)
+# Plot UMAP by group
 
-Plot UMAP by group, input is a SummarizedExperiment object with a
-"Group" column in the colData.
+Plot UMAP for each group separately. Accepts either a
+SummarizedExperiment object or a named list of them (from
+[`split_groups()`](https://hte123.github.io/TiDEomics/reference/split_groups.md)).
 
 ## Usage
 
@@ -12,7 +13,8 @@ plot_umap_by_group(
   nrow = 1,
   umap_neighbors = NULL,
   fontsize = 8,
-  assay = 1
+  assay = 1,
+  legend_pos = "right"
 )
 ```
 
@@ -20,30 +22,34 @@ plot_umap_by_group(
 
 - se_obj:
 
-  A SummarizedExperiment object created by
-  [`create_input()`](https://hte123.github.io/TiDEomics/reference/create_input.md)
+  A SummarizedExperiment object, or a named list of them (e.g. from
+  [`split_groups()`](https://hte123.github.io/TiDEomics/reference/split_groups.md)).
 
 - seed:
 
-  Random seed for UMAP (default is 1234)
+  Random seed for UMAP (default: 1234).
 
 - nrow:
 
-  Number of rows for arranging the UMAP plots (default is 1)
+  Number of rows for arranging the plots (default: 1).
 
 - umap_neighbors:
 
-  UMAP n_neighbors parameter (default is selected by
-  `umap_n_neighbors()` function based on the number of samples)
+  UMAP n_neighbors parameter (default: auto-selected based on sample
+  count).
 
 - fontsize:
 
-  Font size for the plot (default is 8)
+  Base font size (default: 8).
 
 - assay:
 
   Assay index to use, where 1 is the original data and 2 is normalised
-  to time 0 (if available) (default is 1)
+  to time 0 (if available) (default: 1).
+
+- legend_pos:
+
+  Legend position (default: "right").
 
 ## Value
 
@@ -55,6 +61,15 @@ group, coloured by Time.
 ``` r
 data("example")
 plot_umap_by_group(example_obj)
+#> Using n_neighbors = 5
+#> Using n_neighbors = 5
+#> Using n_neighbors = 5
+#> Using n_neighbors = 4
+
+
+# Also accepts a list from split_groups()
+example_obj_list <- split_groups(example_obj)
+plot_umap_by_group(example_obj_list)
 #> Using n_neighbors = 5
 #> Using n_neighbors = 5
 #> Using n_neighbors = 5

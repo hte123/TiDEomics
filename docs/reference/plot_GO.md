@@ -80,31 +80,29 @@ A series of plots visualizing the GO enrichment results.
 ## Examples
 
 ``` r
-library(dplyr)
+library(magrittr)
 library(org.Mm.eg.db)
 data(example_net)
-example_module <- data.frame(Module = as.factor(example_net$colors)) %>%
-    tibble::rownames_to_column("Feature") %>% arrange(Module)
 # select two modules for demonstration
-example_module_list <- example_module %>% 
-    filter(Module %in% c(1, 2)) %>%
-    split(as.character(.$Module)) %>%
-    lapply(`[[`, "Feature")
+example_module <- WGCNA_module(example_net) %>%
+    dplyr::filter(Module %in% c("1", "2"))
 # set cutoff to 1 to show all results for demonstration
-example_go_list = enrichGO_list(example_module_list, OrgDb = org.Mm.eg.db,
+example_go_list = enrichGO_list(example_module, OrgDb = org.Mm.eg.db,
     universe = example_module$Feature,
     pvalueCutoff = 1, qvalueCutoff = 1,
     category = "BP", simplify = FALSE)
 #> Performing GO enrichment for category: BP
+#> Gene list 0 is empty. Skipping.
 #> Processing gene list: 1
 #> 'select()' returned 1:1 mapping between keys and columns
 #> 'select()' returned 1:1 mapping between keys and columns
-#> Warning: 1.03% of input gene IDs are fail to map...
+#> Warning: 2.44% of input gene IDs are fail to map...
 #> Processing gene list: 2
 #> 'select()' returned 1:1 mapping between keys and columns
 #> Warning: 5.88% of input gene IDs are fail to map...
 #> 'select()' returned 1:1 mapping between keys and columns
-#> Warning: 1.03% of input gene IDs are fail to map...
+#> Warning: 2.44% of input gene IDs are fail to map...
+#> Gene list 3 is empty. Skipping.
 #> Merging GO enrichment results across gene lists for each category.
 plot_GO(example_go_list$all, plot_dotplot = TRUE,
     plot_emapplot = FALSE, plot_cnetplot = FALSE)

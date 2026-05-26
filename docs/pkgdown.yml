@@ -1,9 +1,9 @@
-pandoc: 3.8.3
+pandoc: 3.6.3
 pkgdown: 2.2.0
 pkgdown_sha: ~
 articles:
   TiDEomics: TiDEomics.html
-last_built: 2026-05-01T14:57Z
+last_built: 2026-05-26T17:39Z
 urls:
   reference: https://hte123.github.io/TiDEomics/reference
   article: https://hte123.github.io/TiDEomics/articles

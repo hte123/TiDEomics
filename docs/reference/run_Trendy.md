@@ -31,7 +31,7 @@ run_Trendy(
   maxK = 1,
   meanCut = 0,
   minNumInSeg = 3,
-  NCores = 2,
+  NCores = 1,
   ...
 )
 ```
@@ -99,12 +99,17 @@ and statistics for each feature in each group.
 ``` r
 data("example")
 example_obj <- normalise_to_start(example_obj)
+#> Normalising to group baseline at each feature's first non-NA time point.
 example_obj_list <- split_groups(example_obj)
 example_obj_merged_list <- merge_replicates(example_obj_list)
 example_obj_merged_list <- calc_feature_property(example_obj_merged_list,
     threshold = 0)
 # no missing value in the example dataset, so imputation is not necessary
 example_obj_merged_imp_list <- impute_groups(example_obj_merged_list)
+#> Group IFNbeta: no missing values.
+#> Group IFNgamma: no missing values.
+#> Group LPS: no missing values.
+#> Group untreated: no missing values.
 
 # "untreated" group has only 3 time points, so Trendy analysis will not be
 # performed for this group

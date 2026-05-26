@@ -27,7 +27,8 @@ plot_cor_matrix(
 
 - se_obj:
 
-  A SummarizedExperiment object created by `check_input()`
+  A SummarizedExperiment object created by
+  [`create_input()`](https://hte123.github.io/TiDEomics/reference/create_input.md)
 
 - use:
 

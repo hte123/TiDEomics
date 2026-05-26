@@ -8,7 +8,7 @@ to identify co-expression modules of features with
 ## Usage
 
 ``` r
-run_WGCNA(wgcna_input, power, ...)
+run_WGCNA(wgcna_input, power, numericLabels = TRUE, ...)
 ```
 
 ## Arguments
@@ -26,6 +26,11 @@ run_WGCNA(wgcna_input, power, ...)
   [`WGCNA::blockwiseModules()`](https://rdrr.io/pkg/WGCNA/man/blockwiseModules.html),
   selected automatically or manually based on the output of
   [`prepare_WGCNA()`](https://hte123.github.io/TiDEomics/reference/prepare_WGCNA.md)
+
+- numericLabels:
+
+  Whether to use numeric labels for modules in the output (default is
+  TRUE)
 
 - ...:
 
@@ -48,6 +53,7 @@ https://github.com/edo98811/WGCNA_official_documentation/blob/main/FemaleLiver-0
 ``` r
 data("example")
 example_obj <- normalise_to_start(example_obj)
+#> Normalising to group baseline at each feature's first non-NA time point.
 
 wgcna_input <- prepare_WGCNA(example_obj, assay = 2, powers = seq(1, 30),
     networkType = "signed", RsquaredCut = 0.8)

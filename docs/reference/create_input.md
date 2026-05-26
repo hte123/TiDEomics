@@ -6,7 +6,7 @@ SummarizedExperiment object
 ## Usage
 
 ``` r
-create_input(data, sample_ann)
+create_input(data, sample_ann, subject_col = NULL)
 ```
 
 ## Arguments
@@ -23,8 +23,17 @@ create_input(data, sample_ann)
 
   A data frame containing sample annotations with required columns:
   'Sample', 'Group', and 'Time'. 'Replicate' and 'Batch' are optional
-  columns and will be set to 1 for all samples if not provided. 'Time',
+  columns and will be auto-generated if not provided. 'Time',
   'Replicate' and 'Batch' should be numeric.
+
+- subject_col:
+
+  Optional: name of a column in `sample_ann` identifying biological
+  subjects measured repeatedly across time points (e.g., `"PatientID"`).
+  If provided, the column is renamed to 'Subject' and used for
+  repeated-measures analyses downstream. If NULL (default), all samples
+  are treated as independent, e.g. for cell culture experiments.
+  experiments.
 
 ## Value
 
@@ -44,6 +53,7 @@ sample_ann <- data.frame(
     Batch = c(1, 1)
 )
 se_obj <- create_input(data, sample_ann)
+#> No Subject column specified. Samples treated as independent. For repeated-measures designs, set subject_col to the column identifying biological subjects.
 #> Converting 'Group' column to factor. Default order is alphabetical.
 #> Converting 'Replicate' column to factor. Default order is numerical.
 #> Converting 'Batch' column to factor. Default order is numerical.

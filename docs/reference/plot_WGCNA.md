@@ -36,6 +36,7 @@ https://github.com/edo98811/WGCNA_official_documentation/blob/main/FemaleLiver-0
 ``` r
 data("example")
 example_obj <- normalise_to_start(example_obj)
+#> Normalising to group baseline at each feature's first non-NA time point.
 
 # wgcna_input <- prepare_WGCNA(example_obj, assay = 2, powers = seq(1, 30),
 #     networkType = "signed", RsquaredCut = 0.8)
@@ -47,7 +48,6 @@ example_obj <- normalise_to_start(example_obj)
 #    numericLabels = TRUE)
 data("example_net")
 plot_WGCNA(example_net, fontsize = 8)
-#> Warning: The input is a data frame-like object, convert it to a matrix.
 
 
 #> Warning: argument 1 does not name a graphical parameter

@@ -15,6 +15,7 @@ enrichGO_list(
   universe_list = NULL,
   pAdjustMethod = "BH",
   pvalueCutoff = 0.05,
+  qvalueCutoff = 0.05,
   category = NULL,
   simplify = FALSE,
   simplify_cutoff = 0.7,
@@ -29,7 +30,9 @@ enrichGO_list(
 
 - gene_list:
 
-  A list of gene sets (vectors)
+  A named list of gene vectors, or a data.frame with `Feature` and
+  `Module` columns from
+  [`WGCNA_module()`](https://hte123.github.io/TiDEomics/reference/WGCNA_module.md).
 
 - keyType:
 
@@ -57,6 +60,12 @@ enrichGO_list(
   (default is "BH")
 
 - pvalueCutoff:
+
+  (Optional) Parameter of
+  [`clusterProfiler::enrichGO()`](https://rdrr.io/pkg/clusterProfiler/man/enrichGO.html)
+  (default is 0.05)
+
+- qvalueCutoff:
 
   (Optional) Parameter of
   [`clusterProfiler::enrichGO()`](https://rdrr.io/pkg/clusterProfiler/man/enrichGO.html)
@@ -115,15 +124,7 @@ category (BP, MF, CC).
 ## Examples
 
 ``` r
-library(dplyr)
-#> 
-#> Attaching package: 'dplyr'
-#> The following objects are masked from 'package:stats':
-#> 
-#>     filter, lag
-#> The following objects are masked from 'package:base':
-#> 
-#>     intersect, setdiff, setequal, union
+library(magrittr)
 library(org.Mm.eg.db)
 #> Loading required package: AnnotationDbi
 #> Loading required package: stats4
@@ -131,21 +132,18 @@ library(org.Mm.eg.db)
 #> Loading required package: generics
 #> 
 #> Attaching package: 'generics'
-#> The following object is masked from 'package:dplyr':
-#> 
-#>     explain
 #> The following objects are masked from 'package:base':
 #> 
 #>     as.difftime, as.factor, as.ordered, intersect, is.element, setdiff,
 #>     setequal, union
 #> 
 #> Attaching package: 'BiocGenerics'
-#> The following object is masked from 'package:dplyr':
-#> 
-#>     combine
 #> The following objects are masked from 'package:stats':
 #> 
 #>     IQR, mad, sd, var, xtabs
+#> The following object is masked from 'package:utils':
+#> 
+#>     data
 #> The following objects are masked from 'package:base':
 #> 
 #>     Filter, Find, Map, Position, Reduce, anyDuplicated, aperm, append,
@@ -164,9 +162,6 @@ library(org.Mm.eg.db)
 #> Loading required package: S4Vectors
 #> 
 #> Attaching package: 'S4Vectors'
-#> The following objects are masked from 'package:dplyr':
-#> 
-#>     first, rename
 #> The following object is masked from 'package:utils':
 #> 
 #>     findMatches
@@ -175,17 +170,10 @@ library(org.Mm.eg.db)
 #>     I, expand.grid, unname
 #> 
 #> Attaching package: 'IRanges'
-#> The following objects are masked from 'package:dplyr':
-#> 
-#>     collapse, desc, slice
 #> The following object is masked from 'package:grDevices':
 #> 
 #>     windows
-#> 
-#> Attaching package: 'AnnotationDbi'
-#> The following object is masked from 'package:dplyr':
-#> 
-#>     select
+#> Warning: replacing previous import 'utils::data' by 'BiocGenerics::data' when loading 'Biostrings'
 #> 
 library(clusterProfiler)
 #> 
@@ -211,28 +199,26 @@ library(clusterProfiler)
 #> 
 #>     filter
 data(example_net)
-example_module <- data.frame(Module = as.factor(example_net$colors)) %>%
-    tibble::rownames_to_column("Feature") %>% arrange(Module)
 # select two modules for demonstration
-example_module_list <- example_module %>% 
-    filter(Module %in% c(1, 2)) %>%
-    split(as.character(.$Module)) %>%
-    lapply(`[[`, "Feature")
+example_module <- WGCNA_module(example_net) %>%
+    dplyr::filter(Module %in% c("1", "2"))
 # set cutoff to 1 to show all results for demonstration
-example_go_list = enrichGO_list(example_module_list, OrgDb = org.Mm.eg.db,
+example_go_list = enrichGO_list(example_module, OrgDb = org.Mm.eg.db,
     universe = example_module$Feature,
     pvalueCutoff = 1, qvalueCutoff = 1,
     category = "BP", simplify = FALSE)
 #> Performing GO enrichment for category: BP
+#> Gene list 0 is empty. Skipping.
 #> Processing gene list: 1
 #> 'select()' returned 1:1 mapping between keys and columns
 #> 'select()' returned 1:1 mapping between keys and columns
-#> Warning: 1.03% of input gene IDs are fail to map...
+#> Warning: 2.44% of input gene IDs are fail to map...
 #> Processing gene list: 2
 #> 'select()' returned 1:1 mapping between keys and columns
 #> Warning: 5.88% of input gene IDs are fail to map...
 #> 'select()' returned 1:1 mapping between keys and columns
-#> Warning: 1.03% of input gene IDs are fail to map...
+#> Warning: 2.44% of input gene IDs are fail to map...
+#> Gene list 3 is empty. Skipping.
 #> Merging GO enrichment results across gene lists for each category.
 # plot_GO(example_go_list$all, plot_dotplot = TRUE,
 #     plot_emapplot = FALSE, plot_cnetplot = FALSE)

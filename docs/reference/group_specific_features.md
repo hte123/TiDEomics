@@ -19,7 +19,7 @@ group_specific_features(
   group_pct = 1,
   genename = TRUE,
   GO = TRUE,
-  org.db = NULL,
+  OrgDb = NULL,
   keytype = NULL,
   ...
 )
@@ -61,7 +61,7 @@ group_specific_features(
   TRUE, the function will use the
   [`clusterProfiler::bitr()`](https://rdrr.io/pkg/clusterProfiler/man/bitr.html)
   function to annotate the features with gene names based on the
-  specified `org.db` and `keytype`. (default is TRUE).
+  specified `OrgDb` and `keytype`. (default is TRUE).
 
 - GO:
 
@@ -72,7 +72,7 @@ group_specific_features(
   function to perform GO enrichment analysis and visualize the results
   with a dot plot. (default is TRUE).
 
-- org.db:
+- OrgDb:
 
   An OrgDb object from the `AnnotationDbi` package corresponding to the
   organism of interest (e.g., `org.Hs.eg.db` for human, `org.Mm.eg.db`
@@ -86,7 +86,7 @@ group_specific_features(
   row names of the assay data (e.g., "SYMBOL", "ENTREZID", "ENSEMBL").
   This will be used for gene annotation with the
   [`clusterProfiler::bitr()`](https://rdrr.io/pkg/clusterProfiler/man/bitr.html)
-  function. Available key types depend on the `org.db` database and can
+  function. Available key types depend on the `OrgDb` database and can
   be checked with the
   [`AnnotationDbi::keytypes`](https://rdrr.io/pkg/AnnotationDbi/man/AnnotationDb-class.html)
   function.
@@ -111,6 +111,7 @@ unique features will be printed.
 ``` r
 data("example")
 example_obj <- normalise_to_start(example_obj)
+#> Normalising to group baseline at each feature's first non-NA time point.
 example_obj_list <- split_groups(example_obj)
 example_obj_merged_list <- merge_replicates(example_obj_list)
 

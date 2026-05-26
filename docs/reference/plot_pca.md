@@ -24,8 +24,7 @@ plot_pca(
   ylim_min = NULL,
   ylim_max = NULL,
   fontsize = 8,
-  assay = 1,
-  ...
+  assay = 1
 )
 ```
 
@@ -99,12 +98,6 @@ plot_pca(
 
   Assay index to use, where 1 is the original data and 2 is normalised
   to time 0 (if available) (default is 1)
-
-- ...:
-
-  Additional arguments passed to
-  [`ggforce::geom_mark_ellipse()`](https://ggforce.data-imaginist.com/reference/geom_mark_ellipse.html)
-  for customizing the ellipses
 
 ## Value
 

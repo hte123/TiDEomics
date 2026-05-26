@@ -18,7 +18,7 @@ will not be performed and NULL will be returned.
   maxK = 1,
   meanCut = 0,
   minNumInSeg = 3,
-  NCores = 2,
+  NCores = 1,
   ...
 )
 ```

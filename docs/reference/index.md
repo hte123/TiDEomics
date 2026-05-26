@@ -54,15 +54,11 @@
 - [`plot_pca_arrows()`](https://hte123.github.io/TiDEomics/reference/plot_pca_arrows.md)
   : Plot PCA with arrows
 - [`plot_pca_by_group()`](https://hte123.github.io/TiDEomics/reference/plot_pca_by_group.md)
-  : Plot PCA by group (one object)
-- [`plot_pca_by_group_list()`](https://hte123.github.io/TiDEomics/reference/plot_pca_by_group_list.md)
-  : Plot PCA by group (list of objects)
+  : Plot PCA by group
 - [`plot_umap()`](https://hte123.github.io/TiDEomics/reference/plot_umap.md)
   : Plot UMAP
 - [`plot_umap_by_group()`](https://hte123.github.io/TiDEomics/reference/plot_umap_by_group.md)
-  : Plot UMAP by group (one object)
-- [`plot_umap_by_group_list()`](https://hte123.github.io/TiDEomics/reference/plot_umap_by_group_list.md)
-  : Plot UMAP by group (list of objects)
+  : Plot UMAP by group
 
 ## Pairwise differential expression
 
@@ -96,6 +92,8 @@
   : Weighted gene co-expression network analysis
 - [`plot_WGCNA()`](https://hte123.github.io/TiDEomics/reference/plot_WGCNA.md)
   : Plot WGCNA results
+- [`WGCNA_module()`](https://hte123.github.io/TiDEomics/reference/WGCNA_module.md)
+  : Convert WGCNA output to feature-module data frame
 - [`plot_modules_h()`](https://hte123.github.io/TiDEomics/reference/plot_modules_h.md)
   : Plot modules (horizontal layout)
 - [`plot_modules_v()`](https://hte123.github.io/TiDEomics/reference/plot_modules_v.md)
@@ -109,8 +107,8 @@
   : GO enrichment with ranked gene list
 - [`enrichGO_list()`](https://hte123.github.io/TiDEomics/reference/enrichGO_list.md)
   : GO enrichment with gene sets
-- [`enrich_drug_list()`](https://hte123.github.io/TiDEomics/reference/enrich_drug_list.md)
-  : Enrich for drug targets
+- [`enrichR_list()`](https://hte123.github.io/TiDEomics/reference/enrichR_list.md)
+  : Gene-set enrichment via enrichR
 - [`plot_GO()`](https://hte123.github.io/TiDEomics/reference/plot_GO.md)
   : Plot GO enrichment
 
@@ -120,6 +118,8 @@
   : Set custom color palette
 - [`get_custom_palette()`](https://hte123.github.io/TiDEomics/reference/get_custom_palette.md)
   : Get custom color palette
+- [`theme_custom()`](https://hte123.github.io/TiDEomics/reference/theme_custom.md)
+  : Custom ggplot2 theme
 
 ## Data sets in tutorial and examples
 

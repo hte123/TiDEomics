@@ -32,15 +32,16 @@ with updated rowData containing the following columns: Feature, Group,
 Exp_threshold, T_exp (number of time points with values \>
 Exp_threshold), T_total (total number of time points), P_trend (p-value
 from Bartels' test for randomness against a trend), Max_FC (maximum fold
-change across time points), Max_FC_time (time difference between max and
-min expression, positive if max occurs after min, negative otherwise),
-Exp_ratio (T_exp / T_total).
+change across time points), Max_FC_time (difference between the time
+points at which maximum and minimum expression occur; positive if max
+occurs after min, negative otherwise), Exp_ratio (T_exp / T_total).
 
 ## Examples
 
 ``` r
 data("example")
 example_obj <- normalise_to_start(example_obj)
+#> Normalising to group baseline at each feature's first non-NA time point.
 example_obj_list <- split_groups(example_obj)
 example_obj_merged_list <- merge_replicates(example_obj_list)
 

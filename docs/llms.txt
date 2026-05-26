@@ -9,7 +9,7 @@ The package’s main goals are:
 
 - Compare multiple time courses systematically.
 - Identify features (e.g. genes, proteins) and pathways differentially
-  expressed by **time**, **condition**, and **both** factors (time ×
+  expressed by **time**, **condition**, and **both** factors (time x
   condition interactions).
 - Provide utilities for quality control, data processing, sample-level
   and feature-level analysis, tailored for time-course multi-condition
@@ -23,13 +23,18 @@ The package supports datasets with missing values, and operates on
 SummarizedExperiment objects to ensure compatibility with the
 Bioconductor ecosystem.
 
+`TiDEomics` supports both independent-sample designs (e.g. cell culture)
+and repeated-measures designs (e.g. patient longitudinal studies, via
+`subject_col` in
+[`create_input()`](https://hte123.github.io/TiDEomics/reference/create_input.md)).
+Downstream functions auto-detect the data structure.
+
 ## Installation
 
 Install the development version from
 [GitHub](https://github.com/hte123/TiDEomics) with:
 
 ``` r
-
 if (!require("remotes", quietly = TRUE)) install.packages("remotes")
 
 remotes::install_github("hte123/TiDEomics")
@@ -48,7 +53,6 @@ Please run this yourself to check for any updates on how to cite
 **TiDEomics**.
 
 ``` r
-
 print(citation("TiDEomics"), bibtex = TRUE)
 #> To cite package 'TiDEomics' in publications use:
 #> 
@@ -158,15 +162,11 @@ This package was developed using
 - [`plot_pca_arrows()`](https://hte123.github.io/TiDEomics/reference/plot_pca_arrows.md)
   : Plot PCA with arrows
 - [`plot_pca_by_group()`](https://hte123.github.io/TiDEomics/reference/plot_pca_by_group.md)
-  : Plot PCA by group (one object)
-- [`plot_pca_by_group_list()`](https://hte123.github.io/TiDEomics/reference/plot_pca_by_group_list.md)
-  : Plot PCA by group (list of objects)
+  : Plot PCA by group
 - [`plot_umap()`](https://hte123.github.io/TiDEomics/reference/plot_umap.md)
   : Plot UMAP
 - [`plot_umap_by_group()`](https://hte123.github.io/TiDEomics/reference/plot_umap_by_group.md)
-  : Plot UMAP by group (one object)
-- [`plot_umap_by_group_list()`](https://hte123.github.io/TiDEomics/reference/plot_umap_by_group_list.md)
-  : Plot UMAP by group (list of objects)
+  : Plot UMAP by group
 
 ## Pairwise differential expression
 
@@ -200,6 +200,8 @@ This package was developed using
   : Weighted gene co-expression network analysis
 - [`plot_WGCNA()`](https://hte123.github.io/TiDEomics/reference/plot_WGCNA.md)
   : Plot WGCNA results
+- [`WGCNA_module()`](https://hte123.github.io/TiDEomics/reference/WGCNA_module.md)
+  : Convert WGCNA output to feature-module data frame
 - [`plot_modules_h()`](https://hte123.github.io/TiDEomics/reference/plot_modules_h.md)
   : Plot modules (horizontal layout)
 - [`plot_modules_v()`](https://hte123.github.io/TiDEomics/reference/plot_modules_v.md)
@@ -213,8 +215,8 @@ This package was developed using
   : GO enrichment with ranked gene list
 - [`enrichGO_list()`](https://hte123.github.io/TiDEomics/reference/enrichGO_list.md)
   : GO enrichment with gene sets
-- [`enrich_drug_list()`](https://hte123.github.io/TiDEomics/reference/enrich_drug_list.md)
-  : Enrich for drug targets
+- [`enrichR_list()`](https://hte123.github.io/TiDEomics/reference/enrichR_list.md)
+  : Gene-set enrichment via enrichR
 - [`plot_GO()`](https://hte123.github.io/TiDEomics/reference/plot_GO.md)
   : Plot GO enrichment
 
@@ -224,6 +226,8 @@ This package was developed using
   : Set custom color palette
 - [`get_custom_palette()`](https://hte123.github.io/TiDEomics/reference/get_custom_palette.md)
   : Get custom color palette
+- [`theme_custom()`](https://hte123.github.io/TiDEomics/reference/theme_custom.md)
+  : Custom ggplot2 theme
 
 ## Data sets in tutorial and examples
 
