@@ -26,7 +26,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">TiDEomics</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -78,7 +78,7 @@
 Oxford<br><a class="author_email" href="mailto:#"></a><a href="mailto:tianen.he@ndm.ox.ac.uk" class="email">tianen.he@ndm.ox.ac.uk</a>
       </address>
                   
-            <h4 data-toc-skip class="date">26 May 2026</h4>
+            <h4 data-toc-skip class="date">9 June 2026</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/hte123/TiDEomics/blob/HEAD/vignettes/TiDEomics.Rmd" class="external-link"><code>vignettes/TiDEomics.Rmd</code></a></small>
       <div class="d-none name"><code>TiDEomics.Rmd</code></div>
@@ -98,36 +98,35 @@ with missing values.</p>
 and gives practical tips.</p>
 <p>Key features covered:</p>
 <ul>
-<li><p><em>Preparing input</em> - Create a
+<li><p><em>Preparing input</em>: Create a
 <code>SummarizedExperiment</code> object with the data matrix and sample
 annotation, with checks for correct formatting.</p></li>
-<li><p><em>Quality control</em> - Check value distributions and
+<li><p><em>Quality control</em>: Check value distributions and
 missingness patterns.</p></li>
-<li><p><em>Normalisation, grouping and merging replicates</em> -
+<li><p><em>Normalisation, grouping and merging replicates</em>:
 Normalise each feature to the starting time point when focused on
 changes from baseline. Transform the data for analyses that require
 single groups or single time series.</p></li>
 <li><p><em>Sample relationships visualisation (correlation matrix, PCA,
-UMAP)</em> - Explore global structure and major sources of variance,
+UMAP)</em>: Explore global structure and major sources of variance,
 check for batch effects, and identify features driving PCs.</p></li>
-<li><p><em>Pairwise differential expression (by time or group)</em> -
+<li><p><em>Pairwise differential expression (by time or group)</em>:
 Identify DE features between pairs of time points within each group, and
 between pairs of groups at each time point.</p></li>
 <li><p><em>Classification by feature property (randomness and overall
-fold change)</em> - Classify features into different categories (e.g.,
+fold change)</em>: Classify features into different categories (e.g.,
 non-random vs. random, differentially expressed vs. stable) based on
 properties including trend significance and maximum fold
 change.</p></li>
-<li><p><em>Segmented regression with Trendy</em> - Estimate breakpoints
+<li><p><em>Segmented regression with Trendy</em>: Estimate breakpoints
 for each feature in each group and summarise dynamic patterns.</p></li>
-<li><p><em>Variance decomposition modified from PALMO</em> - Quantify
+<li><p><em>Variance decomposition modified from PALMO</em>: Quantify
 relative contributions from <code>Time</code>, <code>Group</code>, and
 <code>Residual</code>, distinguish time or group-dependent DE features
 and “noisy” features.</p></li>
-<li><p><em>Module identification with WGCNA</em> - Identify
-co-expression modules with different temporal and group-specific
-patterns.</p></li>
-<li><p><em>Functional enrichment (gene ontology, drugs, etc.)</em> -
+<li><p><em>Module identification with WGCNA</em>: Identify co-expression
+modules with different temporal and group-specific patterns.</p></li>
+<li><p><em>Functional enrichment (gene ontology, drugs, etc.)</em>:
 Interpret biological meaning of identified DE features and
 modules.</p></li>
 </ul>
@@ -141,6 +140,24 @@ modules.</p></li>
 <span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"hte123/TiDEomics"</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/hte123/TiDEomics" class="external-link">TiDEomics</a></span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: multiple methods tables found for 'transform'</span></span>
+<span><span class="co">#&gt; Warning: replacing previous import 'BiocGenerics::transform' by</span></span>
+<span><span class="co">#&gt; 'S4Vectors::transform' when loading 'SummarizedExperiment'</span></span>
+<span><span class="co">#&gt; Warning: replacing previous import 'BiocGenerics::transform' by</span></span>
+<span><span class="co">#&gt; 'S4Vectors::transform' when loading 'IRanges'</span></span>
+<span><span class="co">#&gt; Warning: multiple methods tables found for 'transform'</span></span>
+<span><span class="co">#&gt; Warning: replacing previous import 'BiocGenerics::transform' by</span></span>
+<span><span class="co">#&gt; 'S4Vectors::transform' when loading 'Seqinfo'</span></span>
+<span><span class="co">#&gt; Warning: replacing previous import 'BiocGenerics::transform' by</span></span>
+<span><span class="co">#&gt; 'S4Vectors::transform' when loading 'GenomicRanges'</span></span>
+<span><span class="co">#&gt; Warning: replacing previous import 'BiocGenerics::transform' by</span></span>
+<span><span class="co">#&gt; 'S4Vectors::transform' when loading 'S4Arrays'</span></span>
+<span><span class="co">#&gt; Warning: replacing previous import 'BiocGenerics::transform' by</span></span>
+<span><span class="co">#&gt; 'S4Vectors::transform' when loading 'DelayedArray'</span></span>
+<span><span class="co">#&gt; Warning: replacing previous import 'BiocGenerics::transform' by</span></span>
+<span><span class="co">#&gt; 'S4Vectors::transform' when loading 'SparseArray'</span></span>
+<span><span class="co">#&gt; Warning: replacing previous import 'BiocGenerics::transform' by</span></span>
+<span><span class="co">#&gt; 'S4Vectors::transform' when loading 'XVector'</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://magrittr.tidyverse.org" class="external-link">magrittr</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://bioconductor.org/packages/SummarizedExperiment" class="external-link">SummarizedExperiment</a></span><span class="op">)</span></span>
 <span><span class="co">#&gt; Loading required package: MatrixGenerics</span></span>
@@ -188,8 +205,8 @@ modules.</p></li>
 <span><span class="co">#&gt;     colnames, dirname, do.call, duplicated, eval, evalq, Filter, Find,</span></span>
 <span><span class="co">#&gt;     get, grep, grepl, is.unsorted, lapply, Map, mapply, match, mget,</span></span>
 <span><span class="co">#&gt;     order, paste, pmax, pmax.int, pmin, pmin.int, Position, rank,</span></span>
-<span><span class="co">#&gt;     rbind, Reduce, rownames, sapply, saveRDS, table, tapply, unique,</span></span>
-<span><span class="co">#&gt;     unsplit, which.max, which.min</span></span>
+<span><span class="co">#&gt;     rbind, Reduce, rownames, sapply, saveRDS, scale, sequence, table,</span></span>
+<span><span class="co">#&gt;     tapply, transform, unique, unsplit, which.max, which.min</span></span>
 <span><span class="co">#&gt; Loading required package: S4Vectors</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Attaching package: 'S4Vectors'</span></span>
@@ -227,8 +244,12 @@ modules.</p></li>
 <span><span class="co">#&gt;     anyMissing, rowMedians</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">org.Mm.eg.db</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Loading required package: AnnotationDbi</span></span>
+<span><span class="co">#&gt; Warning: replacing previous import 'BiocGenerics::transform' by</span></span>
+<span><span class="co">#&gt; 'S4Vectors::transform' when loading 'AnnotationDbi'</span></span>
 <span><span class="co">#&gt; Warning: replacing previous import 'utils::data' by 'BiocGenerics::data' when</span></span>
 <span><span class="co">#&gt; loading 'Biostrings'</span></span>
+<span><span class="co">#&gt; Warning: replacing previous import 'BiocGenerics::transform' by</span></span>
+<span><span class="co">#&gt; 'S4Vectors::transform' when loading 'Biostrings'</span></span>
 <span><span class="co">#&gt; </span></span></code></pre></div>
 </div>
 <div class="section level2">
@@ -280,7 +301,7 @@ in <code>data/tutorial_sample_info.rda</code> and
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"tutorial_data"</span>, package <span class="op">=</span> <span class="st">"TiDEomics"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">data_obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/create_input.html">create_input</a></span><span class="op">(</span></span>
-<span>    data <span class="op">=</span> <span class="va">tutorial_data</span>, </span>
+<span>    data <span class="op">=</span> <span class="va">tutorial_data</span>,</span>
 <span>    sample_ann <span class="op">=</span> <span class="va">tutorial_sample_info</span><span class="op">)</span></span>
 <span><span class="co">#&gt; No Subject column specified. Samples treated as independent. For repeated-measures designs, set subject_col to the column identifying biological subjects.</span></span>
 <span><span class="co">#&gt; Converting 'Group' column to factor. Default order is alphabetical.</span></span>
@@ -478,7 +499,7 @@ information is available and the focus is on subject-specific changes
 from baseline.</p></li>
 </ul>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">data_obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/normalise_to_start.html">normalise_to_start</a></span><span class="op">(</span><span class="va">data_obj</span><span class="op">)</span> </span>
+<code class="sourceCode R"><span><span class="va">data_obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/normalise_to_start.html">normalise_to_start</a></span><span class="op">(</span><span class="va">data_obj</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Normalising to group baseline at each feature's first non-NA time point.</span></span></code></pre></div>
 <p>Both original and time-0 normalised data are stored in the
 <code>SummarizedExperiment</code> object and downstream functions allow
@@ -548,8 +569,8 @@ PCA and UMAP.</p>
 <span>    morepc <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">5</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Please use `linewidth` instead.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The deprecated feature was likely used in the <span style="color: #0000BB;">PCAtools</span> package.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Please use `linewidth` instead.</span>d.</span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The deprecated feature was likely used in the <span style="color: #0000BB;">PCAtools</span> package.</span>e.</span>
 <span><span class="co">#&gt;   Please report the issue to the authors.</span></span>
 <span><span class="co">#&gt; <span style="color: #555555;">This warning is displayed once per session.</span></span></span>
 <span><span class="co">#&gt; <span style="color: #555555;">Call `lifecycle::last_lifecycle_warnings()` to see where this warning was</span></span></span>
@@ -585,7 +606,7 @@ PCA and UMAP.</p>
 <span><span class="co">#&gt; Warning: `line.width` does not currently support multiple values.</span></span>
 <span><span class="co">#&gt; Warning: `line.width` does not currently support multiple values.</span></span></code></pre></div>
 <div class="plotly html-widget html-fill-item" id="htmlwidget-ac96cb3ee4656e2e9ec3" style="width:576px;height:384px;"></div>
-<script type="application/json" data-for="htmlwidget-ac96cb3ee4656e2e9ec3">{"x":{"visdat":{"8940719a6c09":["function () ","plotlyVisDat"]},"cur_data":"8940719a6c09","attrs":{"8940719a6c09":{"x":[-10.592872124524359,-11.728898328474681,1.1523725949908541,4.3362346192852366,-0.48219806057062442,-0.62982695528970178,5.73136763459914,5.4779415110979333,7.8428547206788348,8.3383186837075165,6.4638982013975017,7.5227315449396333,-10.59287212452433,-11.728898328474683,-3.8408837568018774,-2.7551028096940535,-4.5366391523662086,-3.2087950437655963,-0.92780760997569822,-2.5310686734494285,-1.0850258435380591,-2.0118058632113693,-3.3402609375904313,-2.6389279718933918,-10.592872124524328,-11.728898328474687,7.4098419607618213,4.2936045069033772,-0.57207404284806795,16.010692473570241,12.542987268965906,21.838689177693137,16.037619420359952,13.104340154766623,11.49650513658796,-10.592872124524328,-11.728898328474687,-11.36854974490014,-7.9870001691559116,-12.396951163259057],"y":[4.8051761049596076,2.6625908743798385,-8.5688985551101506,-11.535229786897272,-2.2248861548254557,-1.5646501948566829,-7.9488661840422861,-8.5036393864914217,-9.8216056109391552,-12.01732662203441,-11.269842908582659,-11.981421077961983,4.8051761049595987,2.662590874379831,-3.0995517739623604,-3.8045273405834896,0.45119261498812024,-0.90352426618165405,-2.1110228420020389,-3.097412659894649,-3.052432482271259,-4.0621928868855024,-0.40956793486057674,-2.3882453117668305,4.8051761049595978,2.6625908743798314,3.4779108764200322,8.4889690392916499,8.7703041618544884,8.3397014345770728,8.0047885172084694,7.0956630816277517,6.3380950330205401,10.351438681908968,12.274823561649498,4.8051761049595978,2.6625908743798314,1.7705536394522525,0.21493237044358551,2.9154030503497634],"z":[0.17481817305736155,0.27088320777325203,-7.5902766320504558,-9.2938249089404081,4.7177936037188166,4.3730665682541838,3.9720030746016106,4.9679458889783863,4.4351227537429958,2.7227108367118844,1.0378955418809452,-1.544227274909564,0.17481817305735997,0.2708832077732542,-3.9954188192830835,-4.7222037777799484,3.3700887205347265,3.5136050393269098,1.7785878400074431,2.5643665091014523,0.046798088075823245,-0.35989249414689983,2.0721698341197499,-0.31547614873051516,0.17481817305736,0.2708832077732537,-18.147914491881011,5.0416217301558834,5.6632728765015026,6.4378297899351766,5.9154932459901302,1.276982963434969,1.0299112166483999,-5.3866400657281757,-9.6134027715439743,0.17481817305736,0.2708832077732537,-1.6984910662312962,-2.4148799735480124,-1.6374232202701597],"text":{},"mode":"markers","color":{},"size":{},"colors":["#d95f02","#7570b3","#e7298a","#1b9e77"],"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"scatter3d"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"scene":{"xaxis":{"title":"PC1: 31.71%"},"yaxis":{"title":"PC2: 16.56%"},"zaxis":{"title":"PC3: 9.04%"}},"hovermode":"closest","showlegend":true},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":[-10.592872124524359,-11.728898328474681,1.1523725949908541,4.3362346192852366,-0.48219806057062442,-0.62982695528970178,5.73136763459914,5.4779415110979333,7.8428547206788348,8.3383186837075165,6.4638982013975017,7.5227315449396333],"y":[4.8051761049596076,2.6625908743798385,-8.5688985551101506,-11.535229786897272,-2.2248861548254557,-1.5646501948566829,-7.9488661840422861,-8.5036393864914217,-9.8216056109391552,-12.01732662203441,-11.269842908582659,-11.981421077961983],"z":[0.17481817305736155,0.27088320777325203,-7.5902766320504558,-9.2938249089404081,4.7177936037188166,4.3730665682541838,3.9720030746016106,4.9679458889783863,4.4351227537429958,2.7227108367118844,1.0378955418809452,-1.544227274909564],"text":["RNA_IFNbeta_0h_R1_1","RNA_IFNbeta_0h_R2_1","RNA_IFNbeta_24h_R1_2","RNA_IFNbeta_24h_R2_2","RNA_IFNbeta_2h_R1_1","RNA_IFNbeta_2h_R2_1","RNA_IFNbeta_4h_R1_1","RNA_IFNbeta_4h_R2_1","RNA_IFNbeta_6h_R1_1","RNA_IFNbeta_6h_R2_1","RNA_IFNbeta_8h_R1_2","RNA_IFNbeta_8h_R2_2"],"mode":"markers","type":"scatter3d","name":"IFNbeta","marker":{"color":"rgba(217,95,2,1)","size":[10,10,100,100,17.5,17.5,25,25,32.5,32.5,40,40],"sizemode":"area","line":{"color":"rgba(217,95,2,1)"}},"textfont":{"color":"rgba(217,95,2,1)","size":[10,10,100,100,17.5,17.5,25,25,32.5,32.5,40,40]},"error_y":{"color":"rgba(217,95,2,1)","width":[]},"error_x":{"color":"rgba(217,95,2,1)","width":[]},"line":{"color":"rgba(217,95,2,1)"},"frame":null},{"x":[-10.59287212452433,-11.728898328474683,-3.8408837568018774,-2.7551028096940535,-4.5366391523662086,-3.2087950437655963,-0.92780760997569822,-2.5310686734494285,-1.0850258435380591,-2.0118058632113693,-3.3402609375904313,-2.6389279718933918],"y":[4.8051761049595987,2.662590874379831,-3.0995517739623604,-3.8045273405834896,0.45119261498812024,-0.90352426618165405,-2.1110228420020389,-3.097412659894649,-3.052432482271259,-4.0621928868855024,-0.40956793486057674,-2.3882453117668305],"z":[0.17481817305735997,0.2708832077732542,-3.9954188192830835,-4.7222037777799484,3.3700887205347265,3.5136050393269098,1.7785878400074431,2.5643665091014523,0.046798088075823245,-0.35989249414689983,2.0721698341197499,-0.31547614873051516],"text":["RNA_IFNgamma_0h_R1_1","RNA_IFNgamma_0h_R2_1","RNA_IFNgamma_24h_R1_2","RNA_IFNgamma_24h_R2_2","RNA_IFNgamma_2h_R1_1","RNA_IFNgamma_2h_R2_1","RNA_IFNgamma_4h_R1_1","RNA_IFNgamma_4h_R2_1","RNA_IFNgamma_6h_R1_1","RNA_IFNgamma_6h_R2_1","RNA_IFNgamma_8h_R1_2","RNA_IFNgamma_8h_R2_2"],"mode":"markers","type":"scatter3d","name":"IFNgamma","marker":{"color":"rgba(117,112,179,1)","size":[10,10,100,100,17.5,17.5,25,25,32.5,32.5,40,40],"sizemode":"area","line":{"color":"rgba(117,112,179,1)"}},"textfont":{"color":"rgba(117,112,179,1)","size":[10,10,100,100,17.5,17.5,25,25,32.5,32.5,40,40]},"error_y":{"color":"rgba(117,112,179,1)","width":[]},"error_x":{"color":"rgba(117,112,179,1)","width":[]},"line":{"color":"rgba(117,112,179,1)"},"frame":null},{"x":[-10.592872124524328,-11.728898328474687,7.4098419607618213,4.2936045069033772,-0.57207404284806795,16.010692473570241,12.542987268965906,21.838689177693137,16.037619420359952,13.104340154766623,11.49650513658796],"y":[4.8051761049595978,2.6625908743798314,3.4779108764200322,8.4889690392916499,8.7703041618544884,8.3397014345770728,8.0047885172084694,7.0956630816277517,6.3380950330205401,10.351438681908968,12.274823561649498],"z":[0.17481817305736,0.2708832077732537,-18.147914491881011,5.0416217301558834,5.6632728765015026,6.4378297899351766,5.9154932459901302,1.276982963434969,1.0299112166483999,-5.3866400657281757,-9.6134027715439743],"text":["RNA_LPS_0h_R1_1","RNA_LPS_0h_R2_1","RNA_LPS_24h_R2_2","RNA_LPS_2h_R1_1","RNA_LPS_2h_R2_1","RNA_LPS_4h_R1_1","RNA_LPS_4h_R2_1","RNA_LPS_6h_R1_1","RNA_LPS_6h_R2_1","RNA_LPS_8h_R1_2","RNA_LPS_8h_R2_2"],"mode":"markers","type":"scatter3d","name":"LPS","marker":{"color":"rgba(231,41,138,1)","size":[10,10,100,17.5,17.5,25,25,32.5,32.5,40,40],"sizemode":"area","line":{"color":"rgba(231,41,138,1)"}},"textfont":{"color":"rgba(231,41,138,1)","size":[10,10,100,17.5,17.5,25,25,32.5,32.5,40,40]},"error_y":{"color":"rgba(231,41,138,1)","width":[]},"error_x":{"color":"rgba(231,41,138,1)","width":[]},"line":{"color":"rgba(231,41,138,1)"},"frame":null},{"x":[-10.592872124524328,-11.728898328474687,-11.36854974490014,-7.9870001691559116,-12.396951163259057],"y":[4.8051761049595978,2.6625908743798314,1.7705536394522525,0.21493237044358551,2.9154030503497634],"z":[0.17481817305736,0.2708832077732537,-1.6984910662312962,-2.4148799735480124,-1.6374232202701597],"text":["RNA_untreated_0h_R1_1","RNA_untreated_0h_R2_1","RNA_untreated_24h_R1_2","RNA_untreated_24h_R2_2","RNA_untreated_8h_R2_2"],"mode":"markers","type":"scatter3d","name":"untreated","marker":{"color":"rgba(27,158,119,1)","size":[10,10,100,100,40],"sizemode":"area","line":{"color":"rgba(27,158,119,1)"}},"textfont":{"color":"rgba(27,158,119,1)","size":[10,10,100,100,40]},"error_y":{"color":"rgba(27,158,119,1)","width":[]},"error_x":{"color":"rgba(27,158,119,1)","width":[]},"line":{"color":"rgba(27,158,119,1)"},"frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script><p>Note: the 3D plot may not display properly in some html, but should
+<script type="application/json" data-for="htmlwidget-ac96cb3ee4656e2e9ec3">{"x":{"visdat":{"986c6fea2cda":["function () ","plotlyVisDat"]},"cur_data":"986c6fea2cda","attrs":{"986c6fea2cda":{"x":[-10.592872124524359,-11.728898328474681,1.1523725949908541,4.3362346192852366,-0.48219806057062442,-0.62982695528970178,5.73136763459914,5.4779415110979333,7.8428547206788348,8.3383186837075165,6.4638982013975017,7.5227315449396333,-10.59287212452433,-11.728898328474683,-3.8408837568018774,-2.7551028096940535,-4.5366391523662086,-3.2087950437655963,-0.92780760997569822,-2.5310686734494285,-1.0850258435380591,-2.0118058632113693,-3.3402609375904313,-2.6389279718933918,-10.592872124524328,-11.728898328474687,7.4098419607618213,4.2936045069033772,-0.57207404284806795,16.010692473570241,12.542987268965906,21.838689177693137,16.037619420359952,13.104340154766623,11.49650513658796,-10.592872124524328,-11.728898328474687,-11.36854974490014,-7.9870001691559116,-12.396951163259057],"y":[4.8051761049596076,2.6625908743798385,-8.5688985551101506,-11.535229786897272,-2.2248861548254557,-1.5646501948566829,-7.9488661840422861,-8.5036393864914217,-9.8216056109391552,-12.01732662203441,-11.269842908582659,-11.981421077961983,4.8051761049595987,2.662590874379831,-3.0995517739623604,-3.8045273405834896,0.45119261498812024,-0.90352426618165405,-2.1110228420020389,-3.097412659894649,-3.052432482271259,-4.0621928868855024,-0.40956793486057674,-2.3882453117668305,4.8051761049595978,2.6625908743798314,3.4779108764200322,8.4889690392916499,8.7703041618544884,8.3397014345770728,8.0047885172084694,7.0956630816277517,6.3380950330205401,10.351438681908968,12.274823561649498,4.8051761049595978,2.6625908743798314,1.7705536394522525,0.21493237044358551,2.9154030503497634],"z":[0.17481817305736155,0.27088320777325203,-7.5902766320504558,-9.2938249089404081,4.7177936037188166,4.3730665682541838,3.9720030746016106,4.9679458889783863,4.4351227537429958,2.7227108367118844,1.0378955418809452,-1.544227274909564,0.17481817305735997,0.2708832077732542,-3.9954188192830835,-4.7222037777799484,3.3700887205347265,3.5136050393269098,1.7785878400074431,2.5643665091014523,0.046798088075823245,-0.35989249414689983,2.0721698341197499,-0.31547614873051516,0.17481817305736,0.2708832077732537,-18.147914491881011,5.0416217301558834,5.6632728765015026,6.4378297899351766,5.9154932459901302,1.276982963434969,1.0299112166483999,-5.3866400657281757,-9.6134027715439743,0.17481817305736,0.2708832077732537,-1.6984910662312962,-2.4148799735480124,-1.6374232202701597],"text":{},"mode":"markers","color":{},"size":{},"colors":["#d95f02","#7570b3","#e7298a","#1b9e77"],"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"scatter3d"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"scene":{"xaxis":{"title":"PC1: 31.71%"},"yaxis":{"title":"PC2: 16.56%"},"zaxis":{"title":"PC3: 9.04%"}},"hovermode":"closest","showlegend":true},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":[-10.592872124524359,-11.728898328474681,1.1523725949908541,4.3362346192852366,-0.48219806057062442,-0.62982695528970178,5.73136763459914,5.4779415110979333,7.8428547206788348,8.3383186837075165,6.4638982013975017,7.5227315449396333],"y":[4.8051761049596076,2.6625908743798385,-8.5688985551101506,-11.535229786897272,-2.2248861548254557,-1.5646501948566829,-7.9488661840422861,-8.5036393864914217,-9.8216056109391552,-12.01732662203441,-11.269842908582659,-11.981421077961983],"z":[0.17481817305736155,0.27088320777325203,-7.5902766320504558,-9.2938249089404081,4.7177936037188166,4.3730665682541838,3.9720030746016106,4.9679458889783863,4.4351227537429958,2.7227108367118844,1.0378955418809452,-1.544227274909564],"text":["RNA_IFNbeta_0h_R1_1","RNA_IFNbeta_0h_R2_1","RNA_IFNbeta_24h_R1_2","RNA_IFNbeta_24h_R2_2","RNA_IFNbeta_2h_R1_1","RNA_IFNbeta_2h_R2_1","RNA_IFNbeta_4h_R1_1","RNA_IFNbeta_4h_R2_1","RNA_IFNbeta_6h_R1_1","RNA_IFNbeta_6h_R2_1","RNA_IFNbeta_8h_R1_2","RNA_IFNbeta_8h_R2_2"],"mode":"markers","type":"scatter3d","name":"IFNbeta","marker":{"color":"rgba(217,95,2,1)","size":[10,10,100,100,17.5,17.5,25,25,32.5,32.5,40,40],"sizemode":"area","line":{"color":"rgba(217,95,2,1)"}},"textfont":{"color":"rgba(217,95,2,1)","size":[10,10,100,100,17.5,17.5,25,25,32.5,32.5,40,40]},"error_y":{"color":"rgba(217,95,2,1)","width":[]},"error_x":{"color":"rgba(217,95,2,1)","width":[]},"line":{"color":"rgba(217,95,2,1)"},"frame":null},{"x":[-10.59287212452433,-11.728898328474683,-3.8408837568018774,-2.7551028096940535,-4.5366391523662086,-3.2087950437655963,-0.92780760997569822,-2.5310686734494285,-1.0850258435380591,-2.0118058632113693,-3.3402609375904313,-2.6389279718933918],"y":[4.8051761049595987,2.662590874379831,-3.0995517739623604,-3.8045273405834896,0.45119261498812024,-0.90352426618165405,-2.1110228420020389,-3.097412659894649,-3.052432482271259,-4.0621928868855024,-0.40956793486057674,-2.3882453117668305],"z":[0.17481817305735997,0.2708832077732542,-3.9954188192830835,-4.7222037777799484,3.3700887205347265,3.5136050393269098,1.7785878400074431,2.5643665091014523,0.046798088075823245,-0.35989249414689983,2.0721698341197499,-0.31547614873051516],"text":["RNA_IFNgamma_0h_R1_1","RNA_IFNgamma_0h_R2_1","RNA_IFNgamma_24h_R1_2","RNA_IFNgamma_24h_R2_2","RNA_IFNgamma_2h_R1_1","RNA_IFNgamma_2h_R2_1","RNA_IFNgamma_4h_R1_1","RNA_IFNgamma_4h_R2_1","RNA_IFNgamma_6h_R1_1","RNA_IFNgamma_6h_R2_1","RNA_IFNgamma_8h_R1_2","RNA_IFNgamma_8h_R2_2"],"mode":"markers","type":"scatter3d","name":"IFNgamma","marker":{"color":"rgba(117,112,179,1)","size":[10,10,100,100,17.5,17.5,25,25,32.5,32.5,40,40],"sizemode":"area","line":{"color":"rgba(117,112,179,1)"}},"textfont":{"color":"rgba(117,112,179,1)","size":[10,10,100,100,17.5,17.5,25,25,32.5,32.5,40,40]},"error_y":{"color":"rgba(117,112,179,1)","width":[]},"error_x":{"color":"rgba(117,112,179,1)","width":[]},"line":{"color":"rgba(117,112,179,1)"},"frame":null},{"x":[-10.592872124524328,-11.728898328474687,7.4098419607618213,4.2936045069033772,-0.57207404284806795,16.010692473570241,12.542987268965906,21.838689177693137,16.037619420359952,13.104340154766623,11.49650513658796],"y":[4.8051761049595978,2.6625908743798314,3.4779108764200322,8.4889690392916499,8.7703041618544884,8.3397014345770728,8.0047885172084694,7.0956630816277517,6.3380950330205401,10.351438681908968,12.274823561649498],"z":[0.17481817305736,0.2708832077732537,-18.147914491881011,5.0416217301558834,5.6632728765015026,6.4378297899351766,5.9154932459901302,1.276982963434969,1.0299112166483999,-5.3866400657281757,-9.6134027715439743],"text":["RNA_LPS_0h_R1_1","RNA_LPS_0h_R2_1","RNA_LPS_24h_R2_2","RNA_LPS_2h_R1_1","RNA_LPS_2h_R2_1","RNA_LPS_4h_R1_1","RNA_LPS_4h_R2_1","RNA_LPS_6h_R1_1","RNA_LPS_6h_R2_1","RNA_LPS_8h_R1_2","RNA_LPS_8h_R2_2"],"mode":"markers","type":"scatter3d","name":"LPS","marker":{"color":"rgba(231,41,138,1)","size":[10,10,100,17.5,17.5,25,25,32.5,32.5,40,40],"sizemode":"area","line":{"color":"rgba(231,41,138,1)"}},"textfont":{"color":"rgba(231,41,138,1)","size":[10,10,100,17.5,17.5,25,25,32.5,32.5,40,40]},"error_y":{"color":"rgba(231,41,138,1)","width":[]},"error_x":{"color":"rgba(231,41,138,1)","width":[]},"line":{"color":"rgba(231,41,138,1)"},"frame":null},{"x":[-10.592872124524328,-11.728898328474687,-11.36854974490014,-7.9870001691559116,-12.396951163259057],"y":[4.8051761049595978,2.6625908743798314,1.7705536394522525,0.21493237044358551,2.9154030503497634],"z":[0.17481817305736,0.2708832077732537,-1.6984910662312962,-2.4148799735480124,-1.6374232202701597],"text":["RNA_untreated_0h_R1_1","RNA_untreated_0h_R2_1","RNA_untreated_24h_R1_2","RNA_untreated_24h_R2_2","RNA_untreated_8h_R2_2"],"mode":"markers","type":"scatter3d","name":"untreated","marker":{"color":"rgba(27,158,119,1)","size":[10,10,100,100,40],"sizemode":"area","line":{"color":"rgba(27,158,119,1)"}},"textfont":{"color":"rgba(27,158,119,1)","size":[10,10,100,100,40]},"error_y":{"color":"rgba(27,158,119,1)","width":[]},"error_x":{"color":"rgba(27,158,119,1)","width":[]},"line":{"color":"rgba(27,158,119,1)"},"frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script><p>Note: the 3D plot may not display properly in some html, but should
 work in an interactive R session.</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">PCAtools</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/PCAtools/man/eigencorplot.html" class="external-link">eigencorplot</a></span><span class="op">(</span><span class="va">PC</span>,</span>
@@ -668,7 +689,8 @@ point. More replicates are recommended for robust pairwise DE
 analysis.</p>
 <p>DE_between_time():</p>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">DE_between_time_out</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/DE_between_time.html">DE_between_time</a></span><span class="op">(</span><span class="va">data_obj</span>, assay <span class="op">=</span> <span class="fl">1</span>, filter <span class="op">=</span> <span class="fl">1</span>, trend <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">DE_between_time_out</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/DE_between_time.html">DE_between_time</a></span><span class="op">(</span><span class="va">data_obj</span>, assay <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>    filter <span class="op">=</span> <span class="fl">1</span>, trend <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Comparing group IFNbeta time 2 to 0: keeping 500 of 500 features (100.0%)</span></span>
 <span><span class="co">#&gt; Comparing group IFNbeta time 4 to 0: keeping 500 of 500 features (100.0%)</span></span>
 <span><span class="co">#&gt; Comparing group IFNbeta time 6 to 0: keeping 500 of 500 features (100.0%)</span></span>
@@ -753,7 +775,8 @@ analysis.</p>
 <p><img src="TiDEomics_files/figure-html/de-between-time-plot-1.png" class="r-plt" alt="" width="672"></p>
 <p>DE_between_group():</p>
 <div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">DE_between_group_out</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/DE_between_group.html">DE_between_group</a></span><span class="op">(</span><span class="va">data_obj</span>, assay <span class="op">=</span> <span class="fl">2</span>, filter <span class="op">=</span> <span class="fl">1</span>, trend <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">DE_between_group_out</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/DE_between_group.html">DE_between_group</a></span><span class="op">(</span><span class="va">data_obj</span>, assay <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>    filter <span class="op">=</span> <span class="fl">1</span>, trend <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Comparing group IFNgamma to IFNbeta at Time 0: keeping 500 of 500 features (100.0%)</span></span>
 <span><span class="co">#&gt; Warning: Zero sample variances detected, have been offset away from zero</span></span>
 <span><span class="co">#&gt; Comparing group IFNgamma to IFNbeta at Time 2: keeping 500 of 500 features (100.0%)</span></span>
@@ -778,7 +801,7 @@ analysis.</p>
 <span><span class="co">#&gt; Warning: Zero sample variances detected, have been offset away from zero</span></span>
 <span><span class="co">#&gt; Comparing group LPS to IFNbeta at Time 24: keeping 500 of 500 features (100.0%)</span></span>
 <span><span class="co">#&gt; Warning: Zero sample variances detected, have been offset away from zero</span></span>
-<span><span class="co">#&gt; Comparing untreated vs IFNbeta: time points only in IFNbeta: 2, 4, 6; only in untreated: none.</span></span>
+<span><span class="co">#&gt; Comparing untreated vs IFNbeta: time points only in IFNbeta: 2, 4, 6; only in untreated: none</span></span>
 <span><span class="co">#&gt; Comparing group untreated to IFNbeta at Time 0: keeping 500 of 500 features (100.0%)</span></span>
 <span><span class="co">#&gt; Warning: Zero sample variances detected, have been offset away from zero</span></span>
 <span><span class="co">#&gt; Comparing group untreated to IFNbeta at Time 8: keeping 500 of 500 features (100.0%)</span></span>
@@ -809,7 +832,7 @@ analysis.</p>
 <span><span class="co">#&gt; Warning: Zero sample variances detected, have been offset away from zero</span></span>
 <span><span class="co">#&gt; Comparing group LPS to IFNgamma at Time 24: keeping 500 of 500 features (100.0%)</span></span>
 <span><span class="co">#&gt; Warning: Zero sample variances detected, have been offset away from zero</span></span>
-<span><span class="co">#&gt; Comparing untreated vs IFNgamma: time points only in IFNgamma: 2, 4, 6; only in untreated: none.</span></span>
+<span><span class="co">#&gt; Comparing untreated vs IFNgamma: time points only in IFNgamma: 2, 4, 6; only in untreated: none</span></span>
 <span><span class="co">#&gt; Comparing group untreated to IFNgamma at Time 0: keeping 500 of 500 features (100.0%)</span></span>
 <span><span class="co">#&gt; Warning: Zero sample variances detected, have been offset away from zero</span></span>
 <span><span class="co">#&gt; Comparing group untreated to IFNgamma at Time 8: keeping 500 of 500 features (100.0%)</span></span>
@@ -840,28 +863,28 @@ analysis.</p>
 <span><span class="co">#&gt; Warning: Zero sample variances detected, have been offset away from zero</span></span>
 <span><span class="co">#&gt; Comparing group IFNgamma to LPS at Time 24: keeping 500 of 500 features (100.0%)</span></span>
 <span><span class="co">#&gt; Warning: Zero sample variances detected, have been offset away from zero</span></span>
-<span><span class="co">#&gt; Comparing untreated vs LPS: time points only in LPS: 2, 4, 6; only in untreated: none.</span></span>
+<span><span class="co">#&gt; Comparing untreated vs LPS: time points only in LPS: 2, 4, 6; only in untreated: none</span></span>
 <span><span class="co">#&gt; Comparing group untreated to LPS at Time 0: keeping 500 of 500 features (100.0%)</span></span>
 <span><span class="co">#&gt; Warning: Zero sample variances detected, have been offset away from zero</span></span>
 <span><span class="co">#&gt; Comparing group untreated to LPS at Time 8: keeping 500 of 500 features (100.0%)</span></span>
 <span><span class="co">#&gt; Warning: Zero sample variances detected, have been offset away from zero</span></span>
 <span><span class="co">#&gt; Comparing group untreated to LPS at Time 24: keeping 500 of 500 features (100.0%)</span></span>
 <span><span class="co">#&gt; Warning: Zero sample variances detected, have been offset away from zero</span></span>
-<span><span class="co">#&gt; Comparing IFNbeta vs untreated: time points only in untreated: none; only in IFNbeta: 2, 4, 6.</span></span>
+<span><span class="co">#&gt; Comparing IFNbeta vs untreated: time points only in untreated: none; only in IFNbeta: 2, 4, 6</span></span>
 <span><span class="co">#&gt; Comparing group IFNbeta to untreated at Time 0: keeping 500 of 500 features (100.0%)</span></span>
 <span><span class="co">#&gt; Warning: Zero sample variances detected, have been offset away from zero</span></span>
 <span><span class="co">#&gt; Comparing group IFNbeta to untreated at Time 8: keeping 500 of 500 features (100.0%)</span></span>
 <span><span class="co">#&gt; Warning: Zero sample variances detected, have been offset away from zero</span></span>
 <span><span class="co">#&gt; Comparing group IFNbeta to untreated at Time 24: keeping 500 of 500 features (100.0%)</span></span>
 <span><span class="co">#&gt; Warning: Zero sample variances detected, have been offset away from zero</span></span>
-<span><span class="co">#&gt; Comparing IFNgamma vs untreated: time points only in untreated: none; only in IFNgamma: 2, 4, 6.</span></span>
+<span><span class="co">#&gt; Comparing IFNgamma vs untreated: time points only in untreated: none; only in IFNgamma: 2, 4, 6</span></span>
 <span><span class="co">#&gt; Comparing group IFNgamma to untreated at Time 0: keeping 500 of 500 features (100.0%)</span></span>
 <span><span class="co">#&gt; Warning: Zero sample variances detected, have been offset away from zero</span></span>
 <span><span class="co">#&gt; Comparing group IFNgamma to untreated at Time 8: keeping 500 of 500 features (100.0%)</span></span>
 <span><span class="co">#&gt; Warning: Zero sample variances detected, have been offset away from zero</span></span>
 <span><span class="co">#&gt; Comparing group IFNgamma to untreated at Time 24: keeping 500 of 500 features (100.0%)</span></span>
 <span><span class="co">#&gt; Warning: Zero sample variances detected, have been offset away from zero</span></span>
-<span><span class="co">#&gt; Comparing LPS vs untreated: time points only in untreated: none; only in LPS: 2, 4, 6.</span></span>
+<span><span class="co">#&gt; Comparing LPS vs untreated: time points only in untreated: none; only in LPS: 2, 4, 6</span></span>
 <span><span class="co">#&gt; Comparing group LPS to untreated at Time 0: keeping 500 of 500 features (100.0%)</span></span>
 <span><span class="co">#&gt; Warning: Zero sample variances detected, have been offset away from zero</span></span>
 <span><span class="co">#&gt; Comparing group LPS to untreated at Time 8: keeping 500 of 500 features (100.0%)</span></span>
@@ -993,13 +1016,13 @@ to calculate <code>P_trend</code>.</p></li>
 <span><span class="co">#&gt; 4 1700028K03Rik IFNbeta             0     2       6         NA 1.0000000</span></span>
 <span><span class="co">#&gt; 5 1700100I10Rik IFNbeta             0     1       6         NA 0.7924813</span></span>
 <span><span class="co">#&gt; 6 2900005J15Rik IFNbeta             0     5       6 0.09452103 4.4305435</span></span>
-<span><span class="co">#&gt;   Max_FC_time Exp_ratio</span></span>
-<span><span class="co">#&gt; 1          -2 0.1666667</span></span>
-<span><span class="co">#&gt; 2           8 0.3333333</span></span>
-<span><span class="co">#&gt; 3          NA 0.0000000</span></span>
-<span><span class="co">#&gt; 4          24 0.3333333</span></span>
-<span><span class="co">#&gt; 5           8 0.1666667</span></span>
-<span><span class="co">#&gt; 6          -6 0.8333333</span></span></code></pre>
+<span><span class="co">#&gt;   Max_FC_time   Rho_time Peak_ratio Temporal_CV        AUC    Lag1_AC Exp_ratio</span></span>
+<span><span class="co">#&gt; 1          -2         NA         NA          NA -11.500000         NA 0.1666667</span></span>
+<span><span class="co">#&gt; 2           8         NA         NA          NA   8.500000         NA 0.3333333</span></span>
+<span><span class="co">#&gt; 3          NA         NA         NA          NA         NA         NA 0.0000000</span></span>
+<span><span class="co">#&gt; 4          24         NA         NA          NA   9.000000         NA 0.3333333</span></span>
+<span><span class="co">#&gt; 5           8         NA         NA          NA   7.132331         NA 0.1666667</span></span>
+<span><span class="co">#&gt; 6          -6 -0.3714286          0   0.8649384 -57.580693 0.04535587 0.8333333</span></span></code></pre>
 <p>Features expressed in only a subset of groups can be extracted with
 <code><a href="../reference/group_specific_features.html">group_specific_features()</a></code> based on the output table of
 <code><a href="../reference/summarise_feature_property.html">summarise_feature_property()</a></code>.</p>
@@ -1016,8 +1039,8 @@ to calculate <code>P_trend</code>.</p></li>
 </h3>
 <p><code>run_Trendy</code> fits segmented linear models to the time
 course for each feature to estimate breakpoints with Trendy package
-<span class="citation">(Bacher et al. 2018)</span>, see <a href="https://bioconductor.org/packages/release/bioc/html/Trendy.html" class="external-link">Trendy
-documentation</a> for details.</p>
+<span class="citation">(Bacher et al. 2018)</span>, see <a href="https://bioconductor.org/packages/release/bioc/html/Trendy.html" class="external-link">Trendy</a>
+for details.</p>
 <p><strong>Notes</strong>:</p>
 <ul>
 <li><p>The function requires complete input (no NA). When data contains
@@ -1078,7 +1101,7 @@ minNumInSeg = 2, at least 4 time points are needed.</p></li>
 <span><span class="co">#&gt; supported on Windows, use SnowParam()</span></span></code></pre>
 <pre style="max-height: 300px;"><code><span><span class="co">#&gt; breakpoint estimate(s): 9.519174</span></span>
 <span><span class="co">#&gt; Running Trendy for group: untreated</span></span>
-<span><span class="co">#&gt; Trendy analysis is not performed for group untreated: number of time points (3) less than 2 * minNumInSeg</span></span></code></pre>
+<span><span class="co">#&gt; Trendy analysis is not performed for group untreated: number of time points (3) less than required ((maxK + 1) * minNumInSeg = 4</span></span></code></pre>
 <p>Use <code><a href="../reference/plot_segments.html">plot_segments()</a></code>to plot the fitted segments and
 breakpoints for selected features.</p>
 <div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
@@ -1226,23 +1249,25 @@ estimates.</p>
 <div class="section level3">
 <h3 id="wgcna-co-expression-modules">WGCNA (co-expression modules)<a class="anchor" aria-label="anchor" href="#wgcna-co-expression-modules"></a>
 </h3>
-<p>Detailed tutorials of weighted gene correlation network analysis (<a href="https://cran.r-project.org/web/packages/WGCNA/index.html" class="external-link">WGCNA</a>)<span class="citation">(Langfelder and Horvath 2008, 2012)</span> can be found
-<a href="https://github.com/edo98811/WGCNA_official_documentation/" class="external-link">online</a>.
+<p>Detailed tutorials of weighted gene correlation network analysis (<a href="https://cran.r-project.org/web/packages/WGCNA/index.html" class="external-link">WGCNA</a>)
+<span class="citation">(Langfelder and Horvath 2008, 2012)</span> can be
+found <a href="https://github.com/edo98811/WGCNA_official_documentation/" class="external-link">online</a>.
 The following is a brief demonstration of how to prepare input and run
 WGCNA with TiDEomics functions.</p>
 <p><strong>Filtering strategies</strong>:</p>
 <ul>
-<li>Features with too many missing values can be removed, with
-<code><a href="https://rdrr.io/pkg/WGCNA/man/goodGenes.html" class="external-link">WGCNA::goodGenes()</a></code> included in the
-<code><a href="../reference/prepare_WGCNA.html">prepare_WGCNA()</a></code> function, or pre-filter with the calculated
-feature property (output of <code><a href="../reference/calc_feature_property.html">calc_feature_property()</a></code> and
+<li>Features with too many missing values will be automatically removed
+with <code><a href="https://rdrr.io/pkg/WGCNA/man/goodGenes.html" class="external-link">WGCNA::goodGenes()</a></code> included in the
+<code><a href="../reference/prepare_WGCNA.html">prepare_WGCNA()</a></code> function, and can also be pre-filtered with
+the calculated feature property (output of
+<code><a href="../reference/calc_feature_property.html">calc_feature_property()</a></code> and
 <code><a href="../reference/summarise_feature_property.html">summarise_feature_property()</a></code>).</li>
 </ul>
-<!-- - Features flagged as random (no trend) across groups can be excluded, based on the calculated feature property (e.g., remove features with `P_trend >= 0.05` in all groups). --><ul>
+<!-- - Features flagged as random (no trend) across groups can be --><!--     excluded, based on the calculated feature property (e.g., remove --><!--     features with `P_trend >= 0.05` in all groups). --><ul>
 <li><p>Residual variance can be used to exclude noisy features.</p></li>
 <li><p>It is not recommended to filter by differential expression before
 WGCNA, see <a href="https://edo98811.github.io/WGCNA_official_documentation/faq.html" class="external-link">WGCNA
-package FAQ</a>.</p></li>
+FAQ</a>.</p></li>
 </ul>
 <div class="sourceCode" id="cb57"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Example filtering by residual variance &lt; Q3</span></span>
@@ -1259,7 +1284,7 @@ indices to confirm that the chosen power is appropriate.</p>
 networks, and less than 30 for signed networks, to reach scale-free
 topology fit index &gt; 0.8, and mean connectivity (mean.k) not too high
 (in the hundreds or above). See <a href="https://edo98811.github.io/WGCNA_official_documentation/faq.html" class="external-link">WGCNA
-package FAQ</a> for details.</p>
+FAQ</a> for details.</p>
 <div class="sourceCode" id="cb58"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">wgcna_input</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/prepare_WGCNA.html">prepare_WGCNA</a></span><span class="op">(</span><span class="va">data_obj_wgcna</span>, assay <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>    powers <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">30</span><span class="op">)</span>,</span>
@@ -1425,7 +1450,7 @@ method.</p>
 <span><span class="va">gene_module</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">Module</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">n</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<pre style="max-height: 300px;"><code><span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 2</span></span></span>
+<pre style="max-height: 300px;"><code><span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 2</span></span>m</span>
 <span><span class="co">#&gt;   Module     n</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 1         47</span></span>
@@ -1456,8 +1481,8 @@ enrichment efficiently on gene sets and ranked gene list.</p>
 variance decomposition), use <code><a href="../reference/enrichGO_rank.html">enrichGO_rank()</a></code> and plot with
 <code><a href="https://rdrr.io/pkg/enrichplot/man/gseaplot2.html" class="external-link">enrichplot::gseaplot2()</a></code>.</p>
 <div class="sourceCode" id="cb70"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">gse_group</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/enrichGO_rank.html">enrichGO_rank</a></span><span class="op">(</span><span class="va">var_decomp</span>, </span>
-<span>    gene_rank_by <span class="op">=</span> <span class="st">"Group"</span>, </span>
+<code class="sourceCode R"><span><span class="va">gse_group</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/enrichGO_rank.html">enrichGO_rank</a></span><span class="op">(</span><span class="va">var_decomp</span>,</span>
+<span>    gene_rank_by <span class="op">=</span> <span class="st">"Group"</span>,</span>
 <span>    OrgDb <span class="op">=</span> <span class="va">org.Mm.eg.db</span>,</span>
 <span>    keyType <span class="op">=</span> <span class="st">"SYMBOL"</span>, category <span class="op">=</span> <span class="st">"BP"</span>,</span>
 <span>    go_rank_by <span class="op">=</span> <span class="st">"p.adjust"</span><span class="op">)</span></span>
@@ -1472,10 +1497,10 @@ variance decomposition), use <code><a href="../reference/enrichGO_rank.html">enr
 <span><span class="co">#&gt; values detected in gene set IDs. Replacing with string 'NA'.</span></span>
 <span><span class="co">#&gt; Warning in enrichit::gsea_gson(geneList = geneList, exponent = exponent, :</span></span>
 <span><span class="co">#&gt; Duplicate gene set IDs detected: NA... (Total 1). Unique suffixes added.</span></span>
-<span><span class="co">#&gt; Removing NA ID gene sets.</span></span>
+<span><span class="co">#&gt; Removing NA ID gene sets for BP.</span></span>
 <span></span>
-<span><span class="fu">enrichplot</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/enrichplot/man/gseaplot2.html" class="external-link">gseaplot2</a></span><span class="op">(</span><span class="va">gse_group</span>, geneSetID <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, base_size <span class="op">=</span> <span class="fl">8</span><span class="op">)</span> </span></code></pre></div>
-<p><img src="TiDEomics_files/figure-html/go_rank-1.png" class="r-plt" alt="" width="576"></p>
+<span><span class="fu">enrichplot</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/enrichplot/man/gseaplot2.html" class="external-link">gseaplot2</a></span><span class="op">(</span><span class="va">gse_group</span><span class="op">[[</span><span class="st">"BP"</span><span class="op">]</span><span class="op">]</span>, geneSetID <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, base_size <span class="op">=</span> <span class="fl">8</span><span class="op">)</span></span></code></pre></div>
+<p><img src="TiDEomics_files/figure-html/go_rank-1.png" class="r-plt" alt="" width="480"></p>
 <p>For multiple defined gene sets (e.g. WGCNA modules, DE genes by
 feature classification), use <code><a href="../reference/enrichGO_list.html">enrichGO_list()</a></code> and plot with
 <code><a href="../reference/plot_GO.html">plot_GO()</a></code>.</p>
@@ -1483,7 +1508,7 @@ feature classification), use <code><a href="../reference/enrichGO_list.html">enr
 <code><a href="../reference/enrichGO_list.html">enrichGO_list()</a></code> to simplify the GO results by removing
 redundant terms (default: FALSE).</p>
 <div class="sourceCode" id="cb71"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">background_wgcna</span> <span class="op">&lt;-</span> <span class="va">gene_module</span><span class="op">$</span><span class="va">Feature</span></span>
+<code class="sourceCode R"><span><span class="va">background_wgcna</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">wgcna_input</span><span class="op">$</span><span class="va">data</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">go_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/enrichGO_list.html">enrichGO_list</a></span><span class="op">(</span></span>
 <span>    gene_list <span class="op">=</span> <span class="va">gene_module</span>, OrgDb <span class="op">=</span> <span class="va">org.Mm.eg.db</span>,</span>
@@ -1499,102 +1524,102 @@ redundant terms (default: FALSE).</p>
 <span><span class="co">#&gt; 'select()' returned 1:1 mapping between keys and columns</span></span>
 <span><span class="co">#&gt; 'select()' returned 1:1 mapping between keys and columns</span></span>
 <span><span class="co">#&gt; Warning in bitr(gene, fromType = fromType, toType = "ENTREZID", OrgDb = OrgDb):</span></span>
-<span><span class="co">#&gt; 0.88% of input gene IDs are fail to map...</span></span>
+<span><span class="co">#&gt; 0.78% of input gene IDs are fail to map...</span></span>
 <span><span class="co">#&gt; Processing gene list: 2</span></span>
 <span><span class="co">#&gt; 'select()' returned 1:1 mapping between keys and columns</span></span>
 <span><span class="co">#&gt; 'select()' returned 1:1 mapping between keys and columns</span></span>
 <span><span class="co">#&gt; Warning in bitr(gene, fromType = fromType, toType = "ENTREZID", OrgDb = OrgDb):</span></span>
-<span><span class="co">#&gt; 0.88% of input gene IDs are fail to map...</span></span>
+<span><span class="co">#&gt; 0.78% of input gene IDs are fail to map...</span></span>
 <span><span class="co">#&gt; Processing gene list: 3</span></span>
 <span><span class="co">#&gt; 'select()' returned 1:1 mapping between keys and columns</span></span>
 <span><span class="co">#&gt; Warning in bitr(gene, fromType = fromType, toType = "ENTREZID", OrgDb = OrgDb):</span></span>
 <span><span class="co">#&gt; 4.44% of input gene IDs are fail to map...</span></span>
 <span><span class="co">#&gt; 'select()' returned 1:1 mapping between keys and columns</span></span>
 <span><span class="co">#&gt; Warning in bitr(gene, fromType = fromType, toType = "ENTREZID", OrgDb = OrgDb):</span></span>
-<span><span class="co">#&gt; 0.88% of input gene IDs are fail to map...</span></span>
+<span><span class="co">#&gt; 0.78% of input gene IDs are fail to map...</span></span>
 <span><span class="co">#&gt; Processing gene list: 4</span></span>
 <span><span class="co">#&gt; 'select()' returned 1:1 mapping between keys and columns</span></span>
 <span><span class="co">#&gt; 'select()' returned 1:1 mapping between keys and columns</span></span>
 <span><span class="co">#&gt; Warning in bitr(gene, fromType = fromType, toType = "ENTREZID", OrgDb = OrgDb):</span></span>
-<span><span class="co">#&gt; 0.88% of input gene IDs are fail to map...</span></span>
+<span><span class="co">#&gt; 0.78% of input gene IDs are fail to map...</span></span>
 <span><span class="co">#&gt; Processing gene list: 5</span></span>
 <span><span class="co">#&gt; 'select()' returned 1:1 mapping between keys and columns</span></span>
 <span><span class="co">#&gt; 'select()' returned 1:1 mapping between keys and columns</span></span>
 <span><span class="co">#&gt; Warning in bitr(gene, fromType = fromType, toType = "ENTREZID", OrgDb = OrgDb):</span></span>
-<span><span class="co">#&gt; 0.88% of input gene IDs are fail to map...</span></span>
+<span><span class="co">#&gt; 0.78% of input gene IDs are fail to map...</span></span>
 <span><span class="co">#&gt; Processing gene list: 6</span></span>
 <span><span class="co">#&gt; 'select()' returned 1:1 mapping between keys and columns</span></span>
 <span><span class="co">#&gt; 'select()' returned 1:1 mapping between keys and columns</span></span>
 <span><span class="co">#&gt; Warning in bitr(gene, fromType = fromType, toType = "ENTREZID", OrgDb = OrgDb):</span></span>
-<span><span class="co">#&gt; 0.88% of input gene IDs are fail to map...</span></span>
+<span><span class="co">#&gt; 0.78% of input gene IDs are fail to map...</span></span>
 <span><span class="co">#&gt; Performing GO enrichment for category: MF</span></span>
 <span><span class="co">#&gt; Processing gene list: 1</span></span>
 <span><span class="co">#&gt; 'select()' returned 1:1 mapping between keys and columns</span></span>
 <span><span class="co">#&gt; 'select()' returned 1:1 mapping between keys and columns</span></span>
 <span><span class="co">#&gt; Warning in bitr(gene, fromType = fromType, toType = "ENTREZID", OrgDb = OrgDb):</span></span>
-<span><span class="co">#&gt; 0.88% of input gene IDs are fail to map...</span></span>
+<span><span class="co">#&gt; 0.78% of input gene IDs are fail to map...</span></span>
 <span><span class="co">#&gt; Processing gene list: 2</span></span>
 <span><span class="co">#&gt; 'select()' returned 1:1 mapping between keys and columns</span></span>
 <span><span class="co">#&gt; 'select()' returned 1:1 mapping between keys and columns</span></span>
 <span><span class="co">#&gt; Warning in bitr(gene, fromType = fromType, toType = "ENTREZID", OrgDb = OrgDb):</span></span>
-<span><span class="co">#&gt; 0.88% of input gene IDs are fail to map...</span></span>
+<span><span class="co">#&gt; 0.78% of input gene IDs are fail to map...</span></span>
 <span><span class="co">#&gt; Processing gene list: 3</span></span>
 <span><span class="co">#&gt; 'select()' returned 1:1 mapping between keys and columns</span></span>
 <span><span class="co">#&gt; Warning in bitr(gene, fromType = fromType, toType = "ENTREZID", OrgDb = OrgDb):</span></span>
 <span><span class="co">#&gt; 4.44% of input gene IDs are fail to map...</span></span>
 <span><span class="co">#&gt; 'select()' returned 1:1 mapping between keys and columns</span></span>
 <span><span class="co">#&gt; Warning in bitr(gene, fromType = fromType, toType = "ENTREZID", OrgDb = OrgDb):</span></span>
-<span><span class="co">#&gt; 0.88% of input gene IDs are fail to map...</span></span>
+<span><span class="co">#&gt; 0.78% of input gene IDs are fail to map...</span></span>
 <span><span class="co">#&gt; Processing gene list: 4</span></span>
 <span><span class="co">#&gt; 'select()' returned 1:1 mapping between keys and columns</span></span>
 <span><span class="co">#&gt; 'select()' returned 1:1 mapping between keys and columns</span></span>
 <span><span class="co">#&gt; Warning in bitr(gene, fromType = fromType, toType = "ENTREZID", OrgDb = OrgDb):</span></span>
-<span><span class="co">#&gt; 0.88% of input gene IDs are fail to map...</span></span>
+<span><span class="co">#&gt; 0.78% of input gene IDs are fail to map...</span></span>
 <span><span class="co">#&gt; Processing gene list: 5</span></span>
 <span><span class="co">#&gt; 'select()' returned 1:1 mapping between keys and columns</span></span>
 <span><span class="co">#&gt; 'select()' returned 1:1 mapping between keys and columns</span></span>
 <span><span class="co">#&gt; Warning in bitr(gene, fromType = fromType, toType = "ENTREZID", OrgDb = OrgDb):</span></span>
-<span><span class="co">#&gt; 0.88% of input gene IDs are fail to map...</span></span>
+<span><span class="co">#&gt; 0.78% of input gene IDs are fail to map...</span></span>
 <span><span class="co">#&gt; Processing gene list: 6</span></span>
 <span><span class="co">#&gt; 'select()' returned 1:1 mapping between keys and columns</span></span>
 <span><span class="co">#&gt; 'select()' returned 1:1 mapping between keys and columns</span></span>
 <span><span class="co">#&gt; Warning in bitr(gene, fromType = fromType, toType = "ENTREZID", OrgDb = OrgDb):</span></span>
-<span><span class="co">#&gt; 0.88% of input gene IDs are fail to map...</span></span>
+<span><span class="co">#&gt; 0.78% of input gene IDs are fail to map...</span></span>
 <span><span class="co">#&gt; Performing GO enrichment for category: CC</span></span>
 <span><span class="co">#&gt; Processing gene list: 1</span></span>
 <span><span class="co">#&gt; 'select()' returned 1:1 mapping between keys and columns</span></span>
 <span><span class="co">#&gt; 'select()' returned 1:1 mapping between keys and columns</span></span>
 <span><span class="co">#&gt; Warning in bitr(gene, fromType = fromType, toType = "ENTREZID", OrgDb = OrgDb):</span></span>
-<span><span class="co">#&gt; 0.88% of input gene IDs are fail to map...</span></span>
+<span><span class="co">#&gt; 0.78% of input gene IDs are fail to map...</span></span>
 <span><span class="co">#&gt; Processing gene list: 2</span></span>
 <span><span class="co">#&gt; 'select()' returned 1:1 mapping between keys and columns</span></span>
 <span><span class="co">#&gt; 'select()' returned 1:1 mapping between keys and columns</span></span>
 <span><span class="co">#&gt; Warning in bitr(gene, fromType = fromType, toType = "ENTREZID", OrgDb = OrgDb):</span></span>
-<span><span class="co">#&gt; 0.88% of input gene IDs are fail to map...</span></span>
+<span><span class="co">#&gt; 0.78% of input gene IDs are fail to map...</span></span>
 <span><span class="co">#&gt; Processing gene list: 3</span></span>
 <span><span class="co">#&gt; 'select()' returned 1:1 mapping between keys and columns</span></span>
 <span><span class="co">#&gt; Warning in bitr(gene, fromType = fromType, toType = "ENTREZID", OrgDb = OrgDb):</span></span>
 <span><span class="co">#&gt; 4.44% of input gene IDs are fail to map...</span></span>
 <span><span class="co">#&gt; 'select()' returned 1:1 mapping between keys and columns</span></span>
 <span><span class="co">#&gt; Warning in bitr(gene, fromType = fromType, toType = "ENTREZID", OrgDb = OrgDb):</span></span>
-<span><span class="co">#&gt; 0.88% of input gene IDs are fail to map...</span></span>
+<span><span class="co">#&gt; 0.78% of input gene IDs are fail to map...</span></span>
 <span><span class="co">#&gt; Processing gene list: 4</span></span>
 <span><span class="co">#&gt; 'select()' returned 1:1 mapping between keys and columns</span></span>
 <span><span class="co">#&gt; 'select()' returned 1:1 mapping between keys and columns</span></span>
 <span><span class="co">#&gt; Warning in bitr(gene, fromType = fromType, toType = "ENTREZID", OrgDb = OrgDb):</span></span>
-<span><span class="co">#&gt; 0.88% of input gene IDs are fail to map...</span></span>
+<span><span class="co">#&gt; 0.78% of input gene IDs are fail to map...</span></span>
 <span><span class="co">#&gt; Processing gene list: 5</span></span>
 <span><span class="co">#&gt; 'select()' returned 1:1 mapping between keys and columns</span></span>
 <span><span class="co">#&gt; 'select()' returned 1:1 mapping between keys and columns</span></span>
 <span><span class="co">#&gt; Warning in bitr(gene, fromType = fromType, toType = "ENTREZID", OrgDb = OrgDb):</span></span>
-<span><span class="co">#&gt; 0.88% of input gene IDs are fail to map...</span></span>
+<span><span class="co">#&gt; 0.78% of input gene IDs are fail to map...</span></span>
 <span><span class="co">#&gt; Processing gene list: 6</span></span>
 <span><span class="co">#&gt; 'select()' returned 1:1 mapping between keys and columns</span></span>
 <span><span class="co">#&gt; 'select()' returned 1:1 mapping between keys and columns</span></span>
 <span><span class="co">#&gt; Warning in bitr(gene, fromType = fromType, toType = "ENTREZID", OrgDb = OrgDb):</span></span>
-<span><span class="co">#&gt; 0.88% of input gene IDs are fail to map...</span></span>
+<span><span class="co">#&gt; 0.78% of input gene IDs are fail to map...</span></span>
 <span><span class="co">#&gt; Merging GO enrichment results across gene lists for each category.</span></span>
-<span><span class="fu"><a href="../reference/plot_GO.html">plot_GO</a></span><span class="op">(</span><span class="va">go_list</span><span class="op">$</span><span class="va">all</span>, plot_dotplot <span class="op">=</span> <span class="cn">TRUE</span>, </span>
+<span><span class="fu"><a href="../reference/plot_GO.html">plot_GO</a></span><span class="op">(</span><span class="va">go_list</span><span class="op">$</span><span class="va">all</span>, plot_dotplot <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>    plot_emapplot <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>    plot_cnetplot <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>    showCategory_dotplot <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
@@ -1639,31 +1664,31 @@ pathways) can be performed with <code><a href="../reference/enrichR_list.html">e
 </h3>
 <p>Selected features can be plotted with <code><a href="../reference/plot_trend.html">plot_trend()</a></code>,
 which shows the mean and standard deviation of replicates at each time
-point. Input should be the output of <code><a href="../reference/calc_mean_sd.html">calc_mean_sd()</a></code>, which
-calculates the mean and standard deviation of replicates for each
-feature at each time point.</p>
+point.</p>
 <div class="sourceCode" id="cb73"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">table_mean_sd_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/calc_mean_sd.html">calc_mean_sd</a></span><span class="op">(</span><span class="va">data_obj</span><span class="op">)</span></span>
-<span><span class="va">table_mean_sd_orig</span> <span class="op">&lt;-</span> <span class="va">table_mean_sd_list</span><span class="op">$</span><span class="va">orig</span></span>
-<span><span class="va">table_mean_sd_norm</span> <span class="op">&lt;-</span> <span class="va">table_mean_sd_list</span><span class="op">$</span><span class="va">norm0</span></span>
-<span></span>
-<span><span class="fu"><a href="../reference/plot_trend.html">plot_trend</a></span><span class="op">(</span><span class="va">table_mean_sd_orig</span>, features <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Actb"</span>, <span class="st">"Cd69"</span>, <span class="st">"Fosb"</span>, <span class="st">"Il23a"</span><span class="op">)</span>,</span>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_trend.html">plot_trend</a></span><span class="op">(</span><span class="va">data_obj</span>, assay <span class="op">=</span> <span class="fl">1</span>, features <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Actb"</span>, <span class="st">"Cd69"</span>, <span class="st">"Fosb"</span>, <span class="st">"Il23a"</span><span class="op">)</span>,</span>
 <span>    title <span class="op">=</span> <span class="st">"Example features"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Group not specified. Plotting all groups: IFNbeta, IFNgamma, LPS, untreated</span></span>
 <span><span class="co">#&gt; Warning: Removed 12 rows containing missing values or values outside the scale range</span></span>
 <span><span class="co">#&gt; (`geom_point()`).</span></span></code></pre></div>
 <p><img src="TiDEomics_files/figure-html/plot-feature-1.png" class="r-plt" alt="" width="576"></p>
 <div class="sourceCode" id="cb74"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_trend.html">plot_trend</a></span><span class="op">(</span><span class="va">table_mean_sd_norm</span>, features <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Actb"</span>, <span class="st">"Cd69"</span>, <span class="st">"Fosb"</span>, <span class="st">"Il23a"</span><span class="op">)</span>,</span>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_trend.html">plot_trend</a></span><span class="op">(</span><span class="va">data_obj</span>, assay <span class="op">=</span> <span class="fl">2</span>, features <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Actb"</span>, <span class="st">"Cd69"</span>, <span class="st">"Fosb"</span>, <span class="st">"Il23a"</span><span class="op">)</span>,</span>
 <span>    title <span class="op">=</span> <span class="st">"Example features with time 0 normalisation"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Group not specified. Plotting all groups: IFNbeta, IFNgamma, LPS, untreated</span></span>
 <span><span class="co">#&gt; Warning: Removed 12 rows containing missing values or values outside the scale range</span></span>
 <span><span class="co">#&gt; (`geom_point()`).</span></span></code></pre></div>
 <p><img src="TiDEomics_files/figure-html/plot-feature-2.png" class="r-plt" alt="" width="576"></p>
+<div class="sourceCode" id="cb75"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="co"># Or pre-calculate mean and sd with calc_mean_sd()</span></span>
+<span><span class="co"># table_mean_sd_orig &lt;- calc_mean_sd(data_obj)$orig</span></span>
+<span><span class="co"># plot_trend(table_mean_sd_orig, features = c("Actb", "Cd69", "Fosb", "Il23a"),</span></span>
+<span><span class="co">#     title = "Example features")</span></span></code></pre></div>
 <p>Visualisation of features with high &amp; low residual variance
 justify the filtering strategy for WGCNA input.</p>
-<div class="sourceCode" id="cb75"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_trend.html">plot_trend</a></span><span class="op">(</span><span class="va">table_mean_sd_orig</span>,</span>
+<div class="sourceCode" id="cb76"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_trend.html">plot_trend</a></span><span class="op">(</span><span class="va">data_obj</span>, assay <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>    features <span class="op">=</span> <span class="va">var_decomp</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>        <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="va">Residual</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fl">12</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="va">Feature</span><span class="op">)</span>,</span>
 <span>    title <span class="op">=</span> <span class="st">"Features with lowest residual variance"</span></span>
@@ -1672,11 +1697,12 @@ justify the filtering strategy for WGCNA input.</p>
 <span><span class="co">#&gt; Warning: Removed 36 rows containing missing values or values outside the scale range</span></span>
 <span><span class="co">#&gt; (`geom_point()`).</span></span></code></pre></div>
 <p><img src="TiDEomics_files/figure-html/plot-residual-1.png" class="r-plt" alt="" width="576"></p>
-<div class="sourceCode" id="cb76"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb77"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="../reference/plot_trend.html">plot_trend</a></span><span class="op">(</span><span class="va">table_mean_sd_orig</span>,</span>
+<span><span class="fu"><a href="../reference/plot_trend.html">plot_trend</a></span><span class="op">(</span><span class="va">data_obj</span>, assay <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>    features <span class="op">=</span> <span class="va">var_decomp</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>        <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html" class="external-link">desc</a></span><span class="op">(</span><span class="va">Residual</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fl">12</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="va">Feature</span><span class="op">)</span>,</span>
+<span>        <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html" class="external-link">desc</a></span><span class="op">(</span><span class="va">Residual</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>        <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fl">12</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="va">Feature</span><span class="op">)</span>,</span>
 <span>    title <span class="op">=</span> <span class="st">"Features with highest residual variance"</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; Group not specified. Plotting all groups: IFNbeta, IFNgamma, LPS, untreated</span></span>
@@ -1704,7 +1730,7 @@ same subjects tracked across time points. LMM adds
 design via <code><a href="https://rdrr.io/pkg/limma/man/dupcor.html" class="external-link">limma::duplicateCorrelation()</a></code>.
 <code>normalise_to_start(by_subject = TRUE)</code> subtracts each
 subject’s own baseline. <code><a href="../reference/merge_replicates.html">merge_replicates()</a></code> and
-<code><a href="../reference/calc_mean_sd.html">calc_mean_sd()</a></code> compute statistics across subjects.</li>
+<code><a href="../reference/plot_trend.html">plot_trend()</a></code> compute statistics across subjects.</li>
 </ul>
 <p>Users can ask different biological questions and use different
 functions in TiDEomics to answer them. For example:</p>
@@ -1728,7 +1754,7 @@ temporal profiles? -&gt; <code><a href="../reference/prepare_WGCNA.html">prepare
 <code><a href="../reference/run_WGCNA.html">run_WGCNA()</a></code> + <code><a href="../reference/plot_modules_v.html">plot_modules_v()</a></code> or
 <code><a href="../reference/plot_modules_h.html">plot_modules_h()</a></code>.</p></li>
 <li><p>What biological processes are associated with the genes of
-interest (e.g. co-expression modules, differentially expressed genes in
+interest (e.g. co-expression modules, differentially expressed genes in
 each sample group)? -&gt; <code><a href="../reference/enrichGO_list.html">enrichGO_list()</a></code> +
 <code><a href="../reference/plot_GO.html">plot_GO()</a></code>.</p></li>
 <li><p>What biological processes are associated with the genes ranked by
@@ -1748,7 +1774,7 @@ missing values.</p></li>
 <div class="section level2">
 <h2 id="session-information">Session information<a class="anchor" aria-label="anchor" href="#session-information"></a>
 </h2>
-<div class="sourceCode" id="cb77"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb78"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <pre style="max-height: 300px;"><code><span><span class="co">#&gt; R version 4.6.0 (2026-04-24 ucrt)</span></span>
 <span><span class="co">#&gt; Platform: x86_64-w64-mingw32/x64</span></span>
@@ -1776,9 +1802,9 @@ missing values.</p></li>
 <span><span class="co">#&gt;  [3] SummarizedExperiment_1.43.0 Biobase_2.73.1             </span></span>
 <span><span class="co">#&gt;  [5] GenomicRanges_1.65.0        Seqinfo_1.3.0              </span></span>
 <span><span class="co">#&gt;  [7] IRanges_2.47.1              S4Vectors_0.51.2           </span></span>
-<span><span class="co">#&gt;  [9] BiocGenerics_0.59.3         generics_0.1.4             </span></span>
+<span><span class="co">#&gt;  [9] BiocGenerics_0.59.6         generics_0.1.4             </span></span>
 <span><span class="co">#&gt; [11] MatrixGenerics_1.25.0       matrixStats_1.5.0          </span></span>
-<span><span class="co">#&gt; [13] magrittr_2.0.5              TiDEomics_0.99.0           </span></span>
+<span><span class="co">#&gt; [13] magrittr_2.0.5              TiDEomics_0.99.1           </span></span>
 <span><span class="co">#&gt; [15] BiocStyle_2.41.0           </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; loaded via a namespace (and not attached):</span></span>
@@ -1826,7 +1852,7 @@ missing values.</p></li>
 <span><span class="co">#&gt;  [83] xfun_0.57                 rbibutils_2.4.1          </span></span>
 <span><span class="co">#&gt;  [85] S4Arrays_1.13.0           mime_0.13                </span></span>
 <span><span class="co">#&gt;  [87] reformulas_0.4.4          survival_3.8-6           </span></span>
-<span><span class="co">#&gt;  [89] aisdk_1.1.0               iterators_1.0.14         </span></span>
+<span><span class="co">#&gt;  [89] aisdk_1.4.12              iterators_1.0.14         </span></span>
 <span><span class="co">#&gt;  [91] statmod_1.5.2             nlme_3.1-169             </span></span>
 <span><span class="co">#&gt;  [93] ggtree_4.3.0              fontquiver_0.2.1         </span></span>
 <span><span class="co">#&gt;  [95] bit64_4.8.2               bslib_0.11.0             </span></span>
@@ -1838,7 +1864,7 @@ missing values.</p></li>
 <span><span class="co">#&gt; [107] bit_4.6.0                 compiler_4.6.0           </span></span>
 <span><span class="co">#&gt; [109] httr2_1.2.2               htmlTable_2.5.0          </span></span>
 <span><span class="co">#&gt; [111] fontBitstreamVera_0.1.1   randtests_1.0.2          </span></span>
-<span><span class="co">#&gt; [113] desc_1.4.3                DelayedArray_0.39.2      </span></span>
+<span><span class="co">#&gt; [113] desc_1.4.3                DelayedArray_0.39.3      </span></span>
 <span><span class="co">#&gt; [115] plotly_4.12.0             bookdown_0.46            </span></span>
 <span><span class="co">#&gt; [117] checkmate_2.3.4           scales_1.4.0             </span></span>
 <span><span class="co">#&gt; [119] caTools_1.18.3            callr_3.7.6              </span></span>
