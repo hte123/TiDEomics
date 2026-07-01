@@ -13,7 +13,7 @@ for each Group."><meta property="og:image" content="https://hte123.github.io/TiD
 
     <a class="navbar-brand me-2" href="../index.html">TiDEomics</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -25,7 +25,7 @@ for each Group."><meta property="og:image" content="https://hte123.github.io/TiD
 <li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-applications" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Applications</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-applications"><li><a class="dropdown-item" href="../articles/TiDEomics_application_1.html">Transcriptome of macrophage response to six immune stimuli</a></li>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-applications"><li><a class="dropdown-item" href="../articles/TiDEomics_application_1_0.99.2.html">Transcriptome of macrophage response to six immune stimuli</a></li>
   </ul></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
@@ -59,7 +59,6 @@ for each Group.</p>
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">plot_pca</span><span class="op">(</span></span>
 <span>  <span class="va">se_obj</span>,</span>
-<span>  plot <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  plot_screeplot <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  plot_loadings <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  plot_morepc <span class="op">=</span> <span class="cn">TRUE</span>,</span>
@@ -82,10 +81,6 @@ for each Group.</p>
 
 <dl><dt id="arg-se-obj">se_obj<a class="anchor" aria-label="anchor" href="#arg-se-obj"></a></dt>
 <dd><p>A SummarizedExperiment object created by <code><a href="create_input.html">create_input()</a></code></p></dd>
-
-
-<dt id="arg-plot">plot<a class="anchor" aria-label="anchor" href="#arg-plot"></a></dt>
-<dd><p>Logical, whether to plot PCA and other plots (default is TRUE)</p></dd>
 
 
 <dt id="arg-plot-screeplot">plot_screeplot<a class="anchor" aria-label="anchor" href="#arg-plot-screeplot"></a></dt>
@@ -123,22 +118,22 @@ of each group (default is FALSE)</p></dd>
 
 <dt id="arg-xlim-min">xlim_min<a class="anchor" aria-label="anchor" href="#arg-xlim-min"></a></dt>
 <dd><p>Minimum x-axis limit when drawing ellipses
-(default 1.5*min PC1)</p></dd>
+(default: NULL, auto-computed as 1.5×min PC1)</p></dd>
 
 
 <dt id="arg-xlim-max">xlim_max<a class="anchor" aria-label="anchor" href="#arg-xlim-max"></a></dt>
 <dd><p>Maximum x-axis limit when drawing ellipses
-(default 1.5*max PC1)</p></dd>
+(default: NULL, auto-computed as 1.5×max PC1)</p></dd>
 
 
 <dt id="arg-ylim-min">ylim_min<a class="anchor" aria-label="anchor" href="#arg-ylim-min"></a></dt>
 <dd><p>Minimum y-axis limit when drawing ellipses
-(default 1.5*min PC2)</p></dd>
+(default: NULL, auto-computed as 1.5×min PC2)</p></dd>
 
 
 <dt id="arg-ylim-max">ylim_max<a class="anchor" aria-label="anchor" href="#arg-ylim-max"></a></dt>
 <dd><p>Maximum y-axis limit when drawing ellipses
-(default 1.5*max PC2)</p></dd>
+(default: NULL, auto-computed as 1.5×max PC2)</p></dd>
 
 
 <dt id="arg-fontsize">fontsize<a class="anchor" aria-label="anchor" href="#arg-fontsize"></a></dt>
@@ -158,29 +153,25 @@ provided by PCAtools package, and PCAtools output object for custom plotting.</p
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"example"</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">example_obj</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">PC</span> <span class="op">=</span> <span class="fu">plot_pca</span><span class="op">(</span><span class="va">example_obj</span>, morepc <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Please use `linewidth` instead.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> The deprecated feature was likely used in the <span style="color: #0000BB;">PCAtools</span> package.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span>   Please report the issue to the authors.</span>
-<span class="r-plt img"><img src="plot_pca-1.png" alt="" width="700" height="433"></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> -- variables retained:</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Meikin, Epn2, Hk2, Relb, Igf2bp1, Tk1, Pik3r5, Endog, Amotl1</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Angpt1, Lpin1, Tmigd3, Pkib, Kitl, Efna2, Gprc5b, Slc13a3, Zbtb47, Tns4, Serpinf1</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The `size` argument of `element_line()` is deprecated as of ggplot2 3.4.0.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Please use the `linewidth` argument instead.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> The deprecated feature was likely used in the <span style="color: #0000BB;">PCAtools</span> package.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span>   Please report the issue to the authors.</span>
-<span class="r-plt img"><img src="plot_pca-2.png" alt="" width="700" height="433"></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Using <span style="color: #00BB00;">size</span> for a discrete variable is not advised.</span>
-<span class="r-plt img"><img src="plot_pca-3.png" alt="" width="700" height="433"></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Scale for <span style="color: #00BB00;">colour</span> is already present.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Adding another scale for <span style="color: #00BB00;">colour</span>, which will replace the existing scale.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Scale for <span style="color: #00BB00;">colour</span> is already present.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Adding another scale for <span style="color: #00BB00;">colour</span>, which will replace the existing scale.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Scale for <span style="color: #00BB00;">colour</span> is already present.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Adding another scale for <span style="color: #00BB00;">colour</span>, which will replace the existing scale.</span>
-<span class="r-plt img"><img src="plot_pca-4.png" alt="" width="700" height="433"></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

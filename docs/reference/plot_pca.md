@@ -11,7 +11,6 @@ for each Group.
 ``` r
 plot_pca(
   se_obj,
-  plot = TRUE,
   plot_screeplot = TRUE,
   plot_loadings = TRUE,
   plot_morepc = TRUE,
@@ -34,10 +33,6 @@ plot_pca(
 
   A SummarizedExperiment object created by
   [`create_input()`](https://hte123.github.io/TiDEomics/reference/create_input.md)
-
-- plot:
-
-  Logical, whether to plot PCA and other plots (default is TRUE)
 
 - plot_screeplot:
 
@@ -76,19 +71,23 @@ plot_pca(
 
 - xlim_min:
 
-  Minimum x-axis limit when drawing ellipses (default 1.5\*min PC1)
+  Minimum x-axis limit when drawing ellipses (default: NULL,
+  auto-computed as 1.5×min PC1)
 
 - xlim_max:
 
-  Maximum x-axis limit when drawing ellipses (default 1.5\*max PC1)
+  Maximum x-axis limit when drawing ellipses (default: NULL,
+  auto-computed as 1.5×max PC1)
 
 - ylim_min:
 
-  Minimum y-axis limit when drawing ellipses (default 1.5\*min PC2)
+  Minimum y-axis limit when drawing ellipses (default: NULL,
+  auto-computed as 1.5×min PC2)
 
 - ylim_max:
 
-  Maximum y-axis limit when drawing ellipses (default 1.5\*max PC2)
+  Maximum y-axis limit when drawing ellipses (default: NULL,
+  auto-computed as 1.5×max PC2)
 
 - fontsize:
 
@@ -107,22 +106,19 @@ PCAtools package, and PCAtools output object for custom plotting.
 ## Examples
 
 ``` r
-data("example")
+data(example_obj)
 PC = plot_pca(example_obj, morepc = seq(1, 3))
 #> Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
 #> ℹ Please use `linewidth` instead.
 #> ℹ The deprecated feature was likely used in the PCAtools package.
 #>   Please report the issue to the authors.
-
 #> -- variables retained:
-#> Meikin, Epn2, Hk2, Relb, Igf2bp1, Tk1, Pik3r5, Endog, Amotl1
+#> Angpt1, Lpin1, Tmigd3, Pkib, Kitl, Efna2, Gprc5b, Slc13a3, Zbtb47, Tns4, Serpinf1
 #> Warning: The `size` argument of `element_line()` is deprecated as of ggplot2 3.4.0.
 #> ℹ Please use the `linewidth` argument instead.
 #> ℹ The deprecated feature was likely used in the PCAtools package.
 #>   Please report the issue to the authors.
-
 #> Warning: Using size for a discrete variable is not advised.
-
 #> Scale for colour is already present.
 #> Adding another scale for colour, which will replace the existing scale.
 #> Scale for colour is already present.

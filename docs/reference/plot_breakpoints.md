@@ -39,7 +39,7 @@ specified group
 ``` r
 data("example_res_list")
 plot_breakpoints(example_res_list)
-#> Warning: number of columns of result is not a multiple of vector length (arg 9)
-#> Warning: number of columns of result is not a multiple of vector length (arg 3)
-#> Warning: number of columns of result is not a multiple of vector length (arg 5)
+#> Warning: number of columns of result is not a multiple of vector length (arg 25)
+#> Warning: number of columns of result is not a multiple of vector length (arg 19)
+#> Warning: number of columns of result is not a multiple of vector length (arg 16)
 ```

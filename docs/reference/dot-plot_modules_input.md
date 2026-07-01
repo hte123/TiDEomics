@@ -28,7 +28,8 @@ If certain time points are missing in some groups, NA values are added.
   object can be produced by
   [`split_groups()`](https://hte123.github.io/TiDEomics/reference/split_groups.md),
   [`merge_replicates()`](https://hte123.github.io/TiDEomics/reference/merge_replicates.md)
-  and `merge_group()`.
+  and
+  [`merge_groups()`](https://hte123.github.io/TiDEomics/reference/merge_groups.md).
 
 - assay:
 

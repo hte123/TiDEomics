@@ -100,16 +100,17 @@ group_specific_features(
 
 ## Value
 
-A character vector of features that are identified as unique to the
-specified groups based on the filtering criteria. If `genename` is TRUE,
-a table of gene names corresponding to the unique features will be
-printed. If `GO` is TRUE, a dot plot of GO enrichment results for the
-unique features will be printed.
+A named list with element `features` (character vector of features
+identified as unique to the specified groups based on the filtering
+criteria). If `genename` is TRUE, element `genename` contains a
+data.frame of gene annotations. If `GO` is TRUE and enrichment succeeds,
+element `GO` contains a dot plot of GO enrichment results. Returns
+`NULL` if no unique features pass the filter.
 
 ## Examples
 
 ``` r
-data("example")
+data(example_obj)
 example_obj <- normalise_to_start(example_obj)
 #> Normalising to group baseline at each feature's first non-NA time point.
 example_obj_list <- split_groups(example_obj)
@@ -122,5 +123,6 @@ property_random_fc <- summarise_feature_property(example_obj_merged_list)
 group_specific_features(property_random_fc, groups = c("untreated"),
     genename = FALSE, GO = FALSE)
 #> Filtering criteria: >=50% values >0 in >=1 of groups: untreated
-#> [1] "Itga7"   "Sult4a1"
+#> No unique features with the specified filter and groups.
+#> NULL
 ```

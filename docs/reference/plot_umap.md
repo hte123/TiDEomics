@@ -12,7 +12,6 @@ values).
 plot_umap(
   se_obj,
   seed = 1234,
-  plot = TRUE,
   plot_ID = FALSE,
   circle = FALSE,
   xlim_min = NULL,
@@ -36,10 +35,6 @@ plot_umap(
 
   Random seed for UMAP (default is 1234)
 
-- plot:
-
-  Whether to plot the figures (default is TRUE)
-
 - plot_ID:
 
   Whether to include a UMAP plot coloured by number of identified
@@ -52,19 +47,23 @@ plot_umap(
 
 - xlim_min:
 
-  Minimum x-axis limit when drawing ellipses (default 1.5\*min UMAP x)
+  Minimum x-axis limit when drawing ellipses (default: NULL,
+  auto-computed as 1.5×min UMAP x)
 
 - xlim_max:
 
-  Maximum x-axis limit when drawing ellipses (default 1.5\*max UMAP x)
+  Maximum x-axis limit when drawing ellipses (default: NULL,
+  auto-computed as 1.5×max UMAP x)
 
 - ylim_min:
 
-  Minimum y-axis limit when drawing ellipses (default 1.5\*min UMAP y)
+  Minimum y-axis limit when drawing ellipses (default: NULL,
+  auto-computed as 1.5×min UMAP y)
 
 - ylim_max:
 
-  Maximum y-axis limit when drawing ellipses (default 1.5\*max UMAP y)
+  Maximum y-axis limit when drawing ellipses (default: NULL,
+  auto-computed as 1.5×max UMAP y)
 
 - umap_neighbors:
 
@@ -83,15 +82,15 @@ plot_umap(
 
 ## Value
 
-A UMAP plot showing the distribution of samples. And a data frame
-containing UMAP coordinates and sample annotations for custom plotting.
+A list of UMAP plots showing the distribution of samples. And a data
+frame containing UMAP coordinates and sample annotations for custom
+plotting.
 
 ## Examples
 
 ``` r
-data("example")
+data(example_obj)
 umap_layout <- plot_umap(example_obj)
 #> Using n_neighbors = 8
-
 #> Warning: Using size for a discrete variable is not advised.
 ```

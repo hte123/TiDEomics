@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">TiDEomics</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -19,7 +19,7 @@
 <li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-applications" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Applications</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-applications"><li><a class="dropdown-item" href="../articles/TiDEomics_application_1.html">Transcriptome of macrophage response to six immune stimuli</a></li>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-applications"><li><a class="dropdown-item" href="../articles/TiDEomics_application_1_0.99.2.html">Transcriptome of macrophage response to six immune stimuli</a></li>
   </ul></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
@@ -62,7 +62,7 @@
           <code><a href="normalise_to_start.html">normalise_to_start()</a></code>
 
         </dt>
-        <dd>Normalise to time 0</dd>
+        <dd>Normalise to starting time point</dd>
 
         <dt>
 
@@ -270,6 +270,13 @@
 
         <dt>
 
+          <code><a href="plot_DE_between_group.html">plot_DE_between_group()</a></code>
+
+        </dt>
+        <dd>DE number between groups</dd>
+
+        <dt>
+
           <code><a href="plot_DE_between_time.html">plot_DE_between_time()</a></code>
 
         </dt>
@@ -365,6 +372,13 @@
 
         <dt>
 
+          <code><a href="extract_hubs.html">extract_hubs()</a></code>
+
+        </dt>
+        <dd>Extract hub features from WGCNA modules</dd>
+
+        <dt>
+
           <code><a href="plot_modules_h.html">plot_modules_h()</a></code>
 
         </dt>
@@ -383,6 +397,13 @@
 
         </dt>
         <dd>Summarise module patterns</dd>
+
+        <dt>
+
+          <code><a href="summarise_module_metrics.html">summarise_module_metrics()</a></code>
+
+        </dt>
+        <dd>Summarise WGCNA module metrics</dd>
       </dl></div><div class="section level2">
       <h2 id="functional-enrichment">Functional enrichment<a class="anchor" aria-label="anchor" href="#functional-enrichment"></a></h2>
 
@@ -416,10 +437,40 @@
 
         <dt>
 
+          <code><a href="enrich_msigdb.html">enrich_msigdb()</a></code>
+
+        </dt>
+        <dd>Gene set enrichment via MSigDB</dd>
+
+        <dt>
+
           <code><a href="plot_GO.html">plot_GO()</a></code>
 
         </dt>
         <dd>Plot GO enrichment</dd>
+      </dl></div><div class="section level2">
+      <h2 id="bundled-workflow">Bundled workflow<a class="anchor" aria-label="anchor" href="#bundled-workflow"></a></h2>
+
+
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="prepare_tide.html">prepare_tide()</a></code>
+
+        </dt>
+        <dd>Prepare TiDEomics input</dd>
+
+        <dt>
+
+          <code><a href="as_DeeDeeExperiment.html">as_DeeDeeExperiment()</a></code>
+
+        </dt>
+        <dd>Convert a TiDEomics result to DeeDeeExperiment</dd>
       </dl></div><div class="section level2">
       <h2 id="visualization-settings">Visualization settings<a class="anchor" aria-label="anchor" href="#visualization-settings"></a></h2>
 
@@ -476,7 +527,7 @@
 
         <dt>
 
-          <code><a href="example_obj.html">example</a></code>
+          <code><a href="example_obj.html">example_obj</a></code>
 
         </dt>
         <dd>SummarizedExperiment object for runnable examples</dd>

@@ -5,8 +5,9 @@ limma. The function compares each pair of groups at each time point, and
 returns a nested list of DE analysis results for each pair of groups and
 each time point including all features, as well as a list of filtered DE
 results for each pair of groups based on the specified thresholds
-including only significant features. The function can also plot the
-number of DE features between groups over time.
+including only significant features. Use
+[`plot_DE_between_group()`](https://hte123.github.io/TiDEomics/reference/plot_DE_between_group.md)
+to visualise the number of DE features between groups over time.
 
 ## Usage
 
@@ -15,12 +16,10 @@ DE_between_group(
   se_obj,
   group = NULL,
   filter = NULL,
-  assay = c(1, 2),
+  assay,
   adjP_thres = 0.05,
   logFC_thres = 1,
-  trend = FALSE,
-  plot = TRUE,
-  fontsize = 8
+  trend = FALSE
 )
 ```
 
@@ -44,8 +43,12 @@ DE_between_group(
 
 - assay:
 
-  Assay index to use, where 1 is the original data and 2 is normalised
-  to time 0 (if available) (default is 1)
+  Assay to use: `"orig"` for original data, `"norm"` for
+  normalised-to-start data. Numeric indices (1, 2) are also accepted. No
+  default, must be specified explicitly. The selected assay should
+  contain log-transformed, normalised values (e.g. log2-CPM for RNA-seq,
+  log2-intensity for proteomics). A warning is issued if the data
+  appears to be un-logged raw counts.
 
 - adjP_thres:
 
@@ -66,22 +69,16 @@ DE_between_group(
   metabolomics, or other log-intensity data where the mean-variance
   relationship is typically flat.
 
-- plot:
-
-  (Optional) Whether to plot the number of DE features between groups
-  over time (default is TRUE)
-
-- fontsize:
-
-  (Optional) Font size for the plot (default is 8)
-
 ## Value
 
-A list containing two elements: 'all_list' is a nested list of DE
-results for each pair of groups and each time point including all
-features; 'de_list' is a list of filtered DE results for each pair of
-groups based on the specified thresholds including only significant
-features.
+A list with: `all_list` (nested list of DE results per group pair and
+time point, all features); `de_list` (significant features only);
+`fit_list` (nested list of limma `MArrayLM` fit objects, for use with
+[`limma::plotSA()`](https://rdrr.io/pkg/limma/man/plotSA.html));
+`ref_groups` (group to be compared to); `all_groups` (all groups). The
+output can be passed to
+[`plot_DE_between_group()`](https://hte123.github.io/TiDEomics/reference/plot_DE_between_group.md)
+for visualisation.
 
 ## Details
 
@@ -94,7 +91,7 @@ across combined results if needed.
 ## Examples
 
 ``` r
-data("example")
+data(example_obj)
 example_obj <- normalise_to_start(example_obj)
 #> Normalising to group baseline at each feature's first non-NA time point.
 
@@ -124,7 +121,7 @@ DE_between_group_out <- DE_between_group(example_obj, assay = 2)
 #> Warning: Zero sample variances detected, have been offset away from zero
 #> Comparing group LPS to IFNbeta at Time 24: keeping 100 of 100 features (100.0%)
 #> Warning: Zero sample variances detected, have been offset away from zero
-#> Comparing untreated vs IFNbeta: time points only in IFNbeta: 2, 4, 6; only in untreated: none.
+#> Comparing untreated vs IFNbeta: time points only in IFNbeta: 2, 4, 6; only in untreated: none
 #> Comparing group untreated to IFNbeta at Time 0: keeping 100 of 100 features (100.0%)
 #> Warning: Zero sample variances detected, have been offset away from zero
 #> Comparing group untreated to IFNbeta at Time 8: keeping 100 of 100 features (100.0%)
@@ -155,7 +152,7 @@ DE_between_group_out <- DE_between_group(example_obj, assay = 2)
 #> Warning: Zero sample variances detected, have been offset away from zero
 #> Comparing group LPS to IFNgamma at Time 24: keeping 100 of 100 features (100.0%)
 #> Warning: Zero sample variances detected, have been offset away from zero
-#> Comparing untreated vs IFNgamma: time points only in IFNgamma: 2, 4, 6; only in untreated: none.
+#> Comparing untreated vs IFNgamma: time points only in IFNgamma: 2, 4, 6; only in untreated: none
 #> Comparing group untreated to IFNgamma at Time 0: keeping 100 of 100 features (100.0%)
 #> Warning: Zero sample variances detected, have been offset away from zero
 #> Comparing group untreated to IFNgamma at Time 8: keeping 100 of 100 features (100.0%)
@@ -186,35 +183,32 @@ DE_between_group_out <- DE_between_group(example_obj, assay = 2)
 #> Warning: Zero sample variances detected, have been offset away from zero
 #> Comparing group IFNgamma to LPS at Time 24: keeping 100 of 100 features (100.0%)
 #> Warning: Zero sample variances detected, have been offset away from zero
-#> Comparing untreated vs LPS: time points only in LPS: 2, 4, 6; only in untreated: none.
+#> Comparing untreated vs LPS: time points only in LPS: 2, 4, 6; only in untreated: none
 #> Comparing group untreated to LPS at Time 0: keeping 100 of 100 features (100.0%)
 #> Warning: Zero sample variances detected, have been offset away from zero
 #> Comparing group untreated to LPS at Time 8: keeping 100 of 100 features (100.0%)
 #> Warning: Zero sample variances detected, have been offset away from zero
 #> Comparing group untreated to LPS at Time 24: keeping 100 of 100 features (100.0%)
 #> Warning: Zero sample variances detected, have been offset away from zero
-#> Comparing IFNbeta vs untreated: time points only in untreated: none; only in IFNbeta: 2, 4, 6.
+#> Comparing IFNbeta vs untreated: time points only in untreated: none; only in IFNbeta: 2, 4, 6
 #> Comparing group IFNbeta to untreated at Time 0: keeping 100 of 100 features (100.0%)
 #> Warning: Zero sample variances detected, have been offset away from zero
 #> Comparing group IFNbeta to untreated at Time 8: keeping 100 of 100 features (100.0%)
 #> Warning: Zero sample variances detected, have been offset away from zero
 #> Comparing group IFNbeta to untreated at Time 24: keeping 100 of 100 features (100.0%)
 #> Warning: Zero sample variances detected, have been offset away from zero
-#> Comparing IFNgamma vs untreated: time points only in untreated: none; only in IFNgamma: 2, 4, 6.
+#> Comparing IFNgamma vs untreated: time points only in untreated: none; only in IFNgamma: 2, 4, 6
 #> Comparing group IFNgamma to untreated at Time 0: keeping 100 of 100 features (100.0%)
 #> Warning: Zero sample variances detected, have been offset away from zero
 #> Comparing group IFNgamma to untreated at Time 8: keeping 100 of 100 features (100.0%)
 #> Warning: Zero sample variances detected, have been offset away from zero
 #> Comparing group IFNgamma to untreated at Time 24: keeping 100 of 100 features (100.0%)
 #> Warning: Zero sample variances detected, have been offset away from zero
-#> Comparing LPS vs untreated: time points only in untreated: none; only in LPS: 2, 4, 6.
+#> Comparing LPS vs untreated: time points only in untreated: none; only in LPS: 2, 4, 6
 #> Comparing group LPS to untreated at Time 0: keeping 100 of 100 features (100.0%)
 #> Warning: Zero sample variances detected, have been offset away from zero
 #> Comparing group LPS to untreated at Time 8: keeping 100 of 100 features (100.0%)
 #> Warning: Zero sample variances detected, have been offset away from zero
 #> Comparing group LPS to untreated at Time 24: keeping 100 of 100 features (100.0%)
 #> Warning: Zero sample variances detected, have been offset away from zero
-
-
-
 ```

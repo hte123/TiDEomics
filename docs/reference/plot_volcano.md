@@ -115,7 +115,7 @@ A volcano plot of DE results
 ## Examples
 
 ``` r
-data("example")
+data(example_obj)
 example_obj <- normalise_to_start(example_obj)
 #> Normalising to group baseline at each feature's first non-NA time point.
 
@@ -145,7 +145,7 @@ DE_between_group_out <- DE_between_group(example_obj, assay = 2)
 #> Warning: Zero sample variances detected, have been offset away from zero
 #> Comparing group LPS to IFNbeta at Time 24: keeping 100 of 100 features (100.0%)
 #> Warning: Zero sample variances detected, have been offset away from zero
-#> Comparing untreated vs IFNbeta: time points only in IFNbeta: 2, 4, 6; only in untreated: none.
+#> Comparing untreated vs IFNbeta: time points only in IFNbeta: 2, 4, 6; only in untreated: none
 #> Comparing group untreated to IFNbeta at Time 0: keeping 100 of 100 features (100.0%)
 #> Warning: Zero sample variances detected, have been offset away from zero
 #> Comparing group untreated to IFNbeta at Time 8: keeping 100 of 100 features (100.0%)
@@ -176,7 +176,7 @@ DE_between_group_out <- DE_between_group(example_obj, assay = 2)
 #> Warning: Zero sample variances detected, have been offset away from zero
 #> Comparing group LPS to IFNgamma at Time 24: keeping 100 of 100 features (100.0%)
 #> Warning: Zero sample variances detected, have been offset away from zero
-#> Comparing untreated vs IFNgamma: time points only in IFNgamma: 2, 4, 6; only in untreated: none.
+#> Comparing untreated vs IFNgamma: time points only in IFNgamma: 2, 4, 6; only in untreated: none
 #> Comparing group untreated to IFNgamma at Time 0: keeping 100 of 100 features (100.0%)
 #> Warning: Zero sample variances detected, have been offset away from zero
 #> Comparing group untreated to IFNgamma at Time 8: keeping 100 of 100 features (100.0%)
@@ -207,39 +207,35 @@ DE_between_group_out <- DE_between_group(example_obj, assay = 2)
 #> Warning: Zero sample variances detected, have been offset away from zero
 #> Comparing group IFNgamma to LPS at Time 24: keeping 100 of 100 features (100.0%)
 #> Warning: Zero sample variances detected, have been offset away from zero
-#> Comparing untreated vs LPS: time points only in LPS: 2, 4, 6; only in untreated: none.
+#> Comparing untreated vs LPS: time points only in LPS: 2, 4, 6; only in untreated: none
 #> Comparing group untreated to LPS at Time 0: keeping 100 of 100 features (100.0%)
 #> Warning: Zero sample variances detected, have been offset away from zero
 #> Comparing group untreated to LPS at Time 8: keeping 100 of 100 features (100.0%)
 #> Warning: Zero sample variances detected, have been offset away from zero
 #> Comparing group untreated to LPS at Time 24: keeping 100 of 100 features (100.0%)
 #> Warning: Zero sample variances detected, have been offset away from zero
-#> Comparing IFNbeta vs untreated: time points only in untreated: none; only in IFNbeta: 2, 4, 6.
+#> Comparing IFNbeta vs untreated: time points only in untreated: none; only in IFNbeta: 2, 4, 6
 #> Comparing group IFNbeta to untreated at Time 0: keeping 100 of 100 features (100.0%)
 #> Warning: Zero sample variances detected, have been offset away from zero
 #> Comparing group IFNbeta to untreated at Time 8: keeping 100 of 100 features (100.0%)
 #> Warning: Zero sample variances detected, have been offset away from zero
 #> Comparing group IFNbeta to untreated at Time 24: keeping 100 of 100 features (100.0%)
 #> Warning: Zero sample variances detected, have been offset away from zero
-#> Comparing IFNgamma vs untreated: time points only in untreated: none; only in IFNgamma: 2, 4, 6.
+#> Comparing IFNgamma vs untreated: time points only in untreated: none; only in IFNgamma: 2, 4, 6
 #> Comparing group IFNgamma to untreated at Time 0: keeping 100 of 100 features (100.0%)
 #> Warning: Zero sample variances detected, have been offset away from zero
 #> Comparing group IFNgamma to untreated at Time 8: keeping 100 of 100 features (100.0%)
 #> Warning: Zero sample variances detected, have been offset away from zero
 #> Comparing group IFNgamma to untreated at Time 24: keeping 100 of 100 features (100.0%)
 #> Warning: Zero sample variances detected, have been offset away from zero
-#> Comparing LPS vs untreated: time points only in untreated: none; only in LPS: 2, 4, 6.
+#> Comparing LPS vs untreated: time points only in untreated: none; only in LPS: 2, 4, 6
 #> Comparing group LPS to untreated at Time 0: keeping 100 of 100 features (100.0%)
 #> Warning: Zero sample variances detected, have been offset away from zero
 #> Comparing group LPS to untreated at Time 8: keeping 100 of 100 features (100.0%)
 #> Warning: Zero sample variances detected, have been offset away from zero
 #> Comparing group LPS to untreated at Time 24: keeping 100 of 100 features (100.0%)
 #> Warning: Zero sample variances detected, have been offset away from zero
-
-
-
-
-plot_volcano(DE_between_group_out, group1 = "untreated", 
+plot_volcano(DE_between_group_out, group1 = "untreated",
     group2 = "IFNbeta", time = 24,
     logFC_thres = 0.5, adjP_thres = 0.05, label = TRUE)
 ```

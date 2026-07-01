@@ -27,7 +27,7 @@ decomp_variance(
   features = NULL,
   fixed_effect_var = NULL,
   interaction = FALSE,
-  assay = c(1, 2),
+  assay,
   core = 1
 )
 ```
@@ -58,11 +58,13 @@ decomp_variance(
 
 - assay:
 
-  1 for original data, or 2 for data normalised to time 0
+  Assay to use: `"orig"` for original data, `"norm"` for
+  normalised-to-start data. Numeric indices (1, 2) are also accepted. No
+  default, must be specified explicitly.
 
 - core:
 
-  Number of cores for parallel processing (default: 2)
+  Number of cores for parallel processing (default: 1)
 
 ## Value
 
@@ -75,12 +77,10 @@ https://github.com/aifimmunology/PALMO/blob/main/R/lmeVariance.R
 ## Examples
 
 ``` r
-data("example")
+data(example_obj)
 example_obj <- normalise_to_start(example_obj)
 #> Normalising to group baseline at each feature's first non-NA time point.
 
 var_decomp <- decomp_variance(example_obj, assay = 1)
 #> LMM: exp ~ (1|Group) + (1|Time)  |  Output: Group, Time, Residual
-plot_variance(var_decomp, rank = "Time", top_n = 20)
-#> Features not specified. Plotting top 20 features ranked by Time.
 ```

@@ -5,7 +5,7 @@
 - [`create_input()`](https://hte123.github.io/TiDEomics/reference/create_input.md)
   : Create object
 - [`normalise_to_start()`](https://hte123.github.io/TiDEomics/reference/normalise_to_start.md)
-  : Normalise to time 0
+  : Normalise to starting time point
 - [`split_groups()`](https://hte123.github.io/TiDEomics/reference/split_groups.md)
   : Split groups
 - [`merge_groups()`](https://hte123.github.io/TiDEomics/reference/merge_groups.md)
@@ -66,6 +66,8 @@
   : DE between groups
 - [`DE_between_time()`](https://hte123.github.io/TiDEomics/reference/DE_between_time.md)
   : DE between time points
+- [`plot_DE_between_group()`](https://hte123.github.io/TiDEomics/reference/plot_DE_between_group.md)
+  : DE number between groups
 - [`plot_DE_between_time()`](https://hte123.github.io/TiDEomics/reference/plot_DE_between_time.md)
   : DE number between time points
 - [`plot_volcano()`](https://hte123.github.io/TiDEomics/reference/plot_volcano.md)
@@ -94,12 +96,16 @@
   : Plot WGCNA results
 - [`WGCNA_module()`](https://hte123.github.io/TiDEomics/reference/WGCNA_module.md)
   : Convert WGCNA output to feature-module data frame
+- [`extract_hubs()`](https://hte123.github.io/TiDEomics/reference/extract_hubs.md)
+  : Extract hub features from WGCNA modules
 - [`plot_modules_h()`](https://hte123.github.io/TiDEomics/reference/plot_modules_h.md)
   : Plot modules (horizontal layout)
 - [`plot_modules_v()`](https://hte123.github.io/TiDEomics/reference/plot_modules_v.md)
   : Plot modules (vertical layout)
 - [`summarise_module_pattern()`](https://hte123.github.io/TiDEomics/reference/summarise_module_pattern.md)
   : Summarise module patterns
+- [`summarise_module_metrics()`](https://hte123.github.io/TiDEomics/reference/summarise_module_metrics.md)
+  : Summarise WGCNA module metrics
 
 ## Functional enrichment
 
@@ -109,8 +115,17 @@
   : GO enrichment with gene sets
 - [`enrichR_list()`](https://hte123.github.io/TiDEomics/reference/enrichR_list.md)
   : Gene-set enrichment via enrichR
+- [`enrich_msigdb()`](https://hte123.github.io/TiDEomics/reference/enrich_msigdb.md)
+  : Gene set enrichment via MSigDB
 - [`plot_GO()`](https://hte123.github.io/TiDEomics/reference/plot_GO.md)
   : Plot GO enrichment
+
+## Bundled workflow
+
+- [`prepare_tide()`](https://hte123.github.io/TiDEomics/reference/prepare_tide.md)
+  : Prepare TiDEomics input
+- [`as_DeeDeeExperiment()`](https://hte123.github.io/TiDEomics/reference/as_DeeDeeExperiment.md)
+  : Convert a TiDEomics result to DeeDeeExperiment
 
 ## Visualization settings
 
@@ -129,7 +144,7 @@
 - [`tutorial_sample_info`](https://hte123.github.io/TiDEomics/reference/tutorial_sample_info.md)
   : Dataset for TiDEomics tutorial, sample information
 
-- [`example`](https://hte123.github.io/TiDEomics/reference/example_obj.md)
+- [`example_obj`](https://hte123.github.io/TiDEomics/reference/example_obj.md)
   : SummarizedExperiment object for runnable examples
 
 - [`example_res_list`](https://hte123.github.io/TiDEomics/reference/example_res_list.md)

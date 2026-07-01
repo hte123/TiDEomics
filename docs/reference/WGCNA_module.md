@@ -31,8 +31,8 @@ WGCNA_module(net, exclude_grey = FALSE)
 ## Value
 
 A data.frame with columns `Feature` (character) and `Module` (factor
-with sorted levels). When `exclude_grey = TRUE`, grey/unassigned
-features are excluded.
+ordered by decreasing module size). When `exclude_grey = TRUE`,
+grey/unassigned features are excluded.
 
 ## Examples
 

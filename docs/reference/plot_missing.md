@@ -1,7 +1,6 @@
 # Plot missing rate
 
-Plot the ratio of missing values for each sample, with a dashed line
-indicating the global missing value rate across all samples.
+Plot the ratio of missing values for each sample
 
 ## Usage
 
@@ -32,35 +31,38 @@ plot_missing(se_obj, fontsize = 8, signif = FALSE, ...)
 - ...:
 
   Additional arguments to be passed to
-  [`ggsignif::geom_signif()`](https://const-ae.github.io/ggsignif/reference/stat_signif.html)
-  function when `signif` is TRUE, for customizing the significance
-  annotations.
+  [`ggpubr::stat_compare_means()`](https://rpkgs.datanovia.com/ggpubr/reference/stat_compare_means.html)
+  when `signif` is TRUE, for customizing the significance annotations.
 
 ## Value
 
-A plot showing the missing value rate for each sample, with a dashed
-line indicating the global missing value rate across all samples.
+A plot showing the missing value ratio for each sample, with a dashed
+line indicating the global missing value ratio across all samples. And a
+boxplot comparing the missing value ratio between groups, with optional
+significance annotations.
 
 ## Examples
 
 ``` r
 # simulate data with random missing values
-na_data <- matrix(rnorm(1000), nrow = 100, ncol = 100)
-na_data[sample(length(na_data), size = 1000)] <- NA
+na_data <- matrix(rnorm(1500), nrow = 100, ncol = 150)
+na_data[sample(length(na_data), size = 2000)] <- NA
 na_data <- data.frame(Feature = paste0("Feature", 1:100), na_data)
-colnames(na_data)[-1] <- paste0("Sample", 1:100)
+colnames(na_data)[-1] <- paste0("Sample", 1:150)
 
 na_obj <- create_input(na_data,
-    data.frame(Sample = paste0("Sample", 1:100),
-    Time = rep(rep(1:10, each = 5), 2),
-    Group = rep(c("A", "B"), each = 50),
-    Replicate = rep(1:5, 20)))
+    data.frame(Sample = paste0("Sample", 1:150),
+    Time = rep(rep(1:10, each = 5), 3),
+    Group = rep(c("A", "B", "C"), each = 50),
+    Replicate = rep(1:5, 30)))
 #> No Subject column specified. Samples treated as independent. For repeated-measures designs, set subject_col to the column identifying biological subjects.
 #> Converting 'Group' column to factor. Default order is alphabetical.
 #> Converting 'Replicate' column to factor. Default order is numerical.
-plot_ID(na_obj)
+plot_missing(na_obj, signif = TRUE)
+#> $overview
 
+#> 
+#> $comparison
 
-plot_missing(na_obj)
-
+#> 
 ```

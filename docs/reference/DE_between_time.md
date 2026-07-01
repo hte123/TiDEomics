@@ -10,11 +10,10 @@ DE_between_time(
   se_obj,
   group = NULL,
   filter = NULL,
-  assay = c(1, 2),
+  assay,
   adjP_thres = 0.05,
   logFC_thres = 1,
-  trend = FALSE,
-  fontsize = 8
+  trend = FALSE
 )
 ```
 
@@ -37,8 +36,12 @@ DE_between_time(
 
 - assay:
 
-  Assay index to use, where 1 is the original data and 2 is normalised
-  to time 0 (if available) (default is 1)
+  Assay to use: `"orig"` for original data, `"norm"` for
+  normalised-to-start data. Numeric indices (1, 2) are also accepted. No
+  default, must be specified explicitly. The selected assay should
+  contain log-transformed, normalised values (e.g. log2-CPM for RNA-seq,
+  log2-intensity for proteomics). A warning is issued if the data
+  appears to be un-logged raw counts.
 
 - adjP_thres:
 
@@ -59,21 +62,22 @@ DE_between_time(
   metabolomics, or other log-intensity data where the mean-variance
   relationship is typically flat.
 
-- fontsize:
-
-  (Optional) Font size for the heatmap of DE numbers (default is 8)
-
 ## Value
 
-A list containing two elements: 'all_list' is a nested list of DE
-results for each group and time point comparison including all features;
-'de_list' is a nested list of filtered DE results based on the specified
-thresholds including only significant features.
+A list with: `all_list` (nested list of DE results per group and time
+comparison, all features); `de_list` (nested list of significant
+features only); `fit_list` (nested list of limma `MArrayLM` fit objects,
+for use with
+[`limma::plotSA()`](https://rdrr.io/pkg/limma/man/plotSA.html));
+`time_series` (vector of all available time points). The output can be
+passed to
+[`plot_DE_between_time()`](https://hte123.github.io/TiDEomics/reference/plot_DE_between_time.md)
+for visualisation.
 
 ## Examples
 
 ``` r
-data("example")
+data(example_obj)
 example_obj <- normalise_to_start(example_obj)
 #> Normalising to group baseline at each feature's first non-NA time point.
 
@@ -175,10 +179,4 @@ DE_between_time_out <- DE_between_time(example_obj, assay = 1)
 #> Warning: Zero sample variances detected, have been offset away from zero
 #> Comparing group untreated time 24 to 8: keeping 100 of 100 features (100.0%)
 #> Warning: Zero sample variances detected, have been offset away from zero
-plot_DE_between_time(example_obj,
-    de_list = DE_between_time_out$de_list,
-    fontsize = 8, value = TRUE, nrow = 1, heatmap_width = 3)
-#> Registered S3 method overwritten by 'car':
-#>   method           from
-#>   na.action.merMod lme4
 ```

@@ -1,4 +1,4 @@
-# Normalise to time 0
+# Normalise to starting time point
 
 Normalise to starting time point, to make the mean of starting time
 point samples 0.
@@ -40,10 +40,7 @@ slot.
 ## Examples
 
 ``` r
-data("example")
+data(example_obj)
 example_obj <- normalise_to_start(example_obj)
 #> Normalising to group baseline at each feature's first non-NA time point.
-example_obj_list <- split_groups(example_obj)
-example_obj_merged_list <- merge_replicates(example_obj_list)
-example_obj_merged <- merge_groups(example_obj_merged_list)
 ```

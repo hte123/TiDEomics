@@ -82,7 +82,7 @@ run_Trendy(
 
 - NCores:
 
-  Number of cores to use for parallel processing (default is 2)
+  Number of cores to use for parallel processing (default is 1)
 
 - ...:
 
@@ -97,7 +97,7 @@ and statistics for each feature in each group.
 ## Examples
 
 ``` r
-data("example")
+data(example_obj)
 example_obj <- normalise_to_start(example_obj)
 #> Normalising to group baseline at each feature's first non-NA time point.
 example_obj_list <- split_groups(example_obj)
@@ -119,38 +119,40 @@ example_res_list <- run_Trendy(example_obj_merged_imp_list, maxK = 1,
 #> Min mean expression: 0
 #> Min number of samples in each segment: 2
 #> Running Trendy for group: IFNbeta
-#> Feature not specified. Using 80 features expressed in >=50% time points.
+#> Feature not specified. Using 89 features expressed in >=50% time points.
 #> Warning: MulticoreParam() not supported on Windows, use SnowParam()
 #> breakpoint estimate(s): 9.519174 
+#> breakpoint estimate(s): 9.519174 
+#> breakpoint estimate(s): 9.519174 
+#> breakpoint estimate(s): 8.0179 
+#> breakpoint estimate(s): 8.885903 
+#> breakpoint estimate(s): 9.519174 
+#> breakpoint estimate(s): 8.885903 
+#> breakpoint estimate(s): 8.885903 
+#> breakpoint estimate(s): 8.885903 
 #> breakpoint estimate(s): 8.885903 
 #> breakpoint estimate(s): 9.519174 
 #> breakpoint estimate(s): 9.519174 
+#> breakpoint estimate(s): 8.885903 
 #> breakpoint estimate(s): 9.519174 
-#> breakpoint estimate(s): 8.885903 
-#> breakpoint estimate(s): 8.885903 
-#> breakpoint estimate(s): 8.885903 
+#> breakpoint estimate(s): 9.519174 
 #> Running Trendy for group: IFNgamma
-#> Feature not specified. Using 80 features expressed in >=50% time points.
+#> Feature not specified. Using 89 features expressed in >=50% time points.
 #> Warning: MulticoreParam() not supported on Windows, use SnowParam()
-#> breakpoint estimate(s): 8.885903 
-#> breakpoint estimate(s): 8.885903 
-#> breakpoint estimate(s): 8.885903 
-#> breakpoint estimate(s): 8.885903 
 #> breakpoint estimate(s): 9.519174 
+#> breakpoint estimate(s): 9.519174 
+#> breakpoint estimate(s): 9.519174 
+#> breakpoint estimate(s): 8.885903 
+#> breakpoint estimate(s): 8.885903 
+#> breakpoint estimate(s): 8.885903 
 #> breakpoint estimate(s): 8.885903 
 #> Running Trendy for group: LPS
-#> Feature not specified. Using 82 features expressed in >=50% time points.
+#> Feature not specified. Using 88 features expressed in >=50% time points.
 #> Warning: MulticoreParam() not supported on Windows, use SnowParam()
 #> breakpoint estimate(s): 8.885903 
 #> breakpoint estimate(s): 9.519174 
 #> breakpoint estimate(s): 9.519174 
+#> breakpoint estimate(s): 8.885903 
 #> Running Trendy for group: untreated
-#> Trendy analysis is not performed for group untreated: number of time points (3) less than 2 * minNumInSeg
-# usethis::use_data(example_res_list)
-
-# plot_segments(example_obj_merged_imp_list, example_res_list,
-#     feature = c("Mctp1"))
-# plot_breakpoints(example_res_list)
-# trendy_summary <- summarise_Trendy(example_res_list)
-# trendy_list <- extract_segment_trends(trendy_summary)
+#> Trendy analysis is not performed for group untreated: number of time points (3) less than required ((maxK + 1) * minNumInSeg = 4
 ```

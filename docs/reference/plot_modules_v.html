@@ -17,7 +17,7 @@ If certain time points are missing in some groups, NA values are added."><meta p
 
     <a class="navbar-brand me-2" href="../index.html">TiDEomics</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -29,7 +29,7 @@ If certain time points are missing in some groups, NA values are added."><meta p
 <li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-applications" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Applications</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-applications"><li><a class="dropdown-item" href="../articles/TiDEomics_application_1.html">Transcriptome of macrophage response to six immune stimuli</a></li>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-applications"><li><a class="dropdown-item" href="../articles/TiDEomics_application_1_0.99.2.html">Transcriptome of macrophage response to six immune stimuli</a></li>
   </ul></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
@@ -93,7 +93,7 @@ feature (gene).</p>
 feature at each time point in each group (replicates merged). The colData of
 the object should contain columns "Sample", "Group", and "Time". The object
 can be produced by <code><a href="split_groups.html">split_groups()</a></code>, <code><a href="merge_replicates.html">merge_replicates()</a></code> and
-<code>merge_group()</code>.</p></dd>
+<code><a href="merge_groups.html">merge_groups()</a></code>.</p></dd>
 
 
 <dt id="arg-scale">scale<a class="anchor" aria-label="anchor" href="#arg-scale"></a></dt>
@@ -116,7 +116,9 @@ string)</p></dd>
 
 
 <dt id="arg-device">device<a class="anchor" aria-label="anchor" href="#arg-device"></a></dt>
-<dd><p>Image file format for saving (default is "png")</p></dd>
+<dd><p>Image file format(s) for saving. Can be a character
+vector, e.g. <code>c("png", "pdf")</code>, to save in multiple formats
+(default: <code>"png"</code>).</p></dd>
 
 
 <dt id="arg-save">save<a class="anchor" aria-label="anchor" href="#arg-save"></a></dt>
@@ -155,8 +157,7 @@ feature expression across time points.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://magrittr.tidyverse.org" class="external-link">magrittr</a></span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">example</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">example_obj</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">example_obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="normalise_to_start.html">normalise_to_start</a></span><span class="op">(</span><span class="va">example_obj</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Normalising to group baseline at each feature's first non-NA time point.</span>
 <span class="r-in"><span><span class="va">example_obj_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="split_groups.html">split_groups</a></span><span class="op">(</span><span class="va">example_obj</span><span class="op">)</span></span></span>
@@ -164,14 +165,14 @@ feature expression across time points.</p>
 <span class="r-in"><span><span class="va">example_obj_merged</span> <span class="op">&lt;-</span> <span class="fu"><a href="merge_groups.html">merge_groups</a></span><span class="op">(</span><span class="va">example_obj_merged_list</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">example_net</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">example_module</span> <span class="op">&lt;-</span> <span class="fu"><a href="WGCNA_module.html">WGCNA_module</a></span><span class="op">(</span><span class="va">example_net</span><span class="op">)</span> </span></span>
+<span class="r-in"><span><span class="va">example_module</span> <span class="op">&lt;-</span> <span class="fu"><a href="WGCNA_module.html">WGCNA_module</a></span><span class="op">(</span><span class="va">example_net</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu">plot_modules_v</span><span class="op">(</span><span class="va">example_module</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Module</span> <span class="op">!=</span> <span class="st">'0'</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span><span class="fu">plot_modules_v</span><span class="op">(</span><span class="va">example_module</span> <span class="op">|&gt;</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Module</span> <span class="op">!=</span> <span class="st">'0'</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>    <span class="va">example_obj_merged</span>, scale <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
 <span class="r-in"><span>    ylabel <span class="op">=</span> <span class="st">"Z-score of log2 (expression)"</span>,</span></span>
 <span class="r-in"><span>    height_ratio <span class="op">=</span> <span class="fl">2</span>,</span></span>
 <span class="r-in"><span>    fontsize <span class="op">=</span> <span class="fl">6</span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Removed 159 rows containing non-finite outside the scale range</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Removed 204 rows containing non-finite outside the scale range</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> (`stat_summary()`).</span>
 <span class="r-plt img"><img src="plot_modules_v-1.png" alt="" width="700" height="433"></span>
 </code></pre></div>

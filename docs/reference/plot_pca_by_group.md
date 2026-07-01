@@ -71,11 +71,19 @@ coloured by Time.
 ## Examples
 
 ``` r
-data("example")
+data(example_obj)
 plot_pca_by_group(example_obj, circle = TRUE, arrow = TRUE)
+#> Warning: Using size for a discrete variable is not advised.
+#> Warning: Using size for a discrete variable is not advised.
+#> Warning: Using size for a discrete variable is not advised.
+#> Warning: Using size for a discrete variable is not advised.
 
 
 # Also accepts a list from split_groups()
 example_obj_list <- split_groups(example_obj)
 plot_pca_by_group(example_obj_list)
+#> Warning: Using size for a discrete variable is not advised.
+#> Warning: Using size for a discrete variable is not advised.
+#> Warning: Using size for a discrete variable is not advised.
+#> Warning: Using size for a discrete variable is not advised.
 ```

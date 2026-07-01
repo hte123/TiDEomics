@@ -13,7 +13,7 @@ values)."><meta property="og:image" content="https://hte123.github.io/TiDEomics/
 
     <a class="navbar-brand me-2" href="../index.html">TiDEomics</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -25,7 +25,7 @@ values)."><meta property="og:image" content="https://hte123.github.io/TiDEomics/
 <li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-applications" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Applications</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-applications"><li><a class="dropdown-item" href="../articles/TiDEomics_application_1.html">Transcriptome of macrophage response to six immune stimuli</a></li>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-applications"><li><a class="dropdown-item" href="../articles/TiDEomics_application_1_0.99.2.html">Transcriptome of macrophage response to six immune stimuli</a></li>
   </ul></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
@@ -60,7 +60,6 @@ values).</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">plot_umap</span><span class="op">(</span></span>
 <span>  <span class="va">se_obj</span>,</span>
 <span>  seed <span class="op">=</span> <span class="fl">1234</span>,</span>
-<span>  plot <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  plot_ID <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  circle <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  xlim_min <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -85,10 +84,6 @@ values).</p>
 <dd><p>Random seed for UMAP (default is 1234)</p></dd>
 
 
-<dt id="arg-plot">plot<a class="anchor" aria-label="anchor" href="#arg-plot"></a></dt>
-<dd><p>Whether to plot the figures (default is TRUE)</p></dd>
-
-
 <dt id="arg-plot-id">plot_ID<a class="anchor" aria-label="anchor" href="#arg-plot-id"></a></dt>
 <dd><p>Whether to include a UMAP plot coloured by number of
 identified features (default is FALSE)</p></dd>
@@ -100,23 +95,23 @@ each group (default is FALSE)</p></dd>
 
 
 <dt id="arg-xlim-min">xlim_min<a class="anchor" aria-label="anchor" href="#arg-xlim-min"></a></dt>
-<dd><p>Minimum x-axis limit when drawing ellipses (default 1.5*min
-UMAP x)</p></dd>
+<dd><p>Minimum x-axis limit when drawing ellipses
+(default: NULL, auto-computed as 1.5×min UMAP x)</p></dd>
 
 
 <dt id="arg-xlim-max">xlim_max<a class="anchor" aria-label="anchor" href="#arg-xlim-max"></a></dt>
-<dd><p>Maximum x-axis limit when drawing ellipses (default 1.5*max
-UMAP x)</p></dd>
+<dd><p>Maximum x-axis limit when drawing ellipses
+(default: NULL, auto-computed as 1.5×max UMAP x)</p></dd>
 
 
 <dt id="arg-ylim-min">ylim_min<a class="anchor" aria-label="anchor" href="#arg-ylim-min"></a></dt>
-<dd><p>Minimum y-axis limit when drawing ellipses (default 1.5*min
-UMAP y)</p></dd>
+<dd><p>Minimum y-axis limit when drawing ellipses
+(default: NULL, auto-computed as 1.5×min UMAP y)</p></dd>
 
 
 <dt id="arg-ylim-max">ylim_max<a class="anchor" aria-label="anchor" href="#arg-ylim-max"></a></dt>
-<dd><p>Maximum y-axis limit when drawing ellipses (default 1.5*max
-UMAP y)</p></dd>
+<dd><p>Maximum y-axis limit when drawing ellipses
+(default: NULL, auto-computed as 1.5×max UMAP y)</p></dd>
 
 
 <dt id="arg-umap-neighbors">umap_neighbors<a class="anchor" aria-label="anchor" href="#arg-umap-neighbors"></a></dt>
@@ -135,18 +130,16 @@ normalised to time 0 (if available) (default is 1)</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A UMAP plot showing the distribution of samples. And a data
+    <p>A list of UMAP plots showing the distribution of samples. And a data
 frame containing UMAP coordinates and sample annotations for custom plotting.</p>
     </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"example"</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">example_obj</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">umap_layout</span> <span class="op">&lt;-</span> <span class="fu">plot_umap</span><span class="op">(</span><span class="va">example_obj</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Using n_neighbors = 8</span>
-<span class="r-plt img"><img src="plot_umap-1.png" alt="" width="700" height="433"></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Using <span style="color: #00BB00;">size</span> for a discrete variable is not advised.</span>
-<span class="r-plt img"><img src="plot_umap-2.png" alt="" width="700" height="433"></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

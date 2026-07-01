@@ -116,20 +116,37 @@ enrichGO_list(
 
 ## Value
 
-A nested list of GO enrichment results with sublists: 'all' including
-all terms and 'simplified' including simplified terms (if
-`simplify = TRUE`), both containing further sublists for each GO
-category (BP, MF, CC).
+A nested list of GO enrichment results with sublists: 'all' and
+'simplified' (if `simplify = TRUE`) containing merged results of all or
+simplified terms across gene sets for each GO category; 'unmerged_all'
+and 'unmerged_simplified' (if `simplify = TRUE`) including all or
+simplified terms for each gene set and GO category.
 
 ## Examples
 
 ``` r
-library(magrittr)
-library(org.Mm.eg.db)
+if (requireNamespace("org.Mm.eg.db", quietly = TRUE)) {
+    library(org.Mm.eg.db)
+    library(clusterProfiler)
+    data(example_net)
+    # select two modules for demonstration
+    example_module <- WGCNA_module(example_net) |>
+        dplyr::filter(Module %in% c("1", "2"))
+    # set cutoff to 1 to show all results for demonstration
+    example_go_list = enrichGO_list(example_module, OrgDb = org.Mm.eg.db,
+        universe = example_module$Feature,
+        pvalueCutoff = 1, qvalueCutoff = 1,
+        category = "BP", simplify = FALSE)
+}
+#> Warning: replacing previous import 'BiocGenerics::transform' by 'S4Vectors::transform' when loading 'AnnotationDbi'
+#> Warning: replacing previous import 'utils::data' by 'BiocGenerics::data' when loading 'Biostrings'
+#> Warning: replacing previous import 'BiocGenerics::transform' by 'S4Vectors::transform' when loading 'Biostrings'
+#> 
 #> Loading required package: AnnotationDbi
 #> Loading required package: stats4
 #> Loading required package: BiocGenerics
 #> Loading required package: generics
+#> Warning: package 'generics' was built under R version 4.6.1
 #> 
 #> Attaching package: 'generics'
 #> The following objects are masked from 'package:base':
@@ -150,8 +167,8 @@ library(org.Mm.eg.db)
 #>     as.data.frame, basename, cbind, colnames, dirname, do.call,
 #>     duplicated, eval, evalq, get, grep, grepl, is.unsorted, lapply,
 #>     mapply, match, mget, order, paste, pmax, pmax.int, pmin, pmin.int,
-#>     rank, rbind, rownames, sapply, saveRDS, table, tapply, unique,
-#>     unsplit, which.max, which.min
+#>     rank, rbind, rownames, sapply, saveRDS, scale, sequence, table,
+#>     tapply, transform, unique, unsplit, which.max, which.min
 #> Loading required package: Biobase
 #> Welcome to Bioconductor
 #> 
@@ -173,9 +190,6 @@ library(org.Mm.eg.db)
 #> The following object is masked from 'package:grDevices':
 #> 
 #>     windows
-#> Warning: replacing previous import 'utils::data' by 'BiocGenerics::data' when loading 'Biostrings'
-#> 
-library(clusterProfiler)
 #> 
 #> clusterProfiler v4.21.0 Learn more at https://yulab-smu.top/contribution-knowledge-mining/
 #> 
@@ -198,28 +212,12 @@ library(clusterProfiler)
 #> The following object is masked from 'package:stats':
 #> 
 #>     filter
-data(example_net)
-# select two modules for demonstration
-example_module <- WGCNA_module(example_net) %>%
-    dplyr::filter(Module %in% c("1", "2"))
-# set cutoff to 1 to show all results for demonstration
-example_go_list = enrichGO_list(example_module, OrgDb = org.Mm.eg.db,
-    universe = example_module$Feature,
-    pvalueCutoff = 1, qvalueCutoff = 1,
-    category = "BP", simplify = FALSE)
 #> Performing GO enrichment for category: BP
-#> Gene list 0 is empty. Skipping.
 #> Processing gene list: 1
 #> 'select()' returned 1:1 mapping between keys and columns
 #> 'select()' returned 1:1 mapping between keys and columns
-#> Warning: 2.44% of input gene IDs are fail to map...
 #> Processing gene list: 2
 #> 'select()' returned 1:1 mapping between keys and columns
-#> Warning: 5.88% of input gene IDs are fail to map...
 #> 'select()' returned 1:1 mapping between keys and columns
-#> Warning: 2.44% of input gene IDs are fail to map...
-#> Gene list 3 is empty. Skipping.
 #> Merging GO enrichment results across gene lists for each category.
-# plot_GO(example_go_list$all, plot_dotplot = TRUE,
-#     plot_emapplot = FALSE, plot_cnetplot = FALSE)
 ```

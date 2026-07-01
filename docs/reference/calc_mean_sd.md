@@ -25,12 +25,7 @@ Mean, SD, Group, Time, and Feature.
 ## Examples
 
 ``` r
-data("example")
+data(example_obj)
 table_mean_sd_list <- calc_mean_sd(example_obj)
-table_mean_sd <- table_mean_sd_list$norm0
-plot_trend(table_mean_sd, 
-    features = sample(unique(table_mean_sd$Feature), 4))
-#> Group not specified. Plotting all groups: IFNbeta, IFNgamma, LPS, untreated
-#> Warning: Removed 12 rows containing missing values or values outside the scale range
-#> (`geom_point()`).
+table_mean_sd <- table_mean_sd_list$norm
 ```

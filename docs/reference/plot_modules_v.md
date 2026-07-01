@@ -43,7 +43,8 @@ plot_modules_v(
   object can be produced by
   [`split_groups()`](https://hte123.github.io/TiDEomics/reference/split_groups.md),
   [`merge_replicates()`](https://hte123.github.io/TiDEomics/reference/merge_replicates.md)
-  and `merge_group()`.
+  and
+  [`merge_groups()`](https://hte123.github.io/TiDEomics/reference/merge_groups.md).
 
 - scale:
 
@@ -65,7 +66,8 @@ plot_modules_v(
 
 - device:
 
-  Image file format for saving (default is "png")
+  Image file format(s) for saving. Can be a character vector, e.g.
+  `c("png", "pdf")`, to save in multiple formats (default: `"png"`).
 
 - save:
 
@@ -101,8 +103,7 @@ feature expression across time points.
 ## Examples
 
 ``` r
-library(magrittr)
-data(example)
+data(example_obj)
 example_obj <- normalise_to_start(example_obj)
 #> Normalising to group baseline at each feature's first non-NA time point.
 example_obj_list <- split_groups(example_obj)
@@ -110,13 +111,13 @@ example_obj_merged_list <- merge_replicates(example_obj_list)
 example_obj_merged <- merge_groups(example_obj_merged_list)
 
 data(example_net)
-example_module <- WGCNA_module(example_net) 
+example_module <- WGCNA_module(example_net)
 
-plot_modules_v(example_module %>% dplyr::filter(Module != '0'),
+plot_modules_v(example_module |> dplyr::filter(Module != '0'),
     example_obj_merged, scale = TRUE,
     ylabel = "Z-score of log2 (expression)",
     height_ratio = 2,
     fontsize = 6)
-#> Warning: Removed 159 rows containing non-finite outside the scale range
+#> Warning: Removed 204 rows containing non-finite outside the scale range
 #> (`stat_summary()`).
 ```

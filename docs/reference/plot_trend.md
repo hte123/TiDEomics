@@ -1,13 +1,18 @@
 # Plot feature abundance over time
 
 Plot trend of feature abundances / expression over time by mean and
-standard deviation (SD) for each group.
+standard deviation (SD) for each group. Accepts either a
+SummarizedExperiment object (computing mean/SD internally via
+[`calc_mean_sd()`](https://hte123.github.io/TiDEomics/reference/calc_mean_sd.md))
+or a pre-computed table from
+[`calc_mean_sd()`](https://hte123.github.io/TiDEomics/reference/calc_mean_sd.md).
 
 ## Usage
 
 ``` r
 plot_trend(
-  table_mean_sd,
+  se_obj,
+  assay = 1,
   groups = NULL,
   features,
   title = "Feature",
@@ -19,11 +24,16 @@ plot_trend(
 
 ## Arguments
 
-- table_mean_sd:
+- se_obj:
 
-  Output by
-  [`calc_mean_sd()`](https://hte123.github.io/TiDEomics/reference/calc_mean_sd.md),
-  a dataframe with columns: Feature, Time, Group, Mean, SD
+  A SummarizedExperiment object, or a data.frame from
+  [`calc_mean_sd()`](https://hte123.github.io/TiDEomics/reference/calc_mean_sd.md)
+  with columns: Feature, Time, Group, Mean, SD.
+
+- assay:
+
+  Assay index when `se_obj` is a SummarizedExperiment (default: 1 =
+  original, 2 = time-0 normalised).
 
 - groups:
 
@@ -57,12 +67,8 @@ Plot of feature abundances over time by mean and SD
 ## Examples
 
 ``` r
-data("example")
-table_mean_sd_list <- calc_mean_sd(example_obj)
-table_mean_sd <- table_mean_sd_list$norm0
-plot_trend(table_mean_sd,
-    features = sample(unique(table_mean_sd$Feature), 4))
+data(example_obj)
+plot_trend(example_obj,
+    features = sample(rownames(example_obj), 4))
 #> Group not specified. Plotting all groups: IFNbeta, IFNgamma, LPS, untreated
-#> Warning: Removed 12 rows containing missing values or values outside the scale range
-#> (`geom_point()`).
 ```

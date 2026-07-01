@@ -7,6 +7,7 @@ Plot correlation matrix between samples as a heatmap
 ``` r
 plot_cor_matrix(
   se_obj,
+  assay = 1,
   use = "pairwise.complete.obs",
   method = c("spearman", "pearson", "kendall"),
   label_group = TRUE,
@@ -29,6 +30,12 @@ plot_cor_matrix(
 
   A SummarizedExperiment object created by
   [`create_input()`](https://hte123.github.io/TiDEomics/reference/create_input.md)
+
+- assay:
+
+  Assay to use: `"orig"` for original data, `"norm"` for
+  normalised-to-start data. Numeric indices (1, 2) are also accepted.
+  (default is 1, the original data).
 
 - use:
 
@@ -92,6 +99,6 @@ A heatmap showing the correlation between samples.
 ## Examples
 
 ``` r
-data("example")
+data(example_obj)
 plot_cor_matrix(example_obj)
 ```

@@ -13,7 +13,7 @@ with different soft thresholding powers."><meta property="og:image" content="htt
 
     <a class="navbar-brand me-2" href="../index.html">TiDEomics</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -25,7 +25,7 @@ with different soft thresholding powers."><meta property="og:image" content="htt
 <li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-applications" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Applications</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-applications"><li><a class="dropdown-item" href="../articles/TiDEomics_application_1.html">Transcriptome of macrophage response to six immune stimuli</a></li>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-applications"><li><a class="dropdown-item" href="../articles/TiDEomics_application_1_0.99.2.html">Transcriptome of macrophage response to six immune stimuli</a></li>
   </ul></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
@@ -104,7 +104,7 @@ stored by <code><a href="normalise_to_start.html">normalise_to_start()</a></code
 
 <dt id="arg-powers">powers<a class="anchor" aria-label="anchor" href="#arg-powers"></a></dt>
 <dd><p>(Optional) Parameter of <code><a href="https://rdrr.io/pkg/WGCNA/man/pickSoftThreshold.html" class="external-link">WGCNA::pickSoftThreshold()</a></code>
-(default is <code>c(seq(1, 10, by = 1), seq(12, 20, by = 2))</code>)</p></dd>
+(default: NULL, auto-assigned as <code>seq(1, 20)</code>)</p></dd>
 
 
 <dt id="arg-fontsize">fontsize<a class="anchor" aria-label="anchor" href="#arg-fontsize"></a></dt>
@@ -128,88 +128,111 @@ input data used for reuse in <code><a href="run_WGCNA.html">run_WGCNA()</a></cod
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"example"</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">example_obj</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">example_obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="normalise_to_start.html">normalise_to_start</a></span><span class="op">(</span><span class="va">example_obj</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Normalising to group baseline at each feature's first non-NA time point.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">wgcna_input</span> <span class="op">&lt;-</span> <span class="fu">prepare_WGCNA</span><span class="op">(</span><span class="va">example_obj</span>, assay <span class="op">=</span> <span class="fl">2</span>, powers <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">30</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>    networkType <span class="op">=</span> <span class="st">"signed"</span>, RsquaredCut <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Allowing multi-threading with up to 24 threads.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..Excluding 3 genes from the calculation due to too many missing samples or zero variance.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..Excluding 3 genes from the calculation due to too many missing samples or zero variance.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> pickSoftThreshold: will use block size 97.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> pickSoftThreshold: will use block size 100.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  pickSoftThreshold: calculating connectivity for given powers...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    ..working on genes 1 through 97 of 97</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    ..working on genes 1 through 100 of 100</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Power SFT.R.sq  slope truncated.R.sq mean.k. median.k. max.k.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1      1   0.6960  4.190         0.6490  53.800   55.6000  62.70</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2      2   0.4770  1.190         0.5190  32.600   33.9000  44.10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3      3   0.0269  0.140         0.0443  21.000   21.5000  32.50</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4      4   0.0963 -0.310        -0.0953  14.200   14.1000  24.80</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5      5   0.2580 -0.363         0.2340   9.980    9.7800  19.40</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6      6   0.4340 -0.443         0.5110   7.250    6.9600  15.50</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7      7   0.5130 -0.486         0.7030   5.420    4.9400  12.60</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8      8   0.5260 -0.581         0.6970   4.140    3.6300  10.30</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9      9   0.5780 -0.604         0.7460   3.230    2.7900   8.58</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10    10   0.6540 -0.653         0.8050   2.550    2.1900   7.19</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11    11   0.7030 -0.632         0.9220   2.050    1.6500   6.07</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12    12   0.6990 -0.703         0.8440   1.670    1.4400   5.16</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13    13   0.7590 -0.703         0.8830   1.370    1.1400   4.42</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14    14   0.7160 -0.681         0.8240   1.140    0.9050   3.80</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15    15   0.7360 -0.687         0.8170   0.950    0.7030   3.28</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16    16   0.6550 -0.817         0.6610   0.802    0.5490   2.85</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17    17   0.8150 -0.853         0.8380   0.681    0.4300   2.48</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 18    18   0.8510 -0.840         0.8880   0.583    0.3570   2.17</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 19    19   0.8730 -0.859         0.8760   0.502    0.3060   1.90</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20    20   0.8910 -0.823         0.8820   0.435    0.2630   1.67</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 21    21   0.7560 -0.862         0.6910   0.379    0.2260   1.48</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 22    22   0.9280 -0.816         0.9070   0.332    0.1960   1.30</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 23    23   0.8990 -0.810         0.8710   0.292    0.1690   1.16</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 24    24   0.8620 -0.807         0.8310   0.258    0.1450   1.04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 25    25   0.8640 -0.834         0.8270   0.229    0.1270   1.01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 26    26   0.8730 -0.938         0.8470   0.205    0.1040   1.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 27    27   0.2010 -2.460         0.0707   0.184    0.0866   1.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 28    28   0.2520 -3.640         0.1560   0.165    0.0711   1.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 29    29   0.2630 -3.590         0.1660   0.149    0.0584   1.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 30    30   0.3080 -4.560         0.1940   0.135    0.0507   1.00</span>
-<span class="r-plt img"><img src="prepare_WGCNA-1.png" alt="" width="700" height="433"></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1      1   0.8430  3.800         0.9140 52.5000   53.3000 61.000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2      2   0.0646 -0.315         0.1410 30.5000   30.8000 42.500</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3      3   0.6650 -1.280         0.5850 19.0000   18.6000 31.600</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4      4   0.7580 -1.150         0.8160 12.5000   11.8000 24.500</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5      5   0.6820 -1.050         0.7270  8.6000    7.7300 19.500</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6      6   0.7190 -1.130         0.7330  6.1400    5.2300 15.900</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7      7   0.7580 -1.100         0.8040  4.5100    3.6800 13.100</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8      8   0.8680 -1.140         0.9360  3.4000    2.6200 11.000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9      9   0.8240 -1.260         0.8680  2.6200    2.0100  9.350</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10    10   0.8460 -1.220         0.8770  2.0600    1.5000  8.000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11    11   0.8670 -1.160         0.8860  1.6400    1.2300  6.900</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12    12   0.7820 -1.250         0.7270  1.3200    1.0000  5.990</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13    13   0.8750 -1.290         0.8720  1.0800    0.7600  5.240</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14    14   0.8790 -1.240         0.8780  0.8940    0.5780  4.610</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15    15   0.8480 -1.210         0.8220  0.7450    0.4460  4.080</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16    16   0.8010 -1.240         0.7450  0.6270    0.3560  3.620</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17    17   0.8350 -1.230         0.7900  0.5310    0.2740  3.240</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18    18   0.1200 -1.940        -0.1080  0.4530    0.2120  2.900</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19    19   0.1220 -1.870        -0.1070  0.3890    0.1670  2.610</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20    20   0.8880 -1.200         0.8590  0.3360    0.1340  2.360</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21    21   0.8730 -1.210         0.8370  0.2920    0.1080  2.140</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22    22   0.8080 -1.170         0.7550  0.2540    0.0886  1.950</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23    23   0.8450 -1.190         0.8030  0.2230    0.0739  1.780</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24    24   0.1450 -2.560        -0.0914  0.1960    0.0618  1.620</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 25    25   0.1460 -2.540        -0.0918  0.1730    0.0512  1.490</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 26    26   0.1510 -2.540        -0.0875  0.1540    0.0423  1.370</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 27    27   0.0977 -1.490        -0.0975  0.1370    0.0344  1.260</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28    28   0.9180 -1.150         0.8950  0.1220    0.0280  1.160</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 29    29   0.9220 -1.120         0.9020  0.1090    0.0225  1.080</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 30    30   0.8760 -1.120         0.8400  0.0979    0.0181  0.999</span>
 <span class="r-in"><span><span class="va">wgcna_input</span><span class="op">$</span><span class="va">fitIndices</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    Power   SFT.R.sq      slope truncated.R.sq    mean.k.   median.k.    max.k.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1      1 0.69613665  4.1865310     0.64945282 53.7585203 55.62561830 62.731732</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2      2 0.47655276  1.1861802     0.51932643 32.5538385 33.88478800 44.074806</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3      3 0.02693887  0.1404819     0.04431503 20.9594294 21.47265688 32.503023</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4      4 0.09634555 -0.3095089    -0.09534426 14.1739971 14.10139349 24.802197</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5      5 0.25797136 -0.3625834     0.23448424  9.9754635  9.77633931 19.413145</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6      6 0.43378804 -0.4427611     0.51060007  7.2539689  6.95502890 15.497738</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7      7 0.51284973 -0.4863361     0.70302618  5.4194754  4.93966874 12.568845</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8      8 0.52577799 -0.5806811     0.69650409  4.1412810  3.63172730 10.326077</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9      9 0.57763561 -0.6040660     0.74616010  3.2253425  2.79147993  8.575454</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10    10 0.65415150 -0.6528454     0.80485416  2.5531197  2.19455870  7.186954</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11    11 0.70342141 -0.6322812     0.92208417  2.0495686  1.65154355  6.070678</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12    12 0.69938515 -0.7034682     0.84365359  1.6656573  1.43507424  5.162813</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13    13 0.75873460 -0.7025467     0.88336843  1.3684430  1.14206328  4.417021</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14    14 0.71606408 -0.6809841     0.82418466  1.1352394  0.90513016  3.798991</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15    15 0.73594178 -0.6873870     0.81695840  0.9500791  0.70323972  3.282873</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16    16 0.65504157 -0.8170121     0.66144343  0.8015050  0.54867952  2.848903</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17    17 0.81501390 -0.8525252     0.83830600  0.6811539  0.42971725  2.481762</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 18    18 0.85122656 -0.8396477     0.88812958  0.5828270  0.35738660  2.169440</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 19    19 0.87261201 -0.8587925     0.87588980  0.5018668  0.30600664  1.902423</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20    20 0.89102883 -0.8231234     0.88170934  0.4347305  0.26286396  1.673097</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 21    21 0.75587972 -0.8622775     0.69058460  0.3786926  0.22643764  1.475322</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 22    22 0.92771133 -0.8161452     0.90717797  0.3316355  0.19553427  1.304108</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 23    23 0.89948084 -0.8104305     0.87088407  0.2918984  0.16920675  1.155366</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 24    24 0.86193357 -0.8074687     0.83146885  0.2581677  0.14453391  1.036132</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 25    25 0.86409597 -0.8336862     0.82685662  0.2293962  0.12689879  1.005608</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 26    26 0.87312080 -0.9377683     0.84734366  0.2047430  0.10433481  1.004144</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 27    27 0.20086206 -2.4605883     0.07072460  0.1835285  0.08664495  1.003074</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 28    28 0.25205572 -3.6432852     0.15638707  0.1651994  0.07107316  1.002288</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 29    29 0.26336019 -3.5944098     0.16644777  0.1493035  0.05843663  1.001709</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 30    30 0.30801526 -4.5608784     0.19417760  0.1354684  0.05066301  1.001281</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Power   SFT.R.sq      slope truncated.R.sq     mean.k.   median.k.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1      1 0.84286571  3.8040087     0.91423798 52.51960238 53.34184052</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2      2 0.06456817 -0.3146023     0.14136303 30.53003771 30.76853194</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3      3 0.66481255 -1.2767899     0.58472439 19.01674430 18.57511438</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4      4 0.75838466 -1.1499238     0.81633829 12.51048871 11.84379473</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5      5 0.68163955 -1.0462208     0.72716272  8.60319272  7.72652181</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6      6 0.71878451 -1.1308681     0.73335186  6.13592098  5.22626809</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7      7 0.75754120 -1.1024293     0.80426538  4.51077219  3.68053165</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8      8 0.86835973 -1.1446400     0.93573615  3.40121169  2.61507055</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9      9 0.82448245 -1.2633108     0.86803680  2.62007559  2.01016163</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10    10 0.84575084 -1.2179895     0.87657268  2.05548331  1.50432291</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11    11 0.86662570 -1.1568222     0.88604377  1.63803619  1.22596921</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12    12 0.78183532 -1.2522205     0.72720615  1.32325157  1.00069379</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13    13 0.87501515 -1.2939303     0.87217562  1.08177336  0.75980830</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14    14 0.87892749 -1.2364530     0.87771012  0.89371838  0.57809789</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15    15 0.84752610 -1.2051610     0.82190396  0.74530426  0.44613190</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16    16 0.80123884 -1.2403673     0.74533663  0.62677815  0.35607325</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17    17 0.83484572 -1.2265512     0.79043207  0.53111009  0.27379134</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18    18 0.11955170 -1.9402328    -0.10826258  0.45314831  0.21187911</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19    19 0.12163397 -1.8714360    -0.10737965  0.38906091  0.16718735</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20    20 0.88781004 -1.1996277     0.85914411  0.33595920  0.13438680</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21    21 0.87332488 -1.2077457     0.83713926  0.29163891  0.10825081</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22    22 0.80763163 -1.1709049     0.75520878  0.25439934  0.08860988</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23    23 0.84529468 -1.1899539     0.80308953  0.22291500  0.07387197</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24    24 0.14533913 -2.5600205    -0.09137579  0.19614317  0.06181385</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 25    25 0.14636875 -2.5395493    -0.09184163  0.17325658  0.05118420</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 26    26 0.15064567 -2.5419407    -0.08750052  0.15359366  0.04232804</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 27    27 0.09768514 -1.4862196    -0.09748448  0.13662144  0.03441214</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28    28 0.91763379 -1.1487339     0.89520184  0.12190765  0.02803675</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 29    29 0.92239635 -1.1225358     0.90195533  0.10909937  0.02253314</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 30    30 0.87570167 -1.1205509     0.84048182  0.09790681  0.01807656</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        max.k.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  61.0086938</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  42.4575218</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  31.5655844</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  24.4616573</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5  19.5066573</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6  15.8859320</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7  13.1490520</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8  11.0267391</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9   9.3479355</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10  7.9986024</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11  6.8997128</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12  5.9947653</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13  5.2423238</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14  4.6113587</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15  4.0782261</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16  3.6246430</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17  3.2362938</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18  2.9018468</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19  2.6122467</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20  2.3601963</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21  2.1397703</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22  1.9461248</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23  1.7752746</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24  1.6239227</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 25  1.4893261</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 26  1.3691917</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 27  1.2615932</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28  1.1649050</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 29  1.0777494</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 30  0.9989543</span>
 <span class="r-in"><span><span class="va">picked_power</span> <span class="op">&lt;-</span> <span class="va">wgcna_input</span><span class="op">$</span><span class="va">powerEstimate</span></span></span>
-<span class="r-in"><span><span class="co"># example_net &lt;- run_WGCNA(wgcna_input,</span></span></span>
-<span class="r-in"><span><span class="co">#    power = picked_power,</span></span></span>
-<span class="r-in"><span><span class="co">#    minModuleSize = 10, # only 100 genes in the example data</span></span></span>
-<span class="r-in"><span><span class="co">#    numericLabels = TRUE)</span></span></span>
-<span class="r-in"><span><span class="co"># plot_WGCNA(example_net, fontsize = 8)</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

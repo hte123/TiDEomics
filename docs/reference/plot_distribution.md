@@ -41,12 +41,12 @@ faceted by the specified variable.
 ## Examples
 
 ``` r
-data("example")
+data(example_obj)
 plot_distribution(example_obj)
 
 plot_distribution(example_obj, facet_by = "Group")
-#> Picking joint bandwidth of 1.19
-#> Picking joint bandwidth of 1.21
+#> Picking joint bandwidth of 1.28
+#> Picking joint bandwidth of 1.27
 #> Picking joint bandwidth of 1.23
-#> Picking joint bandwidth of 1.24
+#> Picking joint bandwidth of 1.26
 ```

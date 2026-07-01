@@ -9,7 +9,7 @@ with clusterProfiler. Genes can be ranked by variance decomposition results."><m
 
     <a class="navbar-brand me-2" href="../index.html">TiDEomics</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -21,7 +21,7 @@ with clusterProfiler. Genes can be ranked by variance decomposition results."><m
 <li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-applications" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Applications</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-applications"><li><a class="dropdown-item" href="../articles/TiDEomics_application_1.html">Transcriptome of macrophage response to six immune stimuli</a></li>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-applications"><li><a class="dropdown-item" href="../articles/TiDEomics_application_1_0.99.2.html">Transcriptome of macrophage response to six immune stimuli</a></li>
   </ul></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
@@ -115,28 +115,27 @@ BP, MF, CC)</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A <code>gseaResult</code>object containing the GO enrichment results</p>
+    <p>A list of <code>gseaResult</code> objects containing the GSEA results</p>
     </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">org.Mm.eg.db</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"example"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">example_obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="normalise_to_start.html">normalise_to_start</a></span><span class="op">(</span><span class="va">example_obj</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Normalising to group baseline at each feature's first non-NA time point.</span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"org.Mm.eg.db"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">org.Mm.eg.db</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">example_obj</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="va">example_obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="normalise_to_start.html">normalise_to_start</a></span><span class="op">(</span><span class="va">example_obj</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">var_decomp</span> <span class="op">&lt;-</span> <span class="fu"><a href="decomp_variance.html">decomp_variance</a></span><span class="op">(</span><span class="va">example_obj</span>, assay <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="va">var_decomp</span> <span class="op">&lt;-</span> <span class="fu"><a href="decomp_variance.html">decomp_variance</a></span><span class="op">(</span><span class="va">example_obj</span>, assay <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="va">example_go_rank</span> <span class="op">&lt;-</span> <span class="fu">enrichGO_rank</span><span class="op">(</span><span class="va">var_decomp</span>, gene_rank_by <span class="op">=</span> <span class="st">"Time"</span>,</span></span>
+<span class="r-in"><span>        OrgDb <span class="op">=</span> <span class="va">org.Mm.eg.db</span>, keyType <span class="op">=</span> <span class="st">"SYMBOL"</span>, category <span class="op">=</span> <span class="st">"BP"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Normalising to group baseline at each feature's first non-NA time point.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> LMM: exp ~ (1|Group) + (1|Time)  |  Output: Group, Time, Residual</span>
-<span class="r-in"><span><span class="va">example_go_rank</span> <span class="op">&lt;-</span> <span class="fu">enrichGO_rank</span><span class="op">(</span><span class="va">var_decomp</span>, gene_rank_by <span class="op">=</span> <span class="st">"Time"</span>,</span></span>
-<span class="r-in"><span>    OrgDb <span class="op">=</span> <span class="va">org.Mm.eg.db</span>, keyType <span class="op">=</span> <span class="st">"SYMBOL"</span>, category <span class="op">=</span> <span class="st">"BP"</span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>There are ties in the preranked stats (1.03% of the list). The order of those tied genes will be arbitrary, which may produce unexpected results.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>There were 4821 pathways for which P-values were not calculated properly due to unbalanced gene-level statistic values. For such pathways pvalue, NES and log2err are set to NA. You can try to increase nPermSimple.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>There were 4907 pathways for which P-values were not calculated properly due to unbalanced gene-level statistic values. For such pathways pvalue, NES and log2err are set to NA. You can try to increase nPermSimple.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Invalid p-values detected (NA, non-finite, &lt;0, or &gt;1). qvalue will be computed on valid p-values only.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>NA values detected in gene set IDs. Replacing with string 'NA'.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Duplicate gene set IDs detected: NA... (Total 1). Unique suffixes added.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Removing NA ID gene sets.</span>
-<span class="r-in"><span><span class="fu">enrichplot</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/enrichplot/man/gseaplot2.html" class="external-link">gseaplot2</a></span><span class="op">(</span><span class="va">example_go_rank</span>, geneSetID <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="enrichGO_rank-1.png" alt="" width="700" height="433"></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Removing NA ID gene sets for BP.</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

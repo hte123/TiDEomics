@@ -35,7 +35,7 @@ message will be printed indicating that CV cannot be calculated.
 ## Examples
 
 ``` r
-data("example")
+data(example_obj)
 plot_cv(example_obj)
 #> Data contains non-positive values. CV is only meaningful for positive data.
 #> Warning: no non-missing arguments to min; returning Inf

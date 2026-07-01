@@ -64,7 +64,7 @@ will not be performed and NULL will be returned.
 
 - NCores:
 
-  Number of cores to use for parallel processing (default is 2)
+  Number of cores to use for parallel processing (default is 1)
 
 - ...:
 

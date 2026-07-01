@@ -6,7 +6,13 @@ SummarizedExperiment object
 ## Usage
 
 ``` r
-create_input(data, sample_ann, subject_col = NULL)
+create_input(
+  data,
+  sample_ann,
+  subject_col = NULL,
+  replicate_col = NULL,
+  batch_col = NULL
+)
 ```
 
 ## Arguments
@@ -33,7 +39,21 @@ create_input(data, sample_ann, subject_col = NULL)
   If provided, the column is renamed to 'Subject' and used for
   repeated-measures analyses downstream. If NULL (default), all samples
   are treated as independent, e.g. for cell culture experiments.
-  experiments.
+
+- replicate_col:
+
+  Optional: name of a column in `sample_ann` identifying replicate IDs.
+  If provided, the column is renamed to 'Replicate'. If NULL (default),
+  the function looks for a column named 'Replicate'; if absent,
+  replicate IDs are auto-generated within each Group and Time (and
+  Subject, if provided).
+
+- batch_col:
+
+  Optional: name of a column in `sample_ann` identifying batch
+  information. If provided, the column is renamed to 'Batch'. If NULL
+  (default), the function looks for a column named 'Batch'; if absent,
+  all samples are assigned to batch 1.
 
 ## Value
 
@@ -49,10 +69,11 @@ sample_ann <- data.frame(
     Sample = c("Sample1", "Sample2"),
     Group = c("A", "A"),
     Time = c(0, 1),
-    Replicate = c(1, 1),
-    Batch = c(1, 1)
+    Rep = c(1, 1),
+    BatchID = c(1, 1)
 )
-se_obj <- create_input(data, sample_ann)
+se_obj <- create_input(data, sample_ann,
+    replicate_col = "Rep", batch_col = "BatchID")
 #> No Subject column specified. Samples treated as independent. For repeated-measures designs, set subject_col to the column identifying biological subjects.
 #> Converting 'Group' column to factor. Default order is alphabetical.
 #> Converting 'Replicate' column to factor. Default order is numerical.

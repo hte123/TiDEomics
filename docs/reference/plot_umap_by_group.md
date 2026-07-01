@@ -59,19 +59,27 @@ group, coloured by Time.
 ## Examples
 
 ``` r
-data("example")
+data(example_obj)
 plot_umap_by_group(example_obj)
 #> Using n_neighbors = 5
+#> Warning: Using size for a discrete variable is not advised.
 #> Using n_neighbors = 5
+#> Warning: Using size for a discrete variable is not advised.
 #> Using n_neighbors = 5
+#> Warning: Using size for a discrete variable is not advised.
 #> Using n_neighbors = 4
+#> Warning: Using size for a discrete variable is not advised.
 
 
 # Also accepts a list from split_groups()
 example_obj_list <- split_groups(example_obj)
 plot_umap_by_group(example_obj_list)
 #> Using n_neighbors = 5
+#> Warning: Using size for a discrete variable is not advised.
 #> Using n_neighbors = 5
+#> Warning: Using size for a discrete variable is not advised.
 #> Using n_neighbors = 5
+#> Warning: Using size for a discrete variable is not advised.
 #> Using n_neighbors = 4
+#> Warning: Using size for a discrete variable is not advised.
 ```

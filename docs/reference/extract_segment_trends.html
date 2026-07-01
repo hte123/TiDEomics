@@ -9,7 +9,7 @@ segmented regression results summary"><meta property="og:image" content="https:/
 
     <a class="navbar-brand me-2" href="../index.html">TiDEomics</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -21,7 +21,7 @@ segmented regression results summary"><meta property="og:image" content="https:/
 <li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-applications" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Applications</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-applications"><li><a class="dropdown-item" href="../articles/TiDEomics_application_1.html">Transcriptome of macrophage response to six immune stimuli</a></li>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-applications"><li><a class="dropdown-item" href="../articles/TiDEomics_application_1_0.99.2.html">Transcriptome of macrophage response to six immune stimuli</a></li>
   </ul></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
@@ -71,12 +71,12 @@ within each group.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"example"</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">example_obj</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">example_obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="normalise_to_start.html">normalise_to_start</a></span><span class="op">(</span><span class="va">example_obj</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Normalising to group baseline at each feature's first non-NA time point.</span>
 <span class="r-in"><span><span class="va">example_obj_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="split_groups.html">split_groups</a></span><span class="op">(</span><span class="va">example_obj</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">example_obj_merged_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="merge_replicates.html">merge_replicates</a></span><span class="op">(</span><span class="va">example_obj_list</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">example_obj_merged_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="calc_feature_property.html">calc_feature_property</a></span><span class="op">(</span><span class="va">example_obj_merged_list</span>, </span></span>
+<span class="r-in"><span><span class="va">example_obj_merged_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="calc_feature_property.html">calc_feature_property</a></span><span class="op">(</span><span class="va">example_obj_merged_list</span>,</span></span>
 <span class="r-in"><span>    threshold <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># no missing value in the example dataset, so imputation is not necessary</span></span></span>
 <span class="r-in"><span><span class="va">example_obj_merged_imp_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="impute_groups.html">impute_groups</a></span><span class="op">(</span><span class="va">example_obj_merged_list</span><span class="op">)</span></span></span>
@@ -85,29 +85,11 @@ within each group.</p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Group LPS: no missing values.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Group untreated: no missing values.</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># "untreated" group has only 3 time points, so Trendy analysis will not </span></span></span>
-<span class="r-in"><span><span class="co"># be performed for this group</span></span></span>
-<span class="r-in"><span><span class="co"># example_res_list &lt;- run_Trendy(example_obj_merged_imp_list, maxK = 1,</span></span></span>
-<span class="r-in"><span><span class="co">#     minNumInSeg = 2, meanCut = 0)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"example_res_list"</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu"><a href="plot_segments.html">plot_segments</a></span><span class="op">(</span><span class="va">example_obj_merged_imp_list</span>, <span class="va">example_res_list</span>,</span></span>
-<span class="r-in"><span>    feature <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Mctp1"</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Plotting segmented regression for group: IFNbeta</span>
-<span class="r-plt img"><img src="extract_segment_trends-1.png" alt="" width="700" height="433"></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Plotting segmented regression for group: IFNgamma</span>
-<span class="r-plt img"><img src="extract_segment_trends-2.png" alt="" width="700" height="433"></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Plotting segmented regression for group: LPS</span>
-<span class="r-plt img"><img src="extract_segment_trends-3.png" alt="" width="700" height="433"></span>
-<span class="r-in"><span><span class="fu"><a href="plot_breakpoints.html">plot_breakpoints</a></span><span class="op">(</span><span class="va">example_res_list</span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>number of columns of result is not a multiple of vector length (arg 9)</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>number of columns of result is not a multiple of vector length (arg 3)</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>number of columns of result is not a multiple of vector length (arg 5)</span>
-<span class="r-plt img"><img src="extract_segment_trends-4.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span><span class="va">trendy_summary</span> <span class="op">&lt;-</span> <span class="fu"><a href="summarise_Trendy.html">summarise_Trendy</a></span><span class="op">(</span><span class="va">example_res_list</span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>number of columns of result is not a multiple of vector length (arg 9)</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>number of columns of result is not a multiple of vector length (arg 3)</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>number of columns of result is not a multiple of vector length (arg 5)</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>number of columns of result is not a multiple of vector length (arg 25)</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>number of columns of result is not a multiple of vector length (arg 19)</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>number of columns of result is not a multiple of vector length (arg 16)</span>
 <span class="r-in"><span><span class="va">trendy_list</span> <span class="op">&lt;-</span> <span class="fu">extract_segment_trends</span><span class="op">(</span><span class="va">trendy_summary</span><span class="op">)</span></span></span>
 </code></pre></div>
     </div>

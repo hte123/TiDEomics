@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="index.html">TiDEomics</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -43,7 +43,7 @@
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-applications" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Applications</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-applications">
-<li><a class="dropdown-item" href="articles/TiDEomics_application_1.html">Transcriptome of macrophage response to six immune stimuli</a></li>
+<li><a class="dropdown-item" href="articles/TiDEomics_application_1_0.99.2.html">Transcriptome of macrophage response to six immune stimuli</a></li>
   </ul>
 </li>
       </ul>
@@ -74,29 +74,37 @@
 </div>
 <!-- badges: start -->
 
-<p><code>TiDEomics</code> is designed to streamline <strong>Ti</strong>me-course <strong>D</strong>ifferential <strong>E</strong>xpression analysis of <strong>omics</strong> data with <strong>multiple experimental groups / conditions</strong>, for example, different cell lines or different treatments sampled at several time points.</p>
-<p>The package’s main goals are:</p>
+<p><code>TiDEomics</code> provides an integrated framework for <strong>Ti</strong>me-course <strong>D</strong>ifferential <strong>E</strong>xpression analysis of <strong>omics</strong> data with <strong>multiple experimental groups / conditions</strong>.</p>
+<p><code>TiDEomics</code> enables:</p>
 <ul>
-<li>Compare multiple time courses systematically.</li>
-<li>Identify features (e.g. genes, proteins) and pathways differentially expressed by <strong>time</strong>, <strong>condition</strong>, and <strong>both</strong> factors (time x condition interactions).</li>
-<li>Provide utilities for quality control, data processing, sample-level and feature-level analysis, tailored for time-course multi-condition data.</li>
-<li>Output high-quality tables and figures to facilitate interpretation and reporting.</li>
+<li>Analysis of feature x sample format data from different omics technologies.</li>
+<li>Comparison of multiple (more than two) time courses systematically.</li>
+<li>Filtering of features by residual variance, accounting for group and temporal structure.</li>
+<li>Identification of features (e.g. genes, proteins) and pathways differentially expressed by <strong>time</strong>, <strong>group</strong>, and <strong>both</strong> factors (time x group interactions).</li>
+<li>Integration of quality control, data processing, sample-level and feature-level analysis, tailored for time-course multi-condition data.</li>
+<li>Functional enrichment with high-quality visualisation.</li>
 </ul>
+<p>Existing time-course analysis tools typically focus on a single analysis step or are limited to two-group designs or transcriptomics input, and do not provide an integrated workflow.</p>
 <p><img src="reference/figures/TiDEomics_workflow_v1.png" style="width:70.0%"></p>
-<p>The package supports datasets with missing values, and operates on SummarizedExperiment objects to ensure compatibility with the Bioconductor ecosystem.</p>
+<p>Example applications include:</p>
+<ul>
+<li>Transcriptomics analysis of a cell type’s response to different stimuli over time.</li>
+<li>Proteomics analysis of wild type and multiple mutant cell lines sampled at several time points.</li>
+</ul>
+<p><code>TiDEomics</code> supports datasets with missing values (e.g. mass spectrometry-based proteomics), and operates on <code>SummarizedExperiment</code> objects to ensure compatibility with the Bioconductor ecosystem.</p>
 <p><code>TiDEomics</code> supports both independent-sample designs (e.g. cell culture) and repeated-measures designs (e.g. patient longitudinal studies, via <code>subject_col</code> in <code><a href="reference/create_input.html">create_input()</a></code>). Downstream functions auto-detect the data structure.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<!-- Get the latest stable `R` release from [CRAN](http://cran.r-project.org/). Then install `TiDEomics` from [Bioconductor](http://bioconductor.org/) using the following code: -->
-<!-- ```{r 'install', eval = FALSE} -->
-<!-- if (!requireNamespace("BiocManager", quietly = TRUE)) { -->
-<!--     install.packages("BiocManager") -->
-<!-- } -->
-<!-- # BiocManager::install("TiDEomics") -->
-<!-- ``` -->
-<p>Install the development version from <a href="https://github.com/hte123/TiDEomics" class="external-link">GitHub</a> with:</p>
+<p>Get the latest stable <code>R</code> release from <a href="http://cran.r-project.org/" class="external-link">CRAN</a>. Then install <code>TiDEomics</code> from <a href="http://bioconductor.org/" class="external-link">Bioconductor</a> using the following code:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"BiocManager"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"BiocManager"</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://bioconductor.github.io/BiocManager/reference/install.html" class="external-link">install</a></span><span class="op">(</span><span class="st">"TiDEomics"</span><span class="op">)</span></span></code></pre></div>
+<p>The development version can be installed from <a href="https://github.com/hte123/TiDEomics" class="external-link">GitHub</a> with:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://remotes.r-lib.org" class="external-link">"remotes"</a></span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"hte123/TiDEomics"</span><span class="op">)</span></span></code></pre></div>
@@ -110,12 +118,12 @@
 <h2 id="citation">Citation<a class="anchor" aria-label="anchor" href="#citation"></a>
 </h2>
 <p>Below is the citation output from using <code>citation('TiDEomics')</code> in R. Please run this yourself to check for any updates on how to cite <strong>TiDEomics</strong>.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/citation.html" class="external-link">citation</a></span><span class="op">(</span><span class="st">"TiDEomics"</span><span class="op">)</span>, bibtex <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="co">#&gt; To cite package 'TiDEomics' in publications use:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;   He T (2026). _TiDEomics: Time-course Differential Expression analysis</span></span>
-<span><span class="co">#&gt;   of omics data_. R package version 0.99.0,</span></span>
+<span><span class="co">#&gt;   of omics data_. R package version 0.99.2,</span></span>
 <span><span class="co">#&gt;   &lt;https://github.com/hte123/TiDEomics&gt;.</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; A BibTeX entry for LaTeX users is</span></span>
@@ -124,7 +132,7 @@
 <span><span class="co">#&gt;     title = {TiDEomics: Time-course Differential Expression analysis of omics data},</span></span>
 <span><span class="co">#&gt;     author = {Tianen He},</span></span>
 <span><span class="co">#&gt;     year = {2026},</span></span>
-<span><span class="co">#&gt;     note = {R package version 0.99.0},</span></span>
+<span><span class="co">#&gt;     note = {R package version 0.99.2},</span></span>
 <span><span class="co">#&gt;     url = {https://github.com/hte123/TiDEomics},</span></span>
 <span><span class="co">#&gt;   }</span></span></code></pre></div>
 <p>Please note that the <code>TiDEomics</code> was only made possible thanks to many other R and bioinformatics software authors, which are cited either in the vignettes and/or the paper(s) describing this package.</p>
@@ -144,7 +152,7 @@
 <li>The code is styled automatically thanks to <em><a href="https://CRAN.R-project.org/package=styler" class="external-link">styler</a></em>.</li>
 <li>The documentation is formatted thanks to <em><a href="https://CRAN.R-project.org/package=devtools" class="external-link">devtools</a></em> and <em><a href="https://CRAN.R-project.org/package=roxygen2" class="external-link">roxygen2</a></em>.</li>
 </ul>
-<!-- For more details, check the `dev` directory. --><p>This package was developed using <em><a href="https://bioconductor.org/packages/3.24/biocthis" class="external-link">biocthis</a></em>.</p>
+<p>This package was developed using <em><a href="https://bioconductor.org/packages/3.24/biocthis" class="external-link">biocthis</a></em>.</p>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">

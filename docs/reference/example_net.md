@@ -1,8 +1,6 @@
 # `run_WGCNA()` output object for runnable examples
 
-Code for producing the data is available in
-[`run_WGCNA()`](https://hte123.github.io/TiDEomics/reference/run_WGCNA.md)
-examples
+Code for producing the data is in `inst/script/generate_example_net.R`
 
 ## Usage
 

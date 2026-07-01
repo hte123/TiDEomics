@@ -21,7 +21,7 @@ A data.frame with 500 rows and 41 variables:
 
 - Sample1, Sample2, ...:
 
-  Expression values for each sample
+  log2(CPM + 1) normalised expression values
 
 ## Source
 
@@ -29,7 +29,8 @@ GSE263759
 
 ## Details
 
-Code for preparing the data is available in `data-raw/tutorial_input.R`
+Code for preparing the data is available in
+`inst/script/tutorial_input.R`
 
 - Ensembl IDs were mapped to symbols, genes with all zero counts were
   excluded.
@@ -39,3 +40,5 @@ Code for preparing the data is available in `data-raw/tutorial_input.R`
 - Include "untreated", "IFNbeta", "IFNgamma", "LPS" groups.
 
 - Sample 500 random genes.
+
+- Normalised to log2(CPM + 1).

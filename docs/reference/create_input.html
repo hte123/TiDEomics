@@ -9,7 +9,7 @@ SummarizedExperiment object"><meta property="og:image" content="https://hte123.g
 
     <a class="navbar-brand me-2" href="../index.html">TiDEomics</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -21,7 +21,7 @@ SummarizedExperiment object"><meta property="og:image" content="https://hte123.g
 <li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-applications" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Applications</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-applications"><li><a class="dropdown-item" href="../articles/TiDEomics_application_1.html">Transcriptome of macrophage response to six immune stimuli</a></li>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-applications"><li><a class="dropdown-item" href="../articles/TiDEomics_application_1_0.99.2.html">Transcriptome of macrophage response to six immune stimuli</a></li>
   </ul></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
@@ -51,7 +51,13 @@ SummarizedExperiment object</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">create_input</span><span class="op">(</span><span class="va">data</span>, <span class="va">sample_ann</span>, subject_col <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">create_input</span><span class="op">(</span></span>
+<span>  <span class="va">data</span>,</span>
+<span>  <span class="va">sample_ann</span>,</span>
+<span>  subject_col <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  replicate_col <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  batch_col <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -78,8 +84,22 @@ columns and will be auto-generated if not provided. 'Time',
 biological subjects measured repeatedly across time points (e.g.,
 <code>"PatientID"</code>). If provided, the column is renamed to 'Subject' and used
 for repeated-measures analyses downstream. If NULL (default), all samples
-are treated as independent, e.g. for cell culture experiments.
-experiments.</p></dd>
+are treated as independent, e.g. for cell culture experiments.</p></dd>
+
+
+<dt id="arg-replicate-col">replicate_col<a class="anchor" aria-label="anchor" href="#arg-replicate-col"></a></dt>
+<dd><p>Optional: name of a column in <code>sample_ann</code> identifying
+replicate IDs. If provided, the column is renamed to 'Replicate'. If NULL
+(default), the function looks for a column named 'Replicate'; if absent,
+replicate IDs are auto-generated within each Group and Time (and Subject,
+if provided).</p></dd>
+
+
+<dt id="arg-batch-col">batch_col<a class="anchor" aria-label="anchor" href="#arg-batch-col"></a></dt>
+<dd><p>Optional: name of a column in <code>sample_ann</code> identifying
+batch information. If provided, the column is renamed to 'Batch'. If NULL
+(default), the function looks for a column named 'Batch'; if absent, all
+samples are assigned to batch 1.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -96,10 +116,11 @@ annotations.</p>
 <span class="r-in"><span>    Sample <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Sample1"</span>, <span class="st">"Sample2"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>    Group <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"A"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>    Time <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>    Replicate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>    Batch <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    Rep <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    BatchID <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">se_obj</span> <span class="op">&lt;-</span> <span class="fu">create_input</span><span class="op">(</span><span class="va">data</span>, <span class="va">sample_ann</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">se_obj</span> <span class="op">&lt;-</span> <span class="fu">create_input</span><span class="op">(</span><span class="va">data</span>, <span class="va">sample_ann</span>,</span></span>
+<span class="r-in"><span>    replicate_col <span class="op">=</span> <span class="st">"Rep"</span>, batch_col <span class="op">=</span> <span class="st">"BatchID"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> No Subject column specified. Samples treated as independent. For repeated-measures designs, set subject_col to the column identifying biological subjects.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Converting 'Group' column to factor. Default order is alphabetical.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Converting 'Replicate' column to factor. Default order is numerical.</span>

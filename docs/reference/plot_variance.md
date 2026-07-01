@@ -54,7 +54,7 @@ variable (Group or Time) and only the top n features are plotted if
 ## Examples
 
 ``` r
-data("example")
+data(example_obj)
 example_obj <- normalise_to_start(example_obj)
 #> Normalising to group baseline at each feature's first non-NA time point.
 

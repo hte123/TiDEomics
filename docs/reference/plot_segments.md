@@ -58,7 +58,7 @@ each group.
 ## Examples
 
 ``` r
-data("example")
+data(example_obj)
 example_obj <- normalise_to_start(example_obj)
 #> Normalising to group baseline at each feature's first non-NA time point.
 example_obj_list <- split_groups(example_obj)
@@ -74,7 +74,7 @@ example_obj_merged_imp_list <- impute_groups(example_obj_merged_list)
 
 data("example_res_list")
 plot_segments(example_obj_merged_imp_list, example_res_list,
-    feature = c("Mctp1"))
+    feature = c("Kif3a"))
 #> Plotting segmented regression for group: IFNbeta
 
 #> Plotting segmented regression for group: IFNgamma

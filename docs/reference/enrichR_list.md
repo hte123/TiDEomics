@@ -13,7 +13,8 @@ enrichR_list(
   site = "Enrichr",
   universe = NULL,
   universe_list = NULL,
-  pvalueCutoff = 0.05
+  pvalueCutoff = 0.05,
+  include_overlap = FALSE
 )
 ```
 
@@ -52,14 +53,21 @@ enrichR_list(
 
 - pvalueCutoff:
 
-  Adjusted p-value cutoff for filtering enriched terms (default: 0.05).
+  Adjusted p-value cutoff for filtering enriched terms (default: 0.05)
+
+- include_overlap:
+
+  Parameter passed to
+  [`enrichR::enrichr()`](https://rdrr.io/pkg/enrichR/man/enrichr.html).
+  If `TRUE`, databases are downloaded during each query to output
+  'Overlap' when analysing with a background. (default: `FALSE`)
 
 ## Value
 
 A named list of data.frames, one per database. Each data.frame has
 columns `Cluster`, `Description`, `p.adjust` (Adjusted.P.value from
-enrichR output), `Odds.Ratio`, `Combined.Score`, `Genes`, and any
-additional columns returned by the enrichR API. Compatible with
+enrichR output), `Combined.Score`, `Genes`, and any additional columns
+returned by the enrichR API. Compatible with
 `plot_modules_h(enrich_list = result, enrich_category = "DSigDB")`.
 
 ## Details
@@ -101,10 +109,10 @@ library(dplyr)
 #> The following objects are masked from 'package:base':
 #> 
 #>     intersect, setdiff, setequal, union
-example_module <- WGCNA_module(example_net) %>%
+example_module <- WGCNA_module(example_net) |>
     dplyr::filter(Module %in% c("1", "2"))
 # Use high pvalueCutoff for demonstration
-# enrichr_out <- enrichR_list(example_module, 
+# enrichr_out <- enrichR_list(example_module,
 #     databases = c("KEGG_2019_Mouse"),
 #     universe = example_module$Feature, pvalueCutoff = 0.5)
 ```

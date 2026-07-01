@@ -32,6 +32,7 @@ A ggplot2 theme object.
 
 ``` r
 library(ggplot2)
+#> Warning: package 'ggplot2' was built under R version 4.6.1
 ggplot(mtcars, aes(wt, mpg)) +
     geom_point() +
     theme_custom(base_size = 10)

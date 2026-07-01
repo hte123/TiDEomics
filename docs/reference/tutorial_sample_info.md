@@ -41,7 +41,8 @@ GSE263759
 
 ## Details
 
-Code for preparing the data is available in `data-raw/tutorial_input.R`
+Code for preparing the data is available in
+`inst/script/tutorial_input.R`
 
 - Ensembl IDs were mapped to symbols, genes with all zero counts were
   excluded.
