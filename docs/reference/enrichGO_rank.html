@@ -9,7 +9,7 @@ with clusterProfiler. Genes can be ranked by variance decomposition results."><m
 
     <a class="navbar-brand me-2" href="../index.html">TiDEomics</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -21,7 +21,7 @@ with clusterProfiler. Genes can be ranked by variance decomposition results."><m
 <li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-applications" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Applications</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-applications"><li><a class="dropdown-item" href="../articles/TiDEomics_application_1_0.99.2.html">Transcriptome of macrophage response to six immune stimuli</a></li>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-applications"><li><a class="dropdown-item" href="../articles/TiDEomics_application_1_0.99.4.html">Transcriptome of macrophage response to six immune stimuli</a></li>
   </ul></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
@@ -125,9 +125,11 @@ BP, MF, CC)</p></dd>
 <span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">example_obj</span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="va">example_obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="normalise_to_start.html">normalise_to_start</a></span><span class="op">(</span><span class="va">example_obj</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span>    <span class="va">var_decomp</span> <span class="op">&lt;-</span> <span class="fu"><a href="decomp_variance.html">decomp_variance</a></span><span class="op">(</span><span class="va">example_obj</span>, assay <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="va">var_decomp</span> <span class="op">&lt;-</span> <span class="fu"><a href="decomp_variance.html">decomp_variance</a></span><span class="op">(</span><span class="va">example_obj</span>,</span></span>
+<span class="r-in"><span>        features <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">example_obj</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">100</span><span class="op">]</span>, assay <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="va">example_go_rank</span> <span class="op">&lt;-</span> <span class="fu">enrichGO_rank</span><span class="op">(</span><span class="va">var_decomp</span>, gene_rank_by <span class="op">=</span> <span class="st">"Time"</span>,</span></span>
-<span class="r-in"><span>        OrgDb <span class="op">=</span> <span class="va">org.Mm.eg.db</span>, keyType <span class="op">=</span> <span class="st">"SYMBOL"</span>, category <span class="op">=</span> <span class="st">"BP"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>        OrgDb <span class="op">=</span> <span class="va">org.Mm.eg.db</span>, keyType <span class="op">=</span> <span class="st">"SYMBOL"</span>,</span></span>
+<span class="r-in"><span>        category <span class="op">=</span> <span class="st">"BP"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Normalising to group baseline at each feature's first non-NA time point.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> LMM: exp ~ (1|Group) + (1|Time)  |  Output: Group, Time, Residual</span>
@@ -147,7 +149,7 @@ BP, MF, CC)</p></dd>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer></div>

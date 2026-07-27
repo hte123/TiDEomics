@@ -120,7 +120,7 @@ if (requireNamespace("msigdbr", quietly = TRUE)) {
         species = "Mus musculus", db_species = "MM",
         minGSSize = 1,
         pvalueCutoff = 0.9,
-        universe = example_module$Feature)
+        universe = WGCNA_module(example_net, exclude_grey = FALSE)$Feature)
 }
 #> Processing gene list: 1
 #> Processing gene list: 2

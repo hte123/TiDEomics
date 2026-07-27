@@ -60,6 +60,9 @@ na_obj <- create_input(na_data,
 #> Converting 'Group' column to factor. Default order is alphabetical.
 #> Converting 'Replicate' column to factor. Default order is numerical.
 plot_ID(na_obj, signif = TRUE)
+#> `stat_compare_means()` with `comparisons` displays *unadjusted* p-values (no correction for multiple comparisons).
+#> ℹ For p-values adjusted for multiple comparisons, use `geom_pwc()`, or `stat_pvalue_manual()` together with `compare_means(..., p.adjust.method = )`.
+#> This message is displayed once per session.
 #> $overview
 
 #> 

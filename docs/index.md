@@ -48,6 +48,7 @@ Get the latest stable `R` release from
 [Bioconductor](http://bioconductor.org/) using the following code:
 
 ``` r
+
 if (!requireNamespace("BiocManager", quietly = TRUE)) {
     install.packages("BiocManager")
 }
@@ -59,6 +60,7 @@ The development version can be installed from
 [GitHub](https://github.com/hte123/TiDEomics) with:
 
 ``` r
+
 if (!require("remotes", quietly = TRUE)) install.packages("remotes")
 
 remotes::install_github("hte123/TiDEomics")
@@ -77,6 +79,7 @@ Please run this yourself to check for any updates on how to cite
 **TiDEomics**.
 
 ``` r
+
 print(citation("TiDEomics"), bibtex = TRUE)
 #> To cite package 'TiDEomics' in publications use:
 #> 

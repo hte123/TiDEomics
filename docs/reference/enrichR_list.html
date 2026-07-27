@@ -11,7 +11,7 @@ ChEA for TF targets, KEGG for pathways, DrugBank for drug targets)."><meta prope
 
     <a class="navbar-brand me-2" href="../index.html">TiDEomics</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -23,7 +23,7 @@ ChEA for TF targets, KEGG for pathways, DrugBank for drug targets)."><meta prope
 <li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-applications" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Applications</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-applications"><li><a class="dropdown-item" href="../articles/TiDEomics_application_1_0.99.2.html">Transcriptome of macrophage response to six immune stimuli</a></li>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-applications"><li><a class="dropdown-item" href="../articles/TiDEomics_application_1_0.99.4.html">Transcriptome of macrophage response to six immune stimuli</a></li>
   </ul></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
@@ -160,7 +160,8 @@ applied across databases or across modules.</p>
 <span class="r-in"><span><span class="co"># Use high pvalueCutoff for demonstration</span></span></span>
 <span class="r-in"><span><span class="co"># enrichr_out &lt;- enrichR_list(example_module,</span></span></span>
 <span class="r-in"><span><span class="co">#     databases = c("KEGG_2019_Mouse"),</span></span></span>
-<span class="r-in"><span><span class="co">#     universe = example_module$Feature, pvalueCutoff = 0.5)</span></span></span>
+<span class="r-in"><span><span class="co">#     universe = WGCNA_module(example_net, exclude_grey = FALSE)$Feature,</span></span></span>
+<span class="r-in"><span><span class="co">#     pvalueCutoff = 0.5)</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
@@ -172,7 +173,7 @@ applied across databases or across modules.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer></div>

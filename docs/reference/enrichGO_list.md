@@ -134,17 +134,15 @@ if (requireNamespace("org.Mm.eg.db", quietly = TRUE)) {
         dplyr::filter(Module %in% c("1", "2"))
     # set cutoff to 1 to show all results for demonstration
     example_go_list = enrichGO_list(example_module, OrgDb = org.Mm.eg.db,
-        universe = example_module$Feature,
+        universe = WGCNA_module(example_net, exclude_grey = FALSE)$Feature,
         pvalueCutoff = 1, qvalueCutoff = 1,
         category = "BP", simplify = FALSE)
 }
-#> Warning: replacing previous import 'BiocGenerics::transform' by 'S4Vectors::transform' when loading 'AnnotationDbi'
-#> Warning: replacing previous import 'utils::data' by 'BiocGenerics::data' when loading 'Biostrings'
-#> Warning: replacing previous import 'BiocGenerics::transform' by 'S4Vectors::transform' when loading 'Biostrings'
 #> 
 #> Loading required package: AnnotationDbi
 #> Loading required package: stats4
 #> Loading required package: BiocGenerics
+#> Warning: package 'BiocGenerics' was built under R version 4.6.1
 #> Loading required package: generics
 #> Warning: package 'generics' was built under R version 4.6.1
 #> 
@@ -190,7 +188,6 @@ if (requireNamespace("org.Mm.eg.db", quietly = TRUE)) {
 #> The following object is masked from 'package:grDevices':
 #> 
 #>     windows
-#> 
 #> clusterProfiler v4.21.0 Learn more at https://yulab-smu.top/contribution-knowledge-mining/
 #> 
 #> Please cite:

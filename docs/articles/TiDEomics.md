@@ -85,6 +85,7 @@ Key features covered:
 ## Installation
 
 ``` r
+
 if (!requireNamespace("BiocManager", quietly = TRUE)) {
     install.packages("BiocManager")
 }
@@ -93,6 +94,7 @@ BiocManager::install("TiDEomics")
 ```
 
 ``` r
+
 library(TiDEomics)
 #> Warning: multiple methods tables found for 'transform'
 #> Warning: replacing previous import 'BiocGenerics::transform' by
@@ -112,6 +114,14 @@ library(TiDEomics)
 #> 'S4Vectors::transform' when loading 'SparseArray'
 #> Warning: replacing previous import 'BiocGenerics::transform' by
 #> 'S4Vectors::transform' when loading 'XVector'
+#> Warning: replacing previous import 'BiocGenerics::transform' by
+#> 'S4Vectors::transform' when loading 'AnnotationDbi'
+#> Warning: replacing previous import 'BiocGenerics::transform' by
+#> 'S4Vectors::transform' when loading 'Biostrings'
+#> 
+#> Registered S3 method overwritten by 'lme4':
+#>   method           from
+#>   na.action.merMod car
 library(SummarizedExperiment)
 #> Loading required package: MatrixGenerics
 #> Loading required package: matrixStats
@@ -135,8 +145,10 @@ library(SummarizedExperiment)
 #>     rowWeightedMads, rowWeightedMeans, rowWeightedMedians,
 #>     rowWeightedSds, rowWeightedVars
 #> Loading required package: GenomicRanges
+#> Warning: package 'GenomicRanges' was built under R version 4.6.1
 #> Loading required package: stats4
 #> Loading required package: BiocGenerics
+#> Warning: package 'BiocGenerics' was built under R version 4.6.1
 #> Loading required package: generics
 #> Warning: package 'generics' was built under R version 4.6.1
 #> 
@@ -193,12 +205,6 @@ library(SummarizedExperiment)
 #>     anyMissing, rowMedians
 library(org.Mm.eg.db)
 #> Loading required package: AnnotationDbi
-#> Warning: replacing previous import 'BiocGenerics::transform' by
-#> 'S4Vectors::transform' when loading 'AnnotationDbi'
-#> Warning: replacing previous import 'utils::data' by 'BiocGenerics::data' when
-#> loading 'Biostrings'
-#> Warning: replacing previous import 'BiocGenerics::transform' by
-#> 'S4Vectors::transform' when loading 'Biostrings'
 #> 
 ```
 
@@ -231,6 +237,7 @@ data set published in Traxler et al. (2025).
 - Normalised to `log2(CPM + 1)`
 
 ``` r
+
 data("tutorial_sample_info", package = "TiDEomics")
 data("tutorial_data", package = "TiDEomics")
 ```
@@ -271,6 +278,7 @@ parameters.
 ### Data preparation
 
 ``` r
+
 data_obj <- create_input(
     data = tutorial_data,
     sample_ann = tutorial_sample_info)
@@ -301,6 +309,7 @@ time-0-normalised values (added by
 Downstream functions accept either the name or the index.
 
 ``` r
+
 assays(data_obj)[["orig"]] |> as.data.frame() |> utils::head()
 ```
 
@@ -399,6 +408,7 @@ assays(data_obj)[["orig"]] |> as.data.frame() |> utils::head()
 ```
 
 ``` r
+
 colData(data_obj) # sample annotation
 ```
 
@@ -443,6 +453,7 @@ which will be used in all subsequent plotting functions where
 applicable.
 
 ``` r
+
 custom_palette <- c(
     "untreated" = "#1b9e77", "IFNbeta" = "#d95f02",
     "IFNgamma" = "#7570b3", "LPS" = "#e7298a"
@@ -454,6 +465,7 @@ set_custom_palette(custom_palette)
 ### Quality control
 
 ``` r
+
 plot_distribution(data_obj, facet_by = "Group")
 #> Picking joint bandwidth of 1.3
 #> Picking joint bandwidth of 1.31
@@ -492,6 +504,7 @@ Two modes are available for defining the baseline:
   from baseline.
 
 ``` r
+
 data_obj <- normalise_to_start(data_obj)
 #> Normalising to group baseline at each feature's first non-NA time point.
 ```
@@ -520,14 +533,17 @@ and
 [`plot_modules_h()`](https://hte123.github.io/TiDEomics/reference/plot_modules_h.md).
 
 ``` r
+
 data_obj_list <- split_groups(data_obj)
 ```
 
 ``` r
+
 data_obj_merged_list <- merge_replicates(data_obj_list)
 ```
 
 ``` r
+
 data_obj_merged <- merge_groups(data_obj_merged_list)
 ```
 
@@ -538,6 +554,7 @@ Correlation matrix can be plotted with
 to check sample relationships and potential batch effects.
 
 ``` r
+
 plot_cor_matrix(data_obj,
     method = "spearman",
     label_rep = TRUE, label_batch = TRUE,
@@ -579,6 +596,7 @@ and
 to include features with missing values in PCA and UMAP.
 
 ``` r
+
 PC <- plot_pca(data_obj,
     # pc1 = 1, pc2 = 2, # default to plot PC1 and PC2
     plot_screeplot = TRUE,
@@ -639,6 +657,7 @@ PC$p_list
 ![](TiDEomics_files/figure-html/pca-3.png)
 
 ``` r
+
 plot_pca_3D(PC$pca, pcs = 1:3)
 #> Warning: `line.width` does not currently support multiple values.
 #> Warning: `line.width` does not currently support multiple values.
@@ -650,6 +669,7 @@ Note: the 3D plot may not display properly in some html, but should work
 in an interactive R session.
 
 ``` r
+
 PCAtools::eigencorplot(PC$pca,
     metavars = c("Group", "Time"),
     components = paste0("PC", 1:5),
@@ -664,6 +684,7 @@ PCAtools::eigencorplot(PC$pca,
 ![](TiDEomics_files/figure-html/pca-eigencor-1.png)
 
 ``` r
+
 umap <- plot_umap(data_obj, seed = 1234)
 #> Using n_neighbors = 8
 #> Warning: Using size for a discrete variable is not advised.
@@ -691,6 +712,7 @@ show the trajectory of samples along time course. Set `circle = FALSE`
 or `arrow = FALSE` to remove circles and arrows.
 
 ``` r
+
 plot_pca_by_group(data_obj, circle = TRUE, arrow = TRUE, legend_pos = "top")
 #> Warning: Using size for a discrete variable is not advised.
 #> Using size for a discrete variable is not advised.
@@ -701,6 +723,7 @@ plot_pca_by_group(data_obj, circle = TRUE, arrow = TRUE, legend_pos = "top")
 ![](TiDEomics_files/figure-html/pca-umap-group-1.png)
 
 ``` r
+
 # also accepts a list: plot_pca_by_group(data_obj_list)
 
 plot_umap_by_group(data_obj, seed = 1234, legend_pos = "top")
@@ -717,6 +740,7 @@ plot_umap_by_group(data_obj, seed = 1234, legend_pos = "top")
 ![](TiDEomics_files/figure-html/pca-umap-group-2.png)
 
 ``` r
+
 # also accepts a list: plot_umap_by_group(data_obj_list)
 ```
 
@@ -784,6 +808,7 @@ point. More replicates are recommended for robust pairwise DE analysis.
 DE_between_time():
 
 ``` r
+
 DE_between_time_out <- DE_between_time(data_obj, assay = 1,
     filter = 1, trend = FALSE)
 #> Comparing group IFNbeta time 2 to 0: keeping 500 of 500 features (100.0%)
@@ -837,6 +862,7 @@ DE_between_time_out <- DE_between_time(data_obj, assay = 1,
 ```
 
 ``` r
+
 DE_between_time_out$all_list$IFNbeta$`t2-t0` |> utils::head()
 ```
 
@@ -865,6 +891,7 @@ DE_between_time_out$all_list$IFNbeta$`t2-t0` |> utils::head()
 ```
 
 ``` r
+
 DE_between_time_out$de_list$IFNbeta$`t2-t0` |> utils::head()
 ```
 
@@ -879,6 +906,7 @@ DE_between_time_out$de_list$IFNbeta$`t2-t0` |> utils::head()
 ```
 
 ``` r
+
 # Filtered with thresholds in `DE_between_time()`
 plot_DE_between_time(DE_between_time_out,
     fontsize = 8, value = FALSE, nrow = 1, heatmap_width = 3
@@ -888,6 +916,7 @@ plot_DE_between_time(DE_between_time_out,
 ![](TiDEomics_files/figure-html/de-between-time-plot-1.png)
 
 ``` r
+
 
 # Re-filtering with new thresholds
 plot_DE_between_time(DE_between_time_out,
@@ -902,6 +931,7 @@ plot_DE_between_time(DE_between_time_out,
 DE_between_group():
 
 ``` r
+
 DE_between_group_out <- DE_between_group(data_obj, assay = 2,
     filter = 1, trend = TRUE)
 #> Comparing group IFNgamma to IFNbeta at Time 0: keeping 500 of 500 features (100.0%)
@@ -1021,6 +1051,7 @@ DE_between_group_out <- DE_between_group(data_obj, assay = 2,
 ```
 
 ``` r
+
 # Filtered with thresholds in `DE_between_group()`
 plot_DE_between_group(DE_between_group_out)
 ```
@@ -1053,6 +1084,7 @@ plot_DE_between_group(DE_between_group_out)
 ![](TiDEomics_files/figure-html/de-between-group-plot-4.png)
 
 ``` r
+
 
 # Re-filtering with new thresholds
 plot_DE_between_group(DE_between_group_out, adjP_thres = 0.01, logFC_thres = 1)
@@ -1087,6 +1119,7 @@ plot_DE_between_group(DE_between_group_out, adjP_thres = 0.01, logFC_thres = 1)
 ![](TiDEomics_files/figure-html/de-between-group-plot-8.png)
 
 ``` r
+
 DE_between_group_out$all_list$`IFNgamma-untreated`$`24` |> utils::head()
 ```
 
@@ -1115,6 +1148,7 @@ DE_between_group_out$all_list$`IFNgamma-untreated`$`24` |> utils::head()
 ```
 
 ``` r
+
 DE_between_group_out$de_list$`IFNgamma-untreated` |> utils::head()
 ```
 
@@ -1143,6 +1177,7 @@ can be plotted with
 to visualise DE features of selected group(s) and time point(s).
 
 ``` r
+
 plot_volcano(DE_between_group_out,
     group1 = "untreated", group2 = "IFNgamma", time = 24,
     logFC_thres = 0.5, adjP_thres = 0.05, label = TRUE)
@@ -1213,6 +1248,7 @@ Note:
   calculate `P_trend`.
 
 ``` r
+
 data_obj_merged_list <- calc_feature_property(data_obj_merged_list,
     threshold = 0)
 property_tb <- summarise_feature_property(data_obj_merged_list)
@@ -1244,6 +1280,7 @@ based on the output table of
 [`summarise_feature_property()`](https://hte123.github.io/TiDEomics/reference/summarise_feature_property.md).
 
 ``` r
+
 group_specific_features(property_tb, groups = c("untreated"),
     genename = FALSE, GO = FALSE
 )
@@ -1283,6 +1320,7 @@ for details.
   and minNumInSeg = 2, at least 4 time points are needed.
 
 ``` r
+
 data_obj_merged_imp_list <- impute_groups(data_obj_merged_list)
 #> Group IFNbeta: no missing values.
 #> Group IFNgamma: no missing values.
@@ -1295,6 +1333,7 @@ A subset of features is used for demonstration as
 can be time-consuming.
 
 ``` r
+
 set.seed(1234)
 random_features <- sample(rownames(data_obj_merged_imp_list[[1]]), 50)
 
@@ -1348,6 +1387,7 @@ Use
 plot the fitted segments and breakpoints for selected features.
 
 ``` r
+
 plot_segments(data_obj_merged_imp_list,
     example_res_list,
     feature = c("Slc25a51", "Aunip"), # example features
@@ -1375,6 +1415,7 @@ and
 [`extract_segment_trends()`](https://hte123.github.io/TiDEomics/reference/extract_segment_trends.md).
 
 ``` r
+
 plot_breakpoints(example_res_list)
 #> Warning in (function (..., deparse.level = 1) : number of columns of result is
 #> not a multiple of vector length (arg 13)
@@ -1387,6 +1428,7 @@ plot_breakpoints(example_res_list)
 ![](TiDEomics_files/figure-html/trendy-summary-1.png)
 
 ``` r
+
 
 trendy_summary <- summarise_Trendy(example_res_list)
 #> Warning in (function (..., deparse.level = 1) : number of columns of result is
@@ -1430,6 +1472,7 @@ trendy_summary |> utils::head()
 ```
 
 ``` r
+
 trendy_list <- extract_segment_trends(trendy_summary)
 trendy_list$IFNbeta
 ```
@@ -1499,6 +1542,7 @@ patterns. Sufficient replicates per combination are required for stable
 estimates.
 
 ``` r
+
 # filter genes for variance decomposition:
 # at least 50% values > 0 in at least 2 groups
 decomp_filter_genes <- group_specific_features(property_tb,
@@ -1521,6 +1565,7 @@ plot_variance(var_decomp, rank = "Time", top_n = 20)
 ![](TiDEomics_files/figure-html/variance-decomposition-1.png)
 
 ``` r
+
 plot_variance(var_decomp, rank = "Group", top_n = 20)
 #> Features not specified. Plotting top 20 features ranked by Group.
 ```
@@ -1556,6 +1601,7 @@ with TiDEomics functions.
   FAQ](https://edo98811.github.io/WGCNA_official_documentation/faq.html).
 
 ``` r
+
 # Example filtering by residual variance < Q3
 var_res_q3 <- stats::quantile(var_decomp$Residual, 0.75, na.rm = TRUE)
 filter_wgcna <- var_decomp |> dplyr::filter(Residual < var_res_q3) |>
@@ -1579,6 +1625,7 @@ FAQ](https://edo98811.github.io/WGCNA_official_documentation/faq.html)
 for details.
 
 ``` r
+
 wgcna_input <- prepare_WGCNA(data_obj_wgcna, assay = 2,
     powers = seq(1, 20),
     networkType = "signed", RsquaredCut = 0.8
@@ -1617,6 +1664,7 @@ wgcna_input$plot
 ![](TiDEomics_files/figure-html/choose-power-1.png)
 
 ``` r
+
 picked_power <- wgcna_input$powerEstimate
 picked_power
 ```
@@ -1645,6 +1693,7 @@ can be set with
 e.g., `corType` for correlation method.
 
 ``` r
+
 net <- run_WGCNA(wgcna_input,
     power = picked_power,
     # corType = "pearson", # other option is "bicor"
@@ -1690,6 +1739,7 @@ plot_WGCNA(net, fontsize = 8)
 **Extract modules**: show module sizes
 
 ``` r
+
 gene_module <- WGCNA_module(net, exclude_grey = TRUE)
 
 gene_module |>
@@ -1712,6 +1762,7 @@ Module metrics (size, mean kME, etc.) can be summarised with
 [`summarise_module_metrics()`](https://hte123.github.io/TiDEomics/reference/summarise_module_metrics.md):
 
 ``` r
+
 summarise_module_metrics(net)
 ```
 
@@ -1733,6 +1784,7 @@ summarise_module_metrics(net)
 **Plot module profiles**:
 
 ``` r
+
 plot_modules_v(gene_module,
     data_obj_merged, scale = TRUE,
     ylabel = "Z-score of log2(CPM + 1)",
@@ -1760,16 +1812,16 @@ and plot with
 [`enrichplot::gseaplot2()`](https://rdrr.io/pkg/enrichplot/man/gseaplot2.html).
 
 ``` r
+
 gse_group <- enrichGO_rank(var_decomp,
     gene_rank_by = "Group",
     OrgDb = org.Mm.eg.db,
     keyType = "SYMBOL", category = "BP",
     go_rank_by = "p.adjust")
-#> 
-#> Warning in gsea(geneList = geneList, gene_sets = geneSets, minGSSize =
-#> minGSSize, : There were 3643 pathways for which P-values were not calculated
-#> properly due to unbalanced gene-level statistic values. For such pathways
-#> pvalue, NES and log2err are set to NA. You can try to increase nPermSimple.
+#> Warning in gsea(geneList = geneList, gene_sets = geneSets, weight = weight, :
+#> There were 3643 pathways for which P-values were not calculated properly due to
+#> unbalanced gene-level statistic values. For such pathways pvalue, NES and
+#> log2err are set to NA. You can try to increase nPermSimple.
 #> Warning in calculate_qvalue(gsea_res$pvalue): Invalid p-values detected (NA,
 #> non-finite, <0, or >1). qvalue will be computed on valid p-values only.
 #> Warning in enrichit::gsea_gson(geneList = geneList, exponent = exponent, : NA
@@ -1794,6 +1846,7 @@ Optionally, use `simplify = TRUE` with
 to simplify the GO results by removing redundant terms (default: FALSE).
 
 ``` r
+
 background_wgcna <- colnames(wgcna_input$data)
 
 go_list <- enrichGO_list(
@@ -1890,6 +1943,7 @@ and runs a hypergeometric test across user-selected collections
 (Hallmark, GO, etc.) or specific gene sets.
 
 ``` r
+
 # Mouse Hallmark gene sets
 hallmark_msigdb <- enrich_msigdb(gene_module, universe = background_wgcna,
     minGSSize = 5, category = "MH", species = "Mus musculus", db_species = "MM")
@@ -1954,6 +2008,7 @@ top enriched GO terms. The plotting function is adapted from ClusterGVis
 package (Zhang et al. 2026).
 
 ``` r
+
 plot_modules_h(gene_module,
     data_obj_merged, scale = TRUE,
     ylabel = "Z-score of log2(CPM + 1)",
@@ -1989,6 +2044,7 @@ correlation of the feature with the corresponding module eigengene) with
 [`extract_hubs()`](https://hte123.github.io/TiDEomics/reference/extract_hubs.md)
 
 ``` r
+
 hub_features <- extract_hubs(net, top_n = 3)
 
 plot_modules_h(gene_module,
@@ -2023,6 +2079,7 @@ which shows the mean and standard deviation of replicates at each time
 point.
 
 ``` r
+
 plot_trend(data_obj, assay = 1,
     features = c("Abtb1", "Dram1", "Ifi27", "Nufip1"),
     title = "Example features")
@@ -2032,6 +2089,7 @@ plot_trend(data_obj, assay = 1,
 ![](TiDEomics_files/figure-html/plot-feature-1.png)
 
 ``` r
+
 
 # Or pre-calculate mean and sd with calc_mean_sd()
 table_mean_sd_orig <- calc_mean_sd(data_obj)$orig
@@ -2047,6 +2105,7 @@ Visualisation of features with high & low residual variance justify the
 filtering strategy for WGCNA input.
 
 ``` r
+
 plot_trend(data_obj, assay = 1,
     features = var_decomp |>
         dplyr::arrange(Residual) |> utils::head(12) |> dplyr::pull(Feature),
@@ -2058,6 +2117,7 @@ plot_trend(data_obj, assay = 1,
 ![](TiDEomics_files/figure-html/plot-residual-1.png)
 
 ``` r
+
 
 plot_trend(data_obj, assay = 1,
     features = var_decomp |>
@@ -2080,6 +2140,7 @@ standard analyses, while running each step individually allows for more
 control over parameters.
 
 ``` r
+
 tide <- prepare_tide(
     data = tutorial_data,
     sample_ann = tutorial_sample_info,
@@ -2136,6 +2197,7 @@ Pairwise DE, WGCNA and enrichment can be run on the returned elements,
 and the results can be appended to the list for centralised storage.
 
 ``` r
+
 tide$DE <- list(
     between_group = DE_between_group_out,
     between_time  = DE_between_time_out
@@ -2164,225 +2226,114 @@ SummarizedExperiment browser can be used to explore the data in an
 interactive Shiny app.
 
 ``` r
+
 iSEE::iSEE(data_obj)
 ```
 
 [`prepare_tide()`](https://hte123.github.io/TiDEomics/reference/prepare_tide.md)
 output can be converted to a
 [`DeeDeeExperiment`](https://bioconductor.org/packages/DeeDeeExperiment)
-object for formatted summary.
+object for formatted summary. The nested DE and enrichment results can
+be flattened with
+[`flatten_DE()`](https://hte123.github.io/TiDEomics/reference/flatten_DE.md)
+or
+[`flatten_enrich()`](https://hte123.github.io/TiDEomics/reference/flatten_enrich.md)
+before passing to the `DeeDeeExperiment` constructor.
 
 ``` r
-dde <- as_DeeDeeExperiment(tide)
+
+# Flatten nested results
+de_flat <- flatten_DE(tide$DE)
+enrich_flat <- flatten_enrich(tide$enrichment)
+
+# Build DeeDeeExperiment
+dde <- DeeDeeExperiment::DeeDeeExperiment(
+    sce = tide$se,
+    de_results = de_flat,
+    enrich_results = enrich_flat
+)
 #> Warning: replacing previous import 'BiocGenerics::transform' by
 #> 'IRanges::transform' when loading 'DESeq2'
-#> Warning in DeeDeeExperiment::DeeDeeExperiment(sce = sce, de_results = de_flat, : Could not match FEA 'clusterProfiler_GO_modules_BP_1' to any DE contrast.
+#> Warning in DeeDeeExperiment::DeeDeeExperiment(sce = tide$se, de_results = de_flat, : Could not match FEA 'clusterProfiler_GO_modules_BP_1' to any DE contrast.
 #> Available DE results: between_group_IFNgamma-IFNbeta_T0, between_group_IFNgamma-IFNbeta_T2, between_group_IFNgamma-IFNbeta_T4, between_group_IFNgamma-IFNbeta_T6, between_group_IFNgamma-IFNbeta_T8, between_group_IFNgamma-IFNbeta_T24, between_group_LPS-IFNbeta_T0, between_group_LPS-IFNbeta_T2, between_group_LPS-IFNbeta_T4, between_group_LPS-IFNbeta_T6, between_group_LPS-IFNbeta_T8, between_group_LPS-IFNbeta_T24, between_group_untreated-IFNbeta_T0, between_group_untreated-IFNbeta_T8, between_group_untreated-IFNbeta_T24, between_group_IFNbeta-IFNgamma_T0, between_group_IFNbeta-IFNgamma_T2, between_group_IFNbeta-IFNgamma_T4, between_group_IFNbeta-IFNgamma_T6, between_group_IFNbeta-IFNgamma_T8, between_group_IFNbeta-IFNgamma_T24, between_group_LPS-IFNgamma_T0, between_group_LPS-IFNgamma_T2, between_group_LPS-IFNgamma_T4, between_group_LPS-IFNgamma_T6, between_group_LPS-IFNgamma_T8, between_group_LPS-IFNgamma_T24, between_group_untreated-IFNgamma_T0, between_group_untreated-IFNgamma_T8, between_group_untreated-IFNgamma_T24, between_group_IFNbeta-LPS_T0, between_group_IFNbeta-LPS_T2, between_group_IFNbeta-LPS_T4, between_group_IFNbeta-LPS_T6, between_group_IFNbeta-LPS_T8, between_group_IFNbeta-LPS_T24, between_group_IFNgamma-LPS_T0, between_group_IFNgamma-LPS_T2, between_group_IFNgamma-LPS_T4, between_group_IFNgamma-LPS_T6, between_group_IFNgamma-LPS_T8, between_group_IFNgamma-LPS_T24, between_group_untreated-LPS_T0, between_group_untreated-LPS_T8, between_group_untreated-LPS_T24, between_group_IFNbeta-untreated_T0, between_group_IFNbeta-untreated_T8, between_group_IFNbeta-untreated_T24, between_group_IFNgamma-untreated_T0, between_group_IFNgamma-untreated_T8, between_group_IFNgamma-untreated_T24, between_group_LPS-untreated_T0, between_group_LPS-untreated_T8, between_group_LPS-untreated_T24, between_time_IFNbeta_t2-t0, between_time_IFNbeta_t4-t0, between_time_IFNbeta_t6-t0, between_time_IFNbeta_t8-t0, between_time_IFNbeta_t24-t0, between_time_IFNbeta_t4-t2, between_time_IFNbeta_t6-t2, between_time_IFNbeta_t8-t2, between_time_IFNbeta_t24-t2, between_time_IFNbeta_t6-t4, between_time_IFNbeta_t8-t4, between_time_IFNbeta_t24-t4, between_time_IFNbeta_t8-t6, between_time_IFNbeta_t24-t6, between_time_IFNbeta_t24-t8, between_time_IFNgamma_t2-t0, between_time_IFNgamma_t4-t0, between_time_IFNgamma_t6-t0, between_time_IFNgamma_t8-t0, between_time_IFNgamma_t24-t0, between_time_IFNgamma_t4-t2, between_time_IFNgamma_t6-t2, between_time_IFNgamma_t8-t2, between_time_IFNgamma_t24-t2, between_time_IFNgamma_t6-t4, between_time_IFNgamma_t8-t4, between_time_IFNgamma_t24-t4, between_time_IFNgamma_t8-t6, between_time_IFNgamma_t24-t6, between_time_IFNgamma_t24-t8, between_time_LPS_t2-t0, between_time_LPS_t4-t0, between_time_LPS_t6-t0, between_time_LPS_t8-t0, between_time_LPS_t24-t0, between_time_LPS_t4-t2, between_time_LPS_t6-t2, between_time_LPS_t8-t2, between_time_LPS_t24-t2, between_time_LPS_t6-t4, between_time_LPS_t8-t4, between_time_LPS_t24-t4, between_time_LPS_t8-t6, between_time_LPS_t24-t6, between_time_LPS_t24-t8, between_time_untreated_t8-t0, between_time_untreated_t24-t0, between_time_untreated_t24-t8
 #>  Consider naming your enrich_results starting with one of the following prefixes: 'topGO_', 'clusterProfiler_','GeneTonic_', 'DAVID_','gsea_', 'fgsea_', 'enrichr_', 'gPro_',followed by the contrast name
-#> Found 335 gene sets in `enrichResult` object, of which 0 are significant.
+#> Found 334 gene sets in `enrichResult` object, of which 0 are significant.
 #> Converting for usage within the DeeDeeExperiment framework...
-#> Warning in DeeDeeExperiment::DeeDeeExperiment(sce = sce, de_results = de_flat, : Could not match FEA 'clusterProfiler_GO_modules_BP_2' to any DE contrast.
+#> Warning in DeeDeeExperiment::DeeDeeExperiment(sce = tide$se, de_results = de_flat, : Could not match FEA 'clusterProfiler_GO_modules_BP_2' to any DE contrast.
 #> Available DE results: between_group_IFNgamma-IFNbeta_T0, between_group_IFNgamma-IFNbeta_T2, between_group_IFNgamma-IFNbeta_T4, between_group_IFNgamma-IFNbeta_T6, between_group_IFNgamma-IFNbeta_T8, between_group_IFNgamma-IFNbeta_T24, between_group_LPS-IFNbeta_T0, between_group_LPS-IFNbeta_T2, between_group_LPS-IFNbeta_T4, between_group_LPS-IFNbeta_T6, between_group_LPS-IFNbeta_T8, between_group_LPS-IFNbeta_T24, between_group_untreated-IFNbeta_T0, between_group_untreated-IFNbeta_T8, between_group_untreated-IFNbeta_T24, between_group_IFNbeta-IFNgamma_T0, between_group_IFNbeta-IFNgamma_T2, between_group_IFNbeta-IFNgamma_T4, between_group_IFNbeta-IFNgamma_T6, between_group_IFNbeta-IFNgamma_T8, between_group_IFNbeta-IFNgamma_T24, between_group_LPS-IFNgamma_T0, between_group_LPS-IFNgamma_T2, between_group_LPS-IFNgamma_T4, between_group_LPS-IFNgamma_T6, between_group_LPS-IFNgamma_T8, between_group_LPS-IFNgamma_T24, between_group_untreated-IFNgamma_T0, between_group_untreated-IFNgamma_T8, between_group_untreated-IFNgamma_T24, between_group_IFNbeta-LPS_T0, between_group_IFNbeta-LPS_T2, between_group_IFNbeta-LPS_T4, between_group_IFNbeta-LPS_T6, between_group_IFNbeta-LPS_T8, between_group_IFNbeta-LPS_T24, between_group_IFNgamma-LPS_T0, between_group_IFNgamma-LPS_T2, between_group_IFNgamma-LPS_T4, between_group_IFNgamma-LPS_T6, between_group_IFNgamma-LPS_T8, between_group_IFNgamma-LPS_T24, between_group_untreated-LPS_T0, between_group_untreated-LPS_T8, between_group_untreated-LPS_T24, between_group_IFNbeta-untreated_T0, between_group_IFNbeta-untreated_T8, between_group_IFNbeta-untreated_T24, between_group_IFNgamma-untreated_T0, between_group_IFNgamma-untreated_T8, between_group_IFNgamma-untreated_T24, between_group_LPS-untreated_T0, between_group_LPS-untreated_T8, between_group_LPS-untreated_T24, between_time_IFNbeta_t2-t0, between_time_IFNbeta_t4-t0, between_time_IFNbeta_t6-t0, between_time_IFNbeta_t8-t0, between_time_IFNbeta_t24-t0, between_time_IFNbeta_t4-t2, between_time_IFNbeta_t6-t2, between_time_IFNbeta_t8-t2, between_time_IFNbeta_t24-t2, between_time_IFNbeta_t6-t4, between_time_IFNbeta_t8-t4, between_time_IFNbeta_t24-t4, between_time_IFNbeta_t8-t6, between_time_IFNbeta_t24-t6, between_time_IFNbeta_t24-t8, between_time_IFNgamma_t2-t0, between_time_IFNgamma_t4-t0, between_time_IFNgamma_t6-t0, between_time_IFNgamma_t8-t0, between_time_IFNgamma_t24-t0, between_time_IFNgamma_t4-t2, between_time_IFNgamma_t6-t2, between_time_IFNgamma_t8-t2, between_time_IFNgamma_t24-t2, between_time_IFNgamma_t6-t4, between_time_IFNgamma_t8-t4, between_time_IFNgamma_t24-t4, between_time_IFNgamma_t8-t6, between_time_IFNgamma_t24-t6, between_time_IFNgamma_t24-t8, between_time_LPS_t2-t0, between_time_LPS_t4-t0, between_time_LPS_t6-t0, between_time_LPS_t8-t0, between_time_LPS_t24-t0, between_time_LPS_t4-t2, between_time_LPS_t6-t2, between_time_LPS_t8-t2, between_time_LPS_t24-t2, between_time_LPS_t6-t4, between_time_LPS_t8-t4, between_time_LPS_t24-t4, between_time_LPS_t8-t6, between_time_LPS_t24-t6, between_time_LPS_t24-t8, between_time_untreated_t8-t0, between_time_untreated_t24-t0, between_time_untreated_t24-t8
 #>  Consider naming your enrich_results starting with one of the following prefixes: 'topGO_', 'clusterProfiler_','GeneTonic_', 'DAVID_','gsea_', 'fgsea_', 'enrichr_', 'gPro_',followed by the contrast name
-#> Found 335 gene sets in `enrichResult` object, of which 119 are significant.
+#> Found 308 gene sets in `enrichResult` object, of which 194 are significant.
 #> Converting for usage within the DeeDeeExperiment framework...
-#> Warning in DeeDeeExperiment::DeeDeeExperiment(sce = sce, de_results = de_flat, : Could not match FEA 'clusterProfiler_GO_modules_BP_3' to any DE contrast.
+#> Warning in DeeDeeExperiment::DeeDeeExperiment(sce = tide$se, de_results = de_flat, : Could not match FEA 'clusterProfiler_GO_modules_BP_3' to any DE contrast.
 #> Available DE results: between_group_IFNgamma-IFNbeta_T0, between_group_IFNgamma-IFNbeta_T2, between_group_IFNgamma-IFNbeta_T4, between_group_IFNgamma-IFNbeta_T6, between_group_IFNgamma-IFNbeta_T8, between_group_IFNgamma-IFNbeta_T24, between_group_LPS-IFNbeta_T0, between_group_LPS-IFNbeta_T2, between_group_LPS-IFNbeta_T4, between_group_LPS-IFNbeta_T6, between_group_LPS-IFNbeta_T8, between_group_LPS-IFNbeta_T24, between_group_untreated-IFNbeta_T0, between_group_untreated-IFNbeta_T8, between_group_untreated-IFNbeta_T24, between_group_IFNbeta-IFNgamma_T0, between_group_IFNbeta-IFNgamma_T2, between_group_IFNbeta-IFNgamma_T4, between_group_IFNbeta-IFNgamma_T6, between_group_IFNbeta-IFNgamma_T8, between_group_IFNbeta-IFNgamma_T24, between_group_LPS-IFNgamma_T0, between_group_LPS-IFNgamma_T2, between_group_LPS-IFNgamma_T4, between_group_LPS-IFNgamma_T6, between_group_LPS-IFNgamma_T8, between_group_LPS-IFNgamma_T24, between_group_untreated-IFNgamma_T0, between_group_untreated-IFNgamma_T8, between_group_untreated-IFNgamma_T24, between_group_IFNbeta-LPS_T0, between_group_IFNbeta-LPS_T2, between_group_IFNbeta-LPS_T4, between_group_IFNbeta-LPS_T6, between_group_IFNbeta-LPS_T8, between_group_IFNbeta-LPS_T24, between_group_IFNgamma-LPS_T0, between_group_IFNgamma-LPS_T2, between_group_IFNgamma-LPS_T4, between_group_IFNgamma-LPS_T6, between_group_IFNgamma-LPS_T8, between_group_IFNgamma-LPS_T24, between_group_untreated-LPS_T0, between_group_untreated-LPS_T8, between_group_untreated-LPS_T24, between_group_IFNbeta-untreated_T0, between_group_IFNbeta-untreated_T8, between_group_IFNbeta-untreated_T24, between_group_IFNgamma-untreated_T0, between_group_IFNgamma-untreated_T8, between_group_IFNgamma-untreated_T24, between_group_LPS-untreated_T0, between_group_LPS-untreated_T8, between_group_LPS-untreated_T24, between_time_IFNbeta_t2-t0, between_time_IFNbeta_t4-t0, between_time_IFNbeta_t6-t0, between_time_IFNbeta_t8-t0, between_time_IFNbeta_t24-t0, between_time_IFNbeta_t4-t2, between_time_IFNbeta_t6-t2, between_time_IFNbeta_t8-t2, between_time_IFNbeta_t24-t2, between_time_IFNbeta_t6-t4, between_time_IFNbeta_t8-t4, between_time_IFNbeta_t24-t4, between_time_IFNbeta_t8-t6, between_time_IFNbeta_t24-t6, between_time_IFNbeta_t24-t8, between_time_IFNgamma_t2-t0, between_time_IFNgamma_t4-t0, between_time_IFNgamma_t6-t0, between_time_IFNgamma_t8-t0, between_time_IFNgamma_t24-t0, between_time_IFNgamma_t4-t2, between_time_IFNgamma_t6-t2, between_time_IFNgamma_t8-t2, between_time_IFNgamma_t24-t2, between_time_IFNgamma_t6-t4, between_time_IFNgamma_t8-t4, between_time_IFNgamma_t24-t4, between_time_IFNgamma_t8-t6, between_time_IFNgamma_t24-t6, between_time_IFNgamma_t24-t8, between_time_LPS_t2-t0, between_time_LPS_t4-t0, between_time_LPS_t6-t0, between_time_LPS_t8-t0, between_time_LPS_t24-t0, between_time_LPS_t4-t2, between_time_LPS_t6-t2, between_time_LPS_t8-t2, between_time_LPS_t24-t2, between_time_LPS_t6-t4, between_time_LPS_t8-t4, between_time_LPS_t24-t4, between_time_LPS_t8-t6, between_time_LPS_t24-t6, between_time_LPS_t24-t8, between_time_untreated_t8-t0, between_time_untreated_t24-t0, between_time_untreated_t24-t8
 #>  Consider naming your enrich_results starting with one of the following prefixes: 'topGO_', 'clusterProfiler_','GeneTonic_', 'DAVID_','gsea_', 'fgsea_', 'enrichr_', 'gPro_',followed by the contrast name
-#> Found 335 gene sets in `enrichResult` object, of which 7 are significant.
+#> Found 295 gene sets in `enrichResult` object, of which 7 are significant.
 #> Converting for usage within the DeeDeeExperiment framework...
-#> Warning in DeeDeeExperiment::DeeDeeExperiment(sce = sce, de_results = de_flat, : Could not match FEA 'clusterProfiler_GO_modules_BP_4' to any DE contrast.
+#> Warning in DeeDeeExperiment::DeeDeeExperiment(sce = tide$se, de_results = de_flat, : Could not match FEA 'clusterProfiler_GO_modules_BP_4' to any DE contrast.
 #> Available DE results: between_group_IFNgamma-IFNbeta_T0, between_group_IFNgamma-IFNbeta_T2, between_group_IFNgamma-IFNbeta_T4, between_group_IFNgamma-IFNbeta_T6, between_group_IFNgamma-IFNbeta_T8, between_group_IFNgamma-IFNbeta_T24, between_group_LPS-IFNbeta_T0, between_group_LPS-IFNbeta_T2, between_group_LPS-IFNbeta_T4, between_group_LPS-IFNbeta_T6, between_group_LPS-IFNbeta_T8, between_group_LPS-IFNbeta_T24, between_group_untreated-IFNbeta_T0, between_group_untreated-IFNbeta_T8, between_group_untreated-IFNbeta_T24, between_group_IFNbeta-IFNgamma_T0, between_group_IFNbeta-IFNgamma_T2, between_group_IFNbeta-IFNgamma_T4, between_group_IFNbeta-IFNgamma_T6, between_group_IFNbeta-IFNgamma_T8, between_group_IFNbeta-IFNgamma_T24, between_group_LPS-IFNgamma_T0, between_group_LPS-IFNgamma_T2, between_group_LPS-IFNgamma_T4, between_group_LPS-IFNgamma_T6, between_group_LPS-IFNgamma_T8, between_group_LPS-IFNgamma_T24, between_group_untreated-IFNgamma_T0, between_group_untreated-IFNgamma_T8, between_group_untreated-IFNgamma_T24, between_group_IFNbeta-LPS_T0, between_group_IFNbeta-LPS_T2, between_group_IFNbeta-LPS_T4, between_group_IFNbeta-LPS_T6, between_group_IFNbeta-LPS_T8, between_group_IFNbeta-LPS_T24, between_group_IFNgamma-LPS_T0, between_group_IFNgamma-LPS_T2, between_group_IFNgamma-LPS_T4, between_group_IFNgamma-LPS_T6, between_group_IFNgamma-LPS_T8, between_group_IFNgamma-LPS_T24, between_group_untreated-LPS_T0, between_group_untreated-LPS_T8, between_group_untreated-LPS_T24, between_group_IFNbeta-untreated_T0, between_group_IFNbeta-untreated_T8, between_group_IFNbeta-untreated_T24, between_group_IFNgamma-untreated_T0, between_group_IFNgamma-untreated_T8, between_group_IFNgamma-untreated_T24, between_group_LPS-untreated_T0, between_group_LPS-untreated_T8, between_group_LPS-untreated_T24, between_time_IFNbeta_t2-t0, between_time_IFNbeta_t4-t0, between_time_IFNbeta_t6-t0, between_time_IFNbeta_t8-t0, between_time_IFNbeta_t24-t0, between_time_IFNbeta_t4-t2, between_time_IFNbeta_t6-t2, between_time_IFNbeta_t8-t2, between_time_IFNbeta_t24-t2, between_time_IFNbeta_t6-t4, between_time_IFNbeta_t8-t4, between_time_IFNbeta_t24-t4, between_time_IFNbeta_t8-t6, between_time_IFNbeta_t24-t6, between_time_IFNbeta_t24-t8, between_time_IFNgamma_t2-t0, between_time_IFNgamma_t4-t0, between_time_IFNgamma_t6-t0, between_time_IFNgamma_t8-t0, between_time_IFNgamma_t24-t0, between_time_IFNgamma_t4-t2, between_time_IFNgamma_t6-t2, between_time_IFNgamma_t8-t2, between_time_IFNgamma_t24-t2, between_time_IFNgamma_t6-t4, between_time_IFNgamma_t8-t4, between_time_IFNgamma_t24-t4, between_time_IFNgamma_t8-t6, between_time_IFNgamma_t24-t6, between_time_IFNgamma_t24-t8, between_time_LPS_t2-t0, between_time_LPS_t4-t0, between_time_LPS_t6-t0, between_time_LPS_t8-t0, between_time_LPS_t24-t0, between_time_LPS_t4-t2, between_time_LPS_t6-t2, between_time_LPS_t8-t2, between_time_LPS_t24-t2, between_time_LPS_t6-t4, between_time_LPS_t8-t4, between_time_LPS_t24-t4, between_time_LPS_t8-t6, between_time_LPS_t24-t6, between_time_LPS_t24-t8, between_time_untreated_t8-t0, between_time_untreated_t24-t0, between_time_untreated_t24-t8
 #>  Consider naming your enrich_results starting with one of the following prefixes: 'topGO_', 'clusterProfiler_','GeneTonic_', 'DAVID_','gsea_', 'fgsea_', 'enrichr_', 'gPro_',followed by the contrast name
-#> Found 335 gene sets in `enrichResult` object, of which 46 are significant.
+#> Found 308 gene sets in `enrichResult` object, of which 50 are significant.
 #> Converting for usage within the DeeDeeExperiment framework...
-#> Warning in DeeDeeExperiment::DeeDeeExperiment(sce = sce, de_results = de_flat, : Could not match FEA 'clusterProfiler_GO_modules_BP_5' to any DE contrast.
+#> Warning in DeeDeeExperiment::DeeDeeExperiment(sce = tide$se, de_results = de_flat, : Could not match FEA 'clusterProfiler_GO_modules_BP_5' to any DE contrast.
 #> Available DE results: between_group_IFNgamma-IFNbeta_T0, between_group_IFNgamma-IFNbeta_T2, between_group_IFNgamma-IFNbeta_T4, between_group_IFNgamma-IFNbeta_T6, between_group_IFNgamma-IFNbeta_T8, between_group_IFNgamma-IFNbeta_T24, between_group_LPS-IFNbeta_T0, between_group_LPS-IFNbeta_T2, between_group_LPS-IFNbeta_T4, between_group_LPS-IFNbeta_T6, between_group_LPS-IFNbeta_T8, between_group_LPS-IFNbeta_T24, between_group_untreated-IFNbeta_T0, between_group_untreated-IFNbeta_T8, between_group_untreated-IFNbeta_T24, between_group_IFNbeta-IFNgamma_T0, between_group_IFNbeta-IFNgamma_T2, between_group_IFNbeta-IFNgamma_T4, between_group_IFNbeta-IFNgamma_T6, between_group_IFNbeta-IFNgamma_T8, between_group_IFNbeta-IFNgamma_T24, between_group_LPS-IFNgamma_T0, between_group_LPS-IFNgamma_T2, between_group_LPS-IFNgamma_T4, between_group_LPS-IFNgamma_T6, between_group_LPS-IFNgamma_T8, between_group_LPS-IFNgamma_T24, between_group_untreated-IFNgamma_T0, between_group_untreated-IFNgamma_T8, between_group_untreated-IFNgamma_T24, between_group_IFNbeta-LPS_T0, between_group_IFNbeta-LPS_T2, between_group_IFNbeta-LPS_T4, between_group_IFNbeta-LPS_T6, between_group_IFNbeta-LPS_T8, between_group_IFNbeta-LPS_T24, between_group_IFNgamma-LPS_T0, between_group_IFNgamma-LPS_T2, between_group_IFNgamma-LPS_T4, between_group_IFNgamma-LPS_T6, between_group_IFNgamma-LPS_T8, between_group_IFNgamma-LPS_T24, between_group_untreated-LPS_T0, between_group_untreated-LPS_T8, between_group_untreated-LPS_T24, between_group_IFNbeta-untreated_T0, between_group_IFNbeta-untreated_T8, between_group_IFNbeta-untreated_T24, between_group_IFNgamma-untreated_T0, between_group_IFNgamma-untreated_T8, between_group_IFNgamma-untreated_T24, between_group_LPS-untreated_T0, between_group_LPS-untreated_T8, between_group_LPS-untreated_T24, between_time_IFNbeta_t2-t0, between_time_IFNbeta_t4-t0, between_time_IFNbeta_t6-t0, between_time_IFNbeta_t8-t0, between_time_IFNbeta_t24-t0, between_time_IFNbeta_t4-t2, between_time_IFNbeta_t6-t2, between_time_IFNbeta_t8-t2, between_time_IFNbeta_t24-t2, between_time_IFNbeta_t6-t4, between_time_IFNbeta_t8-t4, between_time_IFNbeta_t24-t4, between_time_IFNbeta_t8-t6, between_time_IFNbeta_t24-t6, between_time_IFNbeta_t24-t8, between_time_IFNgamma_t2-t0, between_time_IFNgamma_t4-t0, between_time_IFNgamma_t6-t0, between_time_IFNgamma_t8-t0, between_time_IFNgamma_t24-t0, between_time_IFNgamma_t4-t2, between_time_IFNgamma_t6-t2, between_time_IFNgamma_t8-t2, between_time_IFNgamma_t24-t2, between_time_IFNgamma_t6-t4, between_time_IFNgamma_t8-t4, between_time_IFNgamma_t24-t4, between_time_IFNgamma_t8-t6, between_time_IFNgamma_t24-t6, between_time_IFNgamma_t24-t8, between_time_LPS_t2-t0, between_time_LPS_t4-t0, between_time_LPS_t6-t0, between_time_LPS_t8-t0, between_time_LPS_t24-t0, between_time_LPS_t4-t2, between_time_LPS_t6-t2, between_time_LPS_t8-t2, between_time_LPS_t24-t2, between_time_LPS_t6-t4, between_time_LPS_t8-t4, between_time_LPS_t24-t4, between_time_LPS_t8-t6, between_time_LPS_t24-t6, between_time_LPS_t24-t8, between_time_untreated_t8-t0, between_time_untreated_t24-t0, between_time_untreated_t24-t8
 #>  Consider naming your enrich_results starting with one of the following prefixes: 'topGO_', 'clusterProfiler_','GeneTonic_', 'DAVID_','gsea_', 'fgsea_', 'enrichr_', 'gPro_',followed by the contrast name
-#> Found 335 gene sets in `enrichResult` object, of which 0 are significant.
+#> Found 293 gene sets in `enrichResult` object, of which 0 are significant.
 #> Converting for usage within the DeeDeeExperiment framework...
-#> Warning in DeeDeeExperiment::DeeDeeExperiment(sce = sce, de_results = de_flat, : Could not match FEA 'clusterProfiler_GO_modules_MF_1' to any DE contrast.
+#> Warning in DeeDeeExperiment::DeeDeeExperiment(sce = tide$se, de_results = de_flat, : Could not match FEA 'clusterProfiler_GO_modules_MF_1' to any DE contrast.
 #> Available DE results: between_group_IFNgamma-IFNbeta_T0, between_group_IFNgamma-IFNbeta_T2, between_group_IFNgamma-IFNbeta_T4, between_group_IFNgamma-IFNbeta_T6, between_group_IFNgamma-IFNbeta_T8, between_group_IFNgamma-IFNbeta_T24, between_group_LPS-IFNbeta_T0, between_group_LPS-IFNbeta_T2, between_group_LPS-IFNbeta_T4, between_group_LPS-IFNbeta_T6, between_group_LPS-IFNbeta_T8, between_group_LPS-IFNbeta_T24, between_group_untreated-IFNbeta_T0, between_group_untreated-IFNbeta_T8, between_group_untreated-IFNbeta_T24, between_group_IFNbeta-IFNgamma_T0, between_group_IFNbeta-IFNgamma_T2, between_group_IFNbeta-IFNgamma_T4, between_group_IFNbeta-IFNgamma_T6, between_group_IFNbeta-IFNgamma_T8, between_group_IFNbeta-IFNgamma_T24, between_group_LPS-IFNgamma_T0, between_group_LPS-IFNgamma_T2, between_group_LPS-IFNgamma_T4, between_group_LPS-IFNgamma_T6, between_group_LPS-IFNgamma_T8, between_group_LPS-IFNgamma_T24, between_group_untreated-IFNgamma_T0, between_group_untreated-IFNgamma_T8, between_group_untreated-IFNgamma_T24, between_group_IFNbeta-LPS_T0, between_group_IFNbeta-LPS_T2, between_group_IFNbeta-LPS_T4, between_group_IFNbeta-LPS_T6, between_group_IFNbeta-LPS_T8, between_group_IFNbeta-LPS_T24, between_group_IFNgamma-LPS_T0, between_group_IFNgamma-LPS_T2, between_group_IFNgamma-LPS_T4, between_group_IFNgamma-LPS_T6, between_group_IFNgamma-LPS_T8, between_group_IFNgamma-LPS_T24, between_group_untreated-LPS_T0, between_group_untreated-LPS_T8, between_group_untreated-LPS_T24, between_group_IFNbeta-untreated_T0, between_group_IFNbeta-untreated_T8, between_group_IFNbeta-untreated_T24, between_group_IFNgamma-untreated_T0, between_group_IFNgamma-untreated_T8, between_group_IFNgamma-untreated_T24, between_group_LPS-untreated_T0, between_group_LPS-untreated_T8, between_group_LPS-untreated_T24, between_time_IFNbeta_t2-t0, between_time_IFNbeta_t4-t0, between_time_IFNbeta_t6-t0, between_time_IFNbeta_t8-t0, between_time_IFNbeta_t24-t0, between_time_IFNbeta_t4-t2, between_time_IFNbeta_t6-t2, between_time_IFNbeta_t8-t2, between_time_IFNbeta_t24-t2, between_time_IFNbeta_t6-t4, between_time_IFNbeta_t8-t4, between_time_IFNbeta_t24-t4, between_time_IFNbeta_t8-t6, between_time_IFNbeta_t24-t6, between_time_IFNbeta_t24-t8, between_time_IFNgamma_t2-t0, between_time_IFNgamma_t4-t0, between_time_IFNgamma_t6-t0, between_time_IFNgamma_t8-t0, between_time_IFNgamma_t24-t0, between_time_IFNgamma_t4-t2, between_time_IFNgamma_t6-t2, between_time_IFNgamma_t8-t2, between_time_IFNgamma_t24-t2, between_time_IFNgamma_t6-t4, between_time_IFNgamma_t8-t4, between_time_IFNgamma_t24-t4, between_time_IFNgamma_t8-t6, between_time_IFNgamma_t24-t6, between_time_IFNgamma_t24-t8, between_time_LPS_t2-t0, between_time_LPS_t4-t0, between_time_LPS_t6-t0, between_time_LPS_t8-t0, between_time_LPS_t24-t0, between_time_LPS_t4-t2, between_time_LPS_t6-t2, between_time_LPS_t8-t2, between_time_LPS_t24-t2, between_time_LPS_t6-t4, between_time_LPS_t8-t4, between_time_LPS_t24-t4, between_time_LPS_t8-t6, between_time_LPS_t24-t6, between_time_LPS_t24-t8, between_time_untreated_t8-t0, between_time_untreated_t24-t0, between_time_untreated_t24-t8
 #>  Consider naming your enrich_results starting with one of the following prefixes: 'topGO_', 'clusterProfiler_','GeneTonic_', 'DAVID_','gsea_', 'fgsea_', 'enrichr_', 'gPro_',followed by the contrast name
 #> Found 66 gene sets in `enrichResult` object, of which 6 are significant.
 #> Converting for usage within the DeeDeeExperiment framework...
-#> Warning in DeeDeeExperiment::DeeDeeExperiment(sce = sce, de_results = de_flat, : Could not match FEA 'clusterProfiler_GO_modules_MF_2' to any DE contrast.
+#> Warning in DeeDeeExperiment::DeeDeeExperiment(sce = tide$se, de_results = de_flat, : Could not match FEA 'clusterProfiler_GO_modules_MF_2' to any DE contrast.
 #> Available DE results: between_group_IFNgamma-IFNbeta_T0, between_group_IFNgamma-IFNbeta_T2, between_group_IFNgamma-IFNbeta_T4, between_group_IFNgamma-IFNbeta_T6, between_group_IFNgamma-IFNbeta_T8, between_group_IFNgamma-IFNbeta_T24, between_group_LPS-IFNbeta_T0, between_group_LPS-IFNbeta_T2, between_group_LPS-IFNbeta_T4, between_group_LPS-IFNbeta_T6, between_group_LPS-IFNbeta_T8, between_group_LPS-IFNbeta_T24, between_group_untreated-IFNbeta_T0, between_group_untreated-IFNbeta_T8, between_group_untreated-IFNbeta_T24, between_group_IFNbeta-IFNgamma_T0, between_group_IFNbeta-IFNgamma_T2, between_group_IFNbeta-IFNgamma_T4, between_group_IFNbeta-IFNgamma_T6, between_group_IFNbeta-IFNgamma_T8, between_group_IFNbeta-IFNgamma_T24, between_group_LPS-IFNgamma_T0, between_group_LPS-IFNgamma_T2, between_group_LPS-IFNgamma_T4, between_group_LPS-IFNgamma_T6, between_group_LPS-IFNgamma_T8, between_group_LPS-IFNgamma_T24, between_group_untreated-IFNgamma_T0, between_group_untreated-IFNgamma_T8, between_group_untreated-IFNgamma_T24, between_group_IFNbeta-LPS_T0, between_group_IFNbeta-LPS_T2, between_group_IFNbeta-LPS_T4, between_group_IFNbeta-LPS_T6, between_group_IFNbeta-LPS_T8, between_group_IFNbeta-LPS_T24, between_group_IFNgamma-LPS_T0, between_group_IFNgamma-LPS_T2, between_group_IFNgamma-LPS_T4, between_group_IFNgamma-LPS_T6, between_group_IFNgamma-LPS_T8, between_group_IFNgamma-LPS_T24, between_group_untreated-LPS_T0, between_group_untreated-LPS_T8, between_group_untreated-LPS_T24, between_group_IFNbeta-untreated_T0, between_group_IFNbeta-untreated_T8, between_group_IFNbeta-untreated_T24, between_group_IFNgamma-untreated_T0, between_group_IFNgamma-untreated_T8, between_group_IFNgamma-untreated_T24, between_group_LPS-untreated_T0, between_group_LPS-untreated_T8, between_group_LPS-untreated_T24, between_time_IFNbeta_t2-t0, between_time_IFNbeta_t4-t0, between_time_IFNbeta_t6-t0, between_time_IFNbeta_t8-t0, between_time_IFNbeta_t24-t0, between_time_IFNbeta_t4-t2, between_time_IFNbeta_t6-t2, between_time_IFNbeta_t8-t2, between_time_IFNbeta_t24-t2, between_time_IFNbeta_t6-t4, between_time_IFNbeta_t8-t4, between_time_IFNbeta_t24-t4, between_time_IFNbeta_t8-t6, between_time_IFNbeta_t24-t6, between_time_IFNbeta_t24-t8, between_time_IFNgamma_t2-t0, between_time_IFNgamma_t4-t0, between_time_IFNgamma_t6-t0, between_time_IFNgamma_t8-t0, between_time_IFNgamma_t24-t0, between_time_IFNgamma_t4-t2, between_time_IFNgamma_t6-t2, between_time_IFNgamma_t8-t2, between_time_IFNgamma_t24-t2, between_time_IFNgamma_t6-t4, between_time_IFNgamma_t8-t4, between_time_IFNgamma_t24-t4, between_time_IFNgamma_t8-t6, between_time_IFNgamma_t24-t6, between_time_IFNgamma_t24-t8, between_time_LPS_t2-t0, between_time_LPS_t4-t0, between_time_LPS_t6-t0, between_time_LPS_t8-t0, between_time_LPS_t24-t0, between_time_LPS_t4-t2, between_time_LPS_t6-t2, between_time_LPS_t8-t2, between_time_LPS_t24-t2, between_time_LPS_t6-t4, between_time_LPS_t8-t4, between_time_LPS_t24-t4, between_time_LPS_t8-t6, between_time_LPS_t24-t6, between_time_LPS_t24-t8, between_time_untreated_t8-t0, between_time_untreated_t24-t0, between_time_untreated_t24-t8
 #>  Consider naming your enrich_results starting with one of the following prefixes: 'topGO_', 'clusterProfiler_','GeneTonic_', 'DAVID_','gsea_', 'fgsea_', 'enrichr_', 'gPro_',followed by the contrast name
-#> Found 66 gene sets in `enrichResult` object, of which 0 are significant.
+#> Found 58 gene sets in `enrichResult` object, of which 0 are significant.
 #> Converting for usage within the DeeDeeExperiment framework...
-#> Warning in DeeDeeExperiment::DeeDeeExperiment(sce = sce, de_results = de_flat, : Could not match FEA 'clusterProfiler_GO_modules_MF_3' to any DE contrast.
+#> Warning in DeeDeeExperiment::DeeDeeExperiment(sce = tide$se, de_results = de_flat, : Could not match FEA 'clusterProfiler_GO_modules_MF_3' to any DE contrast.
 #> Available DE results: between_group_IFNgamma-IFNbeta_T0, between_group_IFNgamma-IFNbeta_T2, between_group_IFNgamma-IFNbeta_T4, between_group_IFNgamma-IFNbeta_T6, between_group_IFNgamma-IFNbeta_T8, between_group_IFNgamma-IFNbeta_T24, between_group_LPS-IFNbeta_T0, between_group_LPS-IFNbeta_T2, between_group_LPS-IFNbeta_T4, between_group_LPS-IFNbeta_T6, between_group_LPS-IFNbeta_T8, between_group_LPS-IFNbeta_T24, between_group_untreated-IFNbeta_T0, between_group_untreated-IFNbeta_T8, between_group_untreated-IFNbeta_T24, between_group_IFNbeta-IFNgamma_T0, between_group_IFNbeta-IFNgamma_T2, between_group_IFNbeta-IFNgamma_T4, between_group_IFNbeta-IFNgamma_T6, between_group_IFNbeta-IFNgamma_T8, between_group_IFNbeta-IFNgamma_T24, between_group_LPS-IFNgamma_T0, between_group_LPS-IFNgamma_T2, between_group_LPS-IFNgamma_T4, between_group_LPS-IFNgamma_T6, between_group_LPS-IFNgamma_T8, between_group_LPS-IFNgamma_T24, between_group_untreated-IFNgamma_T0, between_group_untreated-IFNgamma_T8, between_group_untreated-IFNgamma_T24, between_group_IFNbeta-LPS_T0, between_group_IFNbeta-LPS_T2, between_group_IFNbeta-LPS_T4, between_group_IFNbeta-LPS_T6, between_group_IFNbeta-LPS_T8, between_group_IFNbeta-LPS_T24, between_group_IFNgamma-LPS_T0, between_group_IFNgamma-LPS_T2, between_group_IFNgamma-LPS_T4, between_group_IFNgamma-LPS_T6, between_group_IFNgamma-LPS_T8, between_group_IFNgamma-LPS_T24, between_group_untreated-LPS_T0, between_group_untreated-LPS_T8, between_group_untreated-LPS_T24, between_group_IFNbeta-untreated_T0, between_group_IFNbeta-untreated_T8, between_group_IFNbeta-untreated_T24, between_group_IFNgamma-untreated_T0, between_group_IFNgamma-untreated_T8, between_group_IFNgamma-untreated_T24, between_group_LPS-untreated_T0, between_group_LPS-untreated_T8, between_group_LPS-untreated_T24, between_time_IFNbeta_t2-t0, between_time_IFNbeta_t4-t0, between_time_IFNbeta_t6-t0, between_time_IFNbeta_t8-t0, between_time_IFNbeta_t24-t0, between_time_IFNbeta_t4-t2, between_time_IFNbeta_t6-t2, between_time_IFNbeta_t8-t2, between_time_IFNbeta_t24-t2, between_time_IFNbeta_t6-t4, between_time_IFNbeta_t8-t4, between_time_IFNbeta_t24-t4, between_time_IFNbeta_t8-t6, between_time_IFNbeta_t24-t6, between_time_IFNbeta_t24-t8, between_time_IFNgamma_t2-t0, between_time_IFNgamma_t4-t0, between_time_IFNgamma_t6-t0, between_time_IFNgamma_t8-t0, between_time_IFNgamma_t24-t0, between_time_IFNgamma_t4-t2, between_time_IFNgamma_t6-t2, between_time_IFNgamma_t8-t2, between_time_IFNgamma_t24-t2, between_time_IFNgamma_t6-t4, between_time_IFNgamma_t8-t4, between_time_IFNgamma_t24-t4, between_time_IFNgamma_t8-t6, between_time_IFNgamma_t24-t6, between_time_IFNgamma_t24-t8, between_time_LPS_t2-t0, between_time_LPS_t4-t0, between_time_LPS_t6-t0, between_time_LPS_t8-t0, between_time_LPS_t24-t0, between_time_LPS_t4-t2, between_time_LPS_t6-t2, between_time_LPS_t8-t2, between_time_LPS_t24-t2, between_time_LPS_t6-t4, between_time_LPS_t8-t4, between_time_LPS_t24-t4, between_time_LPS_t8-t6, between_time_LPS_t24-t6, between_time_LPS_t24-t8, between_time_untreated_t8-t0, between_time_untreated_t24-t0, between_time_untreated_t24-t8
 #>  Consider naming your enrich_results starting with one of the following prefixes: 'topGO_', 'clusterProfiler_','GeneTonic_', 'DAVID_','gsea_', 'fgsea_', 'enrichr_', 'gPro_',followed by the contrast name
-#> Found 66 gene sets in `enrichResult` object, of which 0 are significant.
+#> Found 55 gene sets in `enrichResult` object, of which 0 are significant.
 #> Converting for usage within the DeeDeeExperiment framework...
-#> Warning in DeeDeeExperiment::DeeDeeExperiment(sce = sce, de_results = de_flat, : Could not match FEA 'clusterProfiler_GO_modules_MF_4' to any DE contrast.
+#> Warning in DeeDeeExperiment::DeeDeeExperiment(sce = tide$se, de_results = de_flat, : Could not match FEA 'clusterProfiler_GO_modules_MF_4' to any DE contrast.
 #> Available DE results: between_group_IFNgamma-IFNbeta_T0, between_group_IFNgamma-IFNbeta_T2, between_group_IFNgamma-IFNbeta_T4, between_group_IFNgamma-IFNbeta_T6, between_group_IFNgamma-IFNbeta_T8, between_group_IFNgamma-IFNbeta_T24, between_group_LPS-IFNbeta_T0, between_group_LPS-IFNbeta_T2, between_group_LPS-IFNbeta_T4, between_group_LPS-IFNbeta_T6, between_group_LPS-IFNbeta_T8, between_group_LPS-IFNbeta_T24, between_group_untreated-IFNbeta_T0, between_group_untreated-IFNbeta_T8, between_group_untreated-IFNbeta_T24, between_group_IFNbeta-IFNgamma_T0, between_group_IFNbeta-IFNgamma_T2, between_group_IFNbeta-IFNgamma_T4, between_group_IFNbeta-IFNgamma_T6, between_group_IFNbeta-IFNgamma_T8, between_group_IFNbeta-IFNgamma_T24, between_group_LPS-IFNgamma_T0, between_group_LPS-IFNgamma_T2, between_group_LPS-IFNgamma_T4, between_group_LPS-IFNgamma_T6, between_group_LPS-IFNgamma_T8, between_group_LPS-IFNgamma_T24, between_group_untreated-IFNgamma_T0, between_group_untreated-IFNgamma_T8, between_group_untreated-IFNgamma_T24, between_group_IFNbeta-LPS_T0, between_group_IFNbeta-LPS_T2, between_group_IFNbeta-LPS_T4, between_group_IFNbeta-LPS_T6, between_group_IFNbeta-LPS_T8, between_group_IFNbeta-LPS_T24, between_group_IFNgamma-LPS_T0, between_group_IFNgamma-LPS_T2, between_group_IFNgamma-LPS_T4, between_group_IFNgamma-LPS_T6, between_group_IFNgamma-LPS_T8, between_group_IFNgamma-LPS_T24, between_group_untreated-LPS_T0, between_group_untreated-LPS_T8, between_group_untreated-LPS_T24, between_group_IFNbeta-untreated_T0, between_group_IFNbeta-untreated_T8, between_group_IFNbeta-untreated_T24, between_group_IFNgamma-untreated_T0, between_group_IFNgamma-untreated_T8, between_group_IFNgamma-untreated_T24, between_group_LPS-untreated_T0, between_group_LPS-untreated_T8, between_group_LPS-untreated_T24, between_time_IFNbeta_t2-t0, between_time_IFNbeta_t4-t0, between_time_IFNbeta_t6-t0, between_time_IFNbeta_t8-t0, between_time_IFNbeta_t24-t0, between_time_IFNbeta_t4-t2, between_time_IFNbeta_t6-t2, between_time_IFNbeta_t8-t2, between_time_IFNbeta_t24-t2, between_time_IFNbeta_t6-t4, between_time_IFNbeta_t8-t4, between_time_IFNbeta_t24-t4, between_time_IFNbeta_t8-t6, between_time_IFNbeta_t24-t6, between_time_IFNbeta_t24-t8, between_time_IFNgamma_t2-t0, between_time_IFNgamma_t4-t0, between_time_IFNgamma_t6-t0, between_time_IFNgamma_t8-t0, between_time_IFNgamma_t24-t0, between_time_IFNgamma_t4-t2, between_time_IFNgamma_t6-t2, between_time_IFNgamma_t8-t2, between_time_IFNgamma_t24-t2, between_time_IFNgamma_t6-t4, between_time_IFNgamma_t8-t4, between_time_IFNgamma_t24-t4, between_time_IFNgamma_t8-t6, between_time_IFNgamma_t24-t6, between_time_IFNgamma_t24-t8, between_time_LPS_t2-t0, between_time_LPS_t4-t0, between_time_LPS_t6-t0, between_time_LPS_t8-t0, between_time_LPS_t24-t0, between_time_LPS_t4-t2, between_time_LPS_t6-t2, between_time_LPS_t8-t2, between_time_LPS_t24-t2, between_time_LPS_t6-t4, between_time_LPS_t8-t4, between_time_LPS_t24-t4, between_time_LPS_t8-t6, between_time_LPS_t24-t6, between_time_LPS_t24-t8, between_time_untreated_t8-t0, between_time_untreated_t24-t0, between_time_untreated_t24-t8
 #>  Consider naming your enrich_results starting with one of the following prefixes: 'topGO_', 'clusterProfiler_','GeneTonic_', 'DAVID_','gsea_', 'fgsea_', 'enrichr_', 'gPro_',followed by the contrast name
-#> Found 66 gene sets in `enrichResult` object, of which 45 are significant.
+#> Found 58 gene sets in `enrichResult` object, of which 56 are significant.
 #> Converting for usage within the DeeDeeExperiment framework...
-#> Warning in DeeDeeExperiment::DeeDeeExperiment(sce = sce, de_results = de_flat, : Could not match FEA 'clusterProfiler_GO_modules_MF_5' to any DE contrast.
+#> Warning in DeeDeeExperiment::DeeDeeExperiment(sce = tide$se, de_results = de_flat, : Could not match FEA 'clusterProfiler_GO_modules_MF_5' to any DE contrast.
 #> Available DE results: between_group_IFNgamma-IFNbeta_T0, between_group_IFNgamma-IFNbeta_T2, between_group_IFNgamma-IFNbeta_T4, between_group_IFNgamma-IFNbeta_T6, between_group_IFNgamma-IFNbeta_T8, between_group_IFNgamma-IFNbeta_T24, between_group_LPS-IFNbeta_T0, between_group_LPS-IFNbeta_T2, between_group_LPS-IFNbeta_T4, between_group_LPS-IFNbeta_T6, between_group_LPS-IFNbeta_T8, between_group_LPS-IFNbeta_T24, between_group_untreated-IFNbeta_T0, between_group_untreated-IFNbeta_T8, between_group_untreated-IFNbeta_T24, between_group_IFNbeta-IFNgamma_T0, between_group_IFNbeta-IFNgamma_T2, between_group_IFNbeta-IFNgamma_T4, between_group_IFNbeta-IFNgamma_T6, between_group_IFNbeta-IFNgamma_T8, between_group_IFNbeta-IFNgamma_T24, between_group_LPS-IFNgamma_T0, between_group_LPS-IFNgamma_T2, between_group_LPS-IFNgamma_T4, between_group_LPS-IFNgamma_T6, between_group_LPS-IFNgamma_T8, between_group_LPS-IFNgamma_T24, between_group_untreated-IFNgamma_T0, between_group_untreated-IFNgamma_T8, between_group_untreated-IFNgamma_T24, between_group_IFNbeta-LPS_T0, between_group_IFNbeta-LPS_T2, between_group_IFNbeta-LPS_T4, between_group_IFNbeta-LPS_T6, between_group_IFNbeta-LPS_T8, between_group_IFNbeta-LPS_T24, between_group_IFNgamma-LPS_T0, between_group_IFNgamma-LPS_T2, between_group_IFNgamma-LPS_T4, between_group_IFNgamma-LPS_T6, between_group_IFNgamma-LPS_T8, between_group_IFNgamma-LPS_T24, between_group_untreated-LPS_T0, between_group_untreated-LPS_T8, between_group_untreated-LPS_T24, between_group_IFNbeta-untreated_T0, between_group_IFNbeta-untreated_T8, between_group_IFNbeta-untreated_T24, between_group_IFNgamma-untreated_T0, between_group_IFNgamma-untreated_T8, between_group_IFNgamma-untreated_T24, between_group_LPS-untreated_T0, between_group_LPS-untreated_T8, between_group_LPS-untreated_T24, between_time_IFNbeta_t2-t0, between_time_IFNbeta_t4-t0, between_time_IFNbeta_t6-t0, between_time_IFNbeta_t8-t0, between_time_IFNbeta_t24-t0, between_time_IFNbeta_t4-t2, between_time_IFNbeta_t6-t2, between_time_IFNbeta_t8-t2, between_time_IFNbeta_t24-t2, between_time_IFNbeta_t6-t4, between_time_IFNbeta_t8-t4, between_time_IFNbeta_t24-t4, between_time_IFNbeta_t8-t6, between_time_IFNbeta_t24-t6, between_time_IFNbeta_t24-t8, between_time_IFNgamma_t2-t0, between_time_IFNgamma_t4-t0, between_time_IFNgamma_t6-t0, between_time_IFNgamma_t8-t0, between_time_IFNgamma_t24-t0, between_time_IFNgamma_t4-t2, between_time_IFNgamma_t6-t2, between_time_IFNgamma_t8-t2, between_time_IFNgamma_t24-t2, between_time_IFNgamma_t6-t4, between_time_IFNgamma_t8-t4, between_time_IFNgamma_t24-t4, between_time_IFNgamma_t8-t6, between_time_IFNgamma_t24-t6, between_time_IFNgamma_t24-t8, between_time_LPS_t2-t0, between_time_LPS_t4-t0, between_time_LPS_t6-t0, between_time_LPS_t8-t0, between_time_LPS_t24-t0, between_time_LPS_t4-t2, between_time_LPS_t6-t2, between_time_LPS_t8-t2, between_time_LPS_t24-t2, between_time_LPS_t6-t4, between_time_LPS_t8-t4, between_time_LPS_t24-t4, between_time_LPS_t8-t6, between_time_LPS_t24-t6, between_time_LPS_t24-t8, between_time_untreated_t8-t0, between_time_untreated_t24-t0, between_time_untreated_t24-t8
 #>  Consider naming your enrich_results starting with one of the following prefixes: 'topGO_', 'clusterProfiler_','GeneTonic_', 'DAVID_','gsea_', 'fgsea_', 'enrichr_', 'gPro_',followed by the contrast name
-#> Found 66 gene sets in `enrichResult` object, of which 45 are significant.
+#> Found 59 gene sets in `enrichResult` object, of which 52 are significant.
 #> Converting for usage within the DeeDeeExperiment framework...
-#> Warning in DeeDeeExperiment::DeeDeeExperiment(sce = sce, de_results = de_flat, : Could not match FEA 'clusterProfiler_GO_modules_CC_1' to any DE contrast.
+#> Warning in DeeDeeExperiment::DeeDeeExperiment(sce = tide$se, de_results = de_flat, : Could not match FEA 'clusterProfiler_GO_modules_CC_1' to any DE contrast.
 #> Available DE results: between_group_IFNgamma-IFNbeta_T0, between_group_IFNgamma-IFNbeta_T2, between_group_IFNgamma-IFNbeta_T4, between_group_IFNgamma-IFNbeta_T6, between_group_IFNgamma-IFNbeta_T8, between_group_IFNgamma-IFNbeta_T24, between_group_LPS-IFNbeta_T0, between_group_LPS-IFNbeta_T2, between_group_LPS-IFNbeta_T4, between_group_LPS-IFNbeta_T6, between_group_LPS-IFNbeta_T8, between_group_LPS-IFNbeta_T24, between_group_untreated-IFNbeta_T0, between_group_untreated-IFNbeta_T8, between_group_untreated-IFNbeta_T24, between_group_IFNbeta-IFNgamma_T0, between_group_IFNbeta-IFNgamma_T2, between_group_IFNbeta-IFNgamma_T4, between_group_IFNbeta-IFNgamma_T6, between_group_IFNbeta-IFNgamma_T8, between_group_IFNbeta-IFNgamma_T24, between_group_LPS-IFNgamma_T0, between_group_LPS-IFNgamma_T2, between_group_LPS-IFNgamma_T4, between_group_LPS-IFNgamma_T6, between_group_LPS-IFNgamma_T8, between_group_LPS-IFNgamma_T24, between_group_untreated-IFNgamma_T0, between_group_untreated-IFNgamma_T8, between_group_untreated-IFNgamma_T24, between_group_IFNbeta-LPS_T0, between_group_IFNbeta-LPS_T2, between_group_IFNbeta-LPS_T4, between_group_IFNbeta-LPS_T6, between_group_IFNbeta-LPS_T8, between_group_IFNbeta-LPS_T24, between_group_IFNgamma-LPS_T0, between_group_IFNgamma-LPS_T2, between_group_IFNgamma-LPS_T4, between_group_IFNgamma-LPS_T6, between_group_IFNgamma-LPS_T8, between_group_IFNgamma-LPS_T24, between_group_untreated-LPS_T0, between_group_untreated-LPS_T8, between_group_untreated-LPS_T24, between_group_IFNbeta-untreated_T0, between_group_IFNbeta-untreated_T8, between_group_IFNbeta-untreated_T24, between_group_IFNgamma-untreated_T0, between_group_IFNgamma-untreated_T8, between_group_IFNgamma-untreated_T24, between_group_LPS-untreated_T0, between_group_LPS-untreated_T8, between_group_LPS-untreated_T24, between_time_IFNbeta_t2-t0, between_time_IFNbeta_t4-t0, between_time_IFNbeta_t6-t0, between_time_IFNbeta_t8-t0, between_time_IFNbeta_t24-t0, between_time_IFNbeta_t4-t2, between_time_IFNbeta_t6-t2, between_time_IFNbeta_t8-t2, between_time_IFNbeta_t24-t2, between_time_IFNbeta_t6-t4, between_time_IFNbeta_t8-t4, between_time_IFNbeta_t24-t4, between_time_IFNbeta_t8-t6, between_time_IFNbeta_t24-t6, between_time_IFNbeta_t24-t8, between_time_IFNgamma_t2-t0, between_time_IFNgamma_t4-t0, between_time_IFNgamma_t6-t0, between_time_IFNgamma_t8-t0, between_time_IFNgamma_t24-t0, between_time_IFNgamma_t4-t2, between_time_IFNgamma_t6-t2, between_time_IFNgamma_t8-t2, between_time_IFNgamma_t24-t2, between_time_IFNgamma_t6-t4, between_time_IFNgamma_t8-t4, between_time_IFNgamma_t24-t4, between_time_IFNgamma_t8-t6, between_time_IFNgamma_t24-t6, between_time_IFNgamma_t24-t8, between_time_LPS_t2-t0, between_time_LPS_t4-t0, between_time_LPS_t6-t0, between_time_LPS_t8-t0, between_time_LPS_t24-t0, between_time_LPS_t4-t2, between_time_LPS_t6-t2, between_time_LPS_t8-t2, between_time_LPS_t24-t2, between_time_LPS_t6-t4, between_time_LPS_t8-t4, between_time_LPS_t24-t4, between_time_LPS_t8-t6, between_time_LPS_t24-t6, between_time_LPS_t24-t8, between_time_untreated_t8-t0, between_time_untreated_t24-t0, between_time_untreated_t24-t8
 #>  Consider naming your enrich_results starting with one of the following prefixes: 'topGO_', 'clusterProfiler_','GeneTonic_', 'DAVID_','gsea_', 'fgsea_', 'enrichr_', 'gPro_',followed by the contrast name
-#> Found 75 gene sets in `enrichResult` object, of which 21 are significant.
+#> Found 74 gene sets in `enrichResult` object, of which 21 are significant.
 #> Converting for usage within the DeeDeeExperiment framework...
-#> Warning in DeeDeeExperiment::DeeDeeExperiment(sce = sce, de_results = de_flat, : Could not match FEA 'clusterProfiler_GO_modules_CC_2' to any DE contrast.
+#> Warning in DeeDeeExperiment::DeeDeeExperiment(sce = tide$se, de_results = de_flat, : Could not match FEA 'clusterProfiler_GO_modules_CC_2' to any DE contrast.
 #> Available DE results: between_group_IFNgamma-IFNbeta_T0, between_group_IFNgamma-IFNbeta_T2, between_group_IFNgamma-IFNbeta_T4, between_group_IFNgamma-IFNbeta_T6, between_group_IFNgamma-IFNbeta_T8, between_group_IFNgamma-IFNbeta_T24, between_group_LPS-IFNbeta_T0, between_group_LPS-IFNbeta_T2, between_group_LPS-IFNbeta_T4, between_group_LPS-IFNbeta_T6, between_group_LPS-IFNbeta_T8, between_group_LPS-IFNbeta_T24, between_group_untreated-IFNbeta_T0, between_group_untreated-IFNbeta_T8, between_group_untreated-IFNbeta_T24, between_group_IFNbeta-IFNgamma_T0, between_group_IFNbeta-IFNgamma_T2, between_group_IFNbeta-IFNgamma_T4, between_group_IFNbeta-IFNgamma_T6, between_group_IFNbeta-IFNgamma_T8, between_group_IFNbeta-IFNgamma_T24, between_group_LPS-IFNgamma_T0, between_group_LPS-IFNgamma_T2, between_group_LPS-IFNgamma_T4, between_group_LPS-IFNgamma_T6, between_group_LPS-IFNgamma_T8, between_group_LPS-IFNgamma_T24, between_group_untreated-IFNgamma_T0, between_group_untreated-IFNgamma_T8, between_group_untreated-IFNgamma_T24, between_group_IFNbeta-LPS_T0, between_group_IFNbeta-LPS_T2, between_group_IFNbeta-LPS_T4, between_group_IFNbeta-LPS_T6, between_group_IFNbeta-LPS_T8, between_group_IFNbeta-LPS_T24, between_group_IFNgamma-LPS_T0, between_group_IFNgamma-LPS_T2, between_group_IFNgamma-LPS_T4, between_group_IFNgamma-LPS_T6, between_group_IFNgamma-LPS_T8, between_group_IFNgamma-LPS_T24, between_group_untreated-LPS_T0, between_group_untreated-LPS_T8, between_group_untreated-LPS_T24, between_group_IFNbeta-untreated_T0, between_group_IFNbeta-untreated_T8, between_group_IFNbeta-untreated_T24, between_group_IFNgamma-untreated_T0, between_group_IFNgamma-untreated_T8, between_group_IFNgamma-untreated_T24, between_group_LPS-untreated_T0, between_group_LPS-untreated_T8, between_group_LPS-untreated_T24, between_time_IFNbeta_t2-t0, between_time_IFNbeta_t4-t0, between_time_IFNbeta_t6-t0, between_time_IFNbeta_t8-t0, between_time_IFNbeta_t24-t0, between_time_IFNbeta_t4-t2, between_time_IFNbeta_t6-t2, between_time_IFNbeta_t8-t2, between_time_IFNbeta_t24-t2, between_time_IFNbeta_t6-t4, between_time_IFNbeta_t8-t4, between_time_IFNbeta_t24-t4, between_time_IFNbeta_t8-t6, between_time_IFNbeta_t24-t6, between_time_IFNbeta_t24-t8, between_time_IFNgamma_t2-t0, between_time_IFNgamma_t4-t0, between_time_IFNgamma_t6-t0, between_time_IFNgamma_t8-t0, between_time_IFNgamma_t24-t0, between_time_IFNgamma_t4-t2, between_time_IFNgamma_t6-t2, between_time_IFNgamma_t8-t2, between_time_IFNgamma_t24-t2, between_time_IFNgamma_t6-t4, between_time_IFNgamma_t8-t4, between_time_IFNgamma_t24-t4, between_time_IFNgamma_t8-t6, between_time_IFNgamma_t24-t6, between_time_IFNgamma_t24-t8, between_time_LPS_t2-t0, between_time_LPS_t4-t0, between_time_LPS_t6-t0, between_time_LPS_t8-t0, between_time_LPS_t24-t0, between_time_LPS_t4-t2, between_time_LPS_t6-t2, between_time_LPS_t8-t2, between_time_LPS_t24-t2, between_time_LPS_t6-t4, between_time_LPS_t8-t4, between_time_LPS_t24-t4, between_time_LPS_t8-t6, between_time_LPS_t24-t6, between_time_LPS_t24-t8, between_time_untreated_t8-t0, between_time_untreated_t24-t0, between_time_untreated_t24-t8
 #>  Consider naming your enrich_results starting with one of the following prefixes: 'topGO_', 'clusterProfiler_','GeneTonic_', 'DAVID_','gsea_', 'fgsea_', 'enrichr_', 'gPro_',followed by the contrast name
-#> Found 75 gene sets in `enrichResult` object, of which 3 are significant.
+#> Found 66 gene sets in `enrichResult` object, of which 3 are significant.
 #> Converting for usage within the DeeDeeExperiment framework...
-#> Warning in DeeDeeExperiment::DeeDeeExperiment(sce = sce, de_results = de_flat, : Could not match FEA 'clusterProfiler_GO_modules_CC_3' to any DE contrast.
+#> Warning in DeeDeeExperiment::DeeDeeExperiment(sce = tide$se, de_results = de_flat, : Could not match FEA 'clusterProfiler_GO_modules_CC_3' to any DE contrast.
 #> Available DE results: between_group_IFNgamma-IFNbeta_T0, between_group_IFNgamma-IFNbeta_T2, between_group_IFNgamma-IFNbeta_T4, between_group_IFNgamma-IFNbeta_T6, between_group_IFNgamma-IFNbeta_T8, between_group_IFNgamma-IFNbeta_T24, between_group_LPS-IFNbeta_T0, between_group_LPS-IFNbeta_T2, between_group_LPS-IFNbeta_T4, between_group_LPS-IFNbeta_T6, between_group_LPS-IFNbeta_T8, between_group_LPS-IFNbeta_T24, between_group_untreated-IFNbeta_T0, between_group_untreated-IFNbeta_T8, between_group_untreated-IFNbeta_T24, between_group_IFNbeta-IFNgamma_T0, between_group_IFNbeta-IFNgamma_T2, between_group_IFNbeta-IFNgamma_T4, between_group_IFNbeta-IFNgamma_T6, between_group_IFNbeta-IFNgamma_T8, between_group_IFNbeta-IFNgamma_T24, between_group_LPS-IFNgamma_T0, between_group_LPS-IFNgamma_T2, between_group_LPS-IFNgamma_T4, between_group_LPS-IFNgamma_T6, between_group_LPS-IFNgamma_T8, between_group_LPS-IFNgamma_T24, between_group_untreated-IFNgamma_T0, between_group_untreated-IFNgamma_T8, between_group_untreated-IFNgamma_T24, between_group_IFNbeta-LPS_T0, between_group_IFNbeta-LPS_T2, between_group_IFNbeta-LPS_T4, between_group_IFNbeta-LPS_T6, between_group_IFNbeta-LPS_T8, between_group_IFNbeta-LPS_T24, between_group_IFNgamma-LPS_T0, between_group_IFNgamma-LPS_T2, between_group_IFNgamma-LPS_T4, between_group_IFNgamma-LPS_T6, between_group_IFNgamma-LPS_T8, between_group_IFNgamma-LPS_T24, between_group_untreated-LPS_T0, between_group_untreated-LPS_T8, between_group_untreated-LPS_T24, between_group_IFNbeta-untreated_T0, between_group_IFNbeta-untreated_T8, between_group_IFNbeta-untreated_T24, between_group_IFNgamma-untreated_T0, between_group_IFNgamma-untreated_T8, between_group_IFNgamma-untreated_T24, between_group_LPS-untreated_T0, between_group_LPS-untreated_T8, between_group_LPS-untreated_T24, between_time_IFNbeta_t2-t0, between_time_IFNbeta_t4-t0, between_time_IFNbeta_t6-t0, between_time_IFNbeta_t8-t0, between_time_IFNbeta_t24-t0, between_time_IFNbeta_t4-t2, between_time_IFNbeta_t6-t2, between_time_IFNbeta_t8-t2, between_time_IFNbeta_t24-t2, between_time_IFNbeta_t6-t4, between_time_IFNbeta_t8-t4, between_time_IFNbeta_t24-t4, between_time_IFNbeta_t8-t6, between_time_IFNbeta_t24-t6, between_time_IFNbeta_t24-t8, between_time_IFNgamma_t2-t0, between_time_IFNgamma_t4-t0, between_time_IFNgamma_t6-t0, between_time_IFNgamma_t8-t0, between_time_IFNgamma_t24-t0, between_time_IFNgamma_t4-t2, between_time_IFNgamma_t6-t2, between_time_IFNgamma_t8-t2, between_time_IFNgamma_t24-t2, between_time_IFNgamma_t6-t4, between_time_IFNgamma_t8-t4, between_time_IFNgamma_t24-t4, between_time_IFNgamma_t8-t6, between_time_IFNgamma_t24-t6, between_time_IFNgamma_t24-t8, between_time_LPS_t2-t0, between_time_LPS_t4-t0, between_time_LPS_t6-t0, between_time_LPS_t8-t0, between_time_LPS_t24-t0, between_time_LPS_t4-t2, between_time_LPS_t6-t2, between_time_LPS_t8-t2, between_time_LPS_t24-t2, between_time_LPS_t6-t4, between_time_LPS_t8-t4, between_time_LPS_t24-t4, between_time_LPS_t8-t6, between_time_LPS_t24-t6, between_time_LPS_t24-t8, between_time_untreated_t8-t0, between_time_untreated_t24-t0, between_time_untreated_t24-t8
 #>  Consider naming your enrich_results starting with one of the following prefixes: 'topGO_', 'clusterProfiler_','GeneTonic_', 'DAVID_','gsea_', 'fgsea_', 'enrichr_', 'gPro_',followed by the contrast name
 #> Found 75 gene sets in `enrichResult` object, of which 7 are significant.
 #> Converting for usage within the DeeDeeExperiment framework...
-#> Warning in DeeDeeExperiment::DeeDeeExperiment(sce = sce, de_results = de_flat, : Could not match FEA 'clusterProfiler_GO_modules_CC_4' to any DE contrast.
+#> Warning in DeeDeeExperiment::DeeDeeExperiment(sce = tide$se, de_results = de_flat, : Could not match FEA 'clusterProfiler_GO_modules_CC_4' to any DE contrast.
 #> Available DE results: between_group_IFNgamma-IFNbeta_T0, between_group_IFNgamma-IFNbeta_T2, between_group_IFNgamma-IFNbeta_T4, between_group_IFNgamma-IFNbeta_T6, between_group_IFNgamma-IFNbeta_T8, between_group_IFNgamma-IFNbeta_T24, between_group_LPS-IFNbeta_T0, between_group_LPS-IFNbeta_T2, between_group_LPS-IFNbeta_T4, between_group_LPS-IFNbeta_T6, between_group_LPS-IFNbeta_T8, between_group_LPS-IFNbeta_T24, between_group_untreated-IFNbeta_T0, between_group_untreated-IFNbeta_T8, between_group_untreated-IFNbeta_T24, between_group_IFNbeta-IFNgamma_T0, between_group_IFNbeta-IFNgamma_T2, between_group_IFNbeta-IFNgamma_T4, between_group_IFNbeta-IFNgamma_T6, between_group_IFNbeta-IFNgamma_T8, between_group_IFNbeta-IFNgamma_T24, between_group_LPS-IFNgamma_T0, between_group_LPS-IFNgamma_T2, between_group_LPS-IFNgamma_T4, between_group_LPS-IFNgamma_T6, between_group_LPS-IFNgamma_T8, between_group_LPS-IFNgamma_T24, between_group_untreated-IFNgamma_T0, between_group_untreated-IFNgamma_T8, between_group_untreated-IFNgamma_T24, between_group_IFNbeta-LPS_T0, between_group_IFNbeta-LPS_T2, between_group_IFNbeta-LPS_T4, between_group_IFNbeta-LPS_T6, between_group_IFNbeta-LPS_T8, between_group_IFNbeta-LPS_T24, between_group_IFNgamma-LPS_T0, between_group_IFNgamma-LPS_T2, between_group_IFNgamma-LPS_T4, between_group_IFNgamma-LPS_T6, between_group_IFNgamma-LPS_T8, between_group_IFNgamma-LPS_T24, between_group_untreated-LPS_T0, between_group_untreated-LPS_T8, between_group_untreated-LPS_T24, between_group_IFNbeta-untreated_T0, between_group_IFNbeta-untreated_T8, between_group_IFNbeta-untreated_T24, between_group_IFNgamma-untreated_T0, between_group_IFNgamma-untreated_T8, between_group_IFNgamma-untreated_T24, between_group_LPS-untreated_T0, between_group_LPS-untreated_T8, between_group_LPS-untreated_T24, between_time_IFNbeta_t2-t0, between_time_IFNbeta_t4-t0, between_time_IFNbeta_t6-t0, between_time_IFNbeta_t8-t0, between_time_IFNbeta_t24-t0, between_time_IFNbeta_t4-t2, between_time_IFNbeta_t6-t2, between_time_IFNbeta_t8-t2, between_time_IFNbeta_t24-t2, between_time_IFNbeta_t6-t4, between_time_IFNbeta_t8-t4, between_time_IFNbeta_t24-t4, between_time_IFNbeta_t8-t6, between_time_IFNbeta_t24-t6, between_time_IFNbeta_t24-t8, between_time_IFNgamma_t2-t0, between_time_IFNgamma_t4-t0, between_time_IFNgamma_t6-t0, between_time_IFNgamma_t8-t0, between_time_IFNgamma_t24-t0, between_time_IFNgamma_t4-t2, between_time_IFNgamma_t6-t2, between_time_IFNgamma_t8-t2, between_time_IFNgamma_t24-t2, between_time_IFNgamma_t6-t4, between_time_IFNgamma_t8-t4, between_time_IFNgamma_t24-t4, between_time_IFNgamma_t8-t6, between_time_IFNgamma_t24-t6, between_time_IFNgamma_t24-t8, between_time_LPS_t2-t0, between_time_LPS_t4-t0, between_time_LPS_t6-t0, between_time_LPS_t8-t0, between_time_LPS_t24-t0, between_time_LPS_t4-t2, between_time_LPS_t6-t2, between_time_LPS_t8-t2, between_time_LPS_t24-t2, between_time_LPS_t6-t4, between_time_LPS_t8-t4, between_time_LPS_t24-t4, between_time_LPS_t8-t6, between_time_LPS_t24-t6, between_time_LPS_t24-t8, between_time_untreated_t8-t0, between_time_untreated_t24-t0, between_time_untreated_t24-t8
 #>  Consider naming your enrich_results starting with one of the following prefixes: 'topGO_', 'clusterProfiler_','GeneTonic_', 'DAVID_','gsea_', 'fgsea_', 'enrichr_', 'gPro_',followed by the contrast name
-#> Found 75 gene sets in `enrichResult` object, of which 65 are significant.
+#> Found 70 gene sets in `enrichResult` object, of which 66 are significant.
 #> Converting for usage within the DeeDeeExperiment framework...
-#> Warning in DeeDeeExperiment::DeeDeeExperiment(sce = sce, de_results = de_flat, : Could not match FEA 'clusterProfiler_GO_modules_CC_5' to any DE contrast.
+#> Warning in DeeDeeExperiment::DeeDeeExperiment(sce = tide$se, de_results = de_flat, : Could not match FEA 'clusterProfiler_GO_modules_CC_5' to any DE contrast.
 #> Available DE results: between_group_IFNgamma-IFNbeta_T0, between_group_IFNgamma-IFNbeta_T2, between_group_IFNgamma-IFNbeta_T4, between_group_IFNgamma-IFNbeta_T6, between_group_IFNgamma-IFNbeta_T8, between_group_IFNgamma-IFNbeta_T24, between_group_LPS-IFNbeta_T0, between_group_LPS-IFNbeta_T2, between_group_LPS-IFNbeta_T4, between_group_LPS-IFNbeta_T6, between_group_LPS-IFNbeta_T8, between_group_LPS-IFNbeta_T24, between_group_untreated-IFNbeta_T0, between_group_untreated-IFNbeta_T8, between_group_untreated-IFNbeta_T24, between_group_IFNbeta-IFNgamma_T0, between_group_IFNbeta-IFNgamma_T2, between_group_IFNbeta-IFNgamma_T4, between_group_IFNbeta-IFNgamma_T6, between_group_IFNbeta-IFNgamma_T8, between_group_IFNbeta-IFNgamma_T24, between_group_LPS-IFNgamma_T0, between_group_LPS-IFNgamma_T2, between_group_LPS-IFNgamma_T4, between_group_LPS-IFNgamma_T6, between_group_LPS-IFNgamma_T8, between_group_LPS-IFNgamma_T24, between_group_untreated-IFNgamma_T0, between_group_untreated-IFNgamma_T8, between_group_untreated-IFNgamma_T24, between_group_IFNbeta-LPS_T0, between_group_IFNbeta-LPS_T2, between_group_IFNbeta-LPS_T4, between_group_IFNbeta-LPS_T6, between_group_IFNbeta-LPS_T8, between_group_IFNbeta-LPS_T24, between_group_IFNgamma-LPS_T0, between_group_IFNgamma-LPS_T2, between_group_IFNgamma-LPS_T4, between_group_IFNgamma-LPS_T6, between_group_IFNgamma-LPS_T8, between_group_IFNgamma-LPS_T24, between_group_untreated-LPS_T0, between_group_untreated-LPS_T8, between_group_untreated-LPS_T24, between_group_IFNbeta-untreated_T0, between_group_IFNbeta-untreated_T8, between_group_IFNbeta-untreated_T24, between_group_IFNgamma-untreated_T0, between_group_IFNgamma-untreated_T8, between_group_IFNgamma-untreated_T24, between_group_LPS-untreated_T0, between_group_LPS-untreated_T8, between_group_LPS-untreated_T24, between_time_IFNbeta_t2-t0, between_time_IFNbeta_t4-t0, between_time_IFNbeta_t6-t0, between_time_IFNbeta_t8-t0, between_time_IFNbeta_t24-t0, between_time_IFNbeta_t4-t2, between_time_IFNbeta_t6-t2, between_time_IFNbeta_t8-t2, between_time_IFNbeta_t24-t2, between_time_IFNbeta_t6-t4, between_time_IFNbeta_t8-t4, between_time_IFNbeta_t24-t4, between_time_IFNbeta_t8-t6, between_time_IFNbeta_t24-t6, between_time_IFNbeta_t24-t8, between_time_IFNgamma_t2-t0, between_time_IFNgamma_t4-t0, between_time_IFNgamma_t6-t0, between_time_IFNgamma_t8-t0, between_time_IFNgamma_t24-t0, between_time_IFNgamma_t4-t2, between_time_IFNgamma_t6-t2, between_time_IFNgamma_t8-t2, between_time_IFNgamma_t24-t2, between_time_IFNgamma_t6-t4, between_time_IFNgamma_t8-t4, between_time_IFNgamma_t24-t4, between_time_IFNgamma_t8-t6, between_time_IFNgamma_t24-t6, between_time_IFNgamma_t24-t8, between_time_LPS_t2-t0, between_time_LPS_t4-t0, between_time_LPS_t6-t0, between_time_LPS_t8-t0, between_time_LPS_t24-t0, between_time_LPS_t4-t2, between_time_LPS_t6-t2, between_time_LPS_t8-t2, between_time_LPS_t24-t2, between_time_LPS_t6-t4, between_time_LPS_t8-t4, between_time_LPS_t24-t4, between_time_LPS_t8-t6, between_time_LPS_t24-t6, between_time_LPS_t24-t8, between_time_untreated_t8-t0, between_time_untreated_t24-t0, between_time_untreated_t24-t8
 #>  Consider naming your enrich_results starting with one of the following prefixes: 'topGO_', 'clusterProfiler_','GeneTonic_', 'DAVID_','gsea_', 'fgsea_', 'enrichr_', 'gPro_',followed by the contrast name
-#> Found 75 gene sets in `enrichResult` object, of which 13 are significant.
+#> Found 71 gene sets in `enrichResult` object, of which 14 are significant.
 #> Converting for usage within the DeeDeeExperiment framework...
-#> Warning in DeeDeeExperiment::DeeDeeExperiment(sce = sce, de_results = de_flat, : Could not match FEA 'clusterProfiler_MSigDB_MH' to any DE contrast.
+#> Warning in DeeDeeExperiment::DeeDeeExperiment(sce = tide$se, de_results = de_flat, : Could not match FEA 'clusterProfiler_MSigDB_MH' to any DE contrast.
 #> Available DE results: between_group_IFNgamma-IFNbeta_T0, between_group_IFNgamma-IFNbeta_T2, between_group_IFNgamma-IFNbeta_T4, between_group_IFNgamma-IFNbeta_T6, between_group_IFNgamma-IFNbeta_T8, between_group_IFNgamma-IFNbeta_T24, between_group_LPS-IFNbeta_T0, between_group_LPS-IFNbeta_T2, between_group_LPS-IFNbeta_T4, between_group_LPS-IFNbeta_T6, between_group_LPS-IFNbeta_T8, between_group_LPS-IFNbeta_T24, between_group_untreated-IFNbeta_T0, between_group_untreated-IFNbeta_T8, between_group_untreated-IFNbeta_T24, between_group_IFNbeta-IFNgamma_T0, between_group_IFNbeta-IFNgamma_T2, between_group_IFNbeta-IFNgamma_T4, between_group_IFNbeta-IFNgamma_T6, between_group_IFNbeta-IFNgamma_T8, between_group_IFNbeta-IFNgamma_T24, between_group_LPS-IFNgamma_T0, between_group_LPS-IFNgamma_T2, between_group_LPS-IFNgamma_T4, between_group_LPS-IFNgamma_T6, between_group_LPS-IFNgamma_T8, between_group_LPS-IFNgamma_T24, between_group_untreated-IFNgamma_T0, between_group_untreated-IFNgamma_T8, between_group_untreated-IFNgamma_T24, between_group_IFNbeta-LPS_T0, between_group_IFNbeta-LPS_T2, between_group_IFNbeta-LPS_T4, between_group_IFNbeta-LPS_T6, between_group_IFNbeta-LPS_T8, between_group_IFNbeta-LPS_T24, between_group_IFNgamma-LPS_T0, between_group_IFNgamma-LPS_T2, between_group_IFNgamma-LPS_T4, between_group_IFNgamma-LPS_T6, between_group_IFNgamma-LPS_T8, between_group_IFNgamma-LPS_T24, between_group_untreated-LPS_T0, between_group_untreated-LPS_T8, between_group_untreated-LPS_T24, between_group_IFNbeta-untreated_T0, between_group_IFNbeta-untreated_T8, between_group_IFNbeta-untreated_T24, between_group_IFNgamma-untreated_T0, between_group_IFNgamma-untreated_T8, between_group_IFNgamma-untreated_T24, between_group_LPS-untreated_T0, between_group_LPS-untreated_T8, between_group_LPS-untreated_T24, between_time_IFNbeta_t2-t0, between_time_IFNbeta_t4-t0, between_time_IFNbeta_t6-t0, between_time_IFNbeta_t8-t0, between_time_IFNbeta_t24-t0, between_time_IFNbeta_t4-t2, between_time_IFNbeta_t6-t2, between_time_IFNbeta_t8-t2, between_time_IFNbeta_t24-t2, between_time_IFNbeta_t6-t4, between_time_IFNbeta_t8-t4, between_time_IFNbeta_t24-t4, between_time_IFNbeta_t8-t6, between_time_IFNbeta_t24-t6, between_time_IFNbeta_t24-t8, between_time_IFNgamma_t2-t0, between_time_IFNgamma_t4-t0, between_time_IFNgamma_t6-t0, between_time_IFNgamma_t8-t0, between_time_IFNgamma_t24-t0, between_time_IFNgamma_t4-t2, between_time_IFNgamma_t6-t2, between_time_IFNgamma_t8-t2, between_time_IFNgamma_t24-t2, between_time_IFNgamma_t6-t4, between_time_IFNgamma_t8-t4, between_time_IFNgamma_t24-t4, between_time_IFNgamma_t8-t6, between_time_IFNgamma_t24-t6, between_time_IFNgamma_t24-t8, between_time_LPS_t2-t0, between_time_LPS_t4-t0, between_time_LPS_t6-t0, between_time_LPS_t8-t0, between_time_LPS_t24-t0, between_time_LPS_t4-t2, between_time_LPS_t6-t2, between_time_LPS_t8-t2, between_time_LPS_t24-t2, between_time_LPS_t6-t4, between_time_LPS_t8-t4, between_time_LPS_t24-t4, between_time_LPS_t8-t6, between_time_LPS_t24-t6, between_time_LPS_t24-t8, between_time_untreated_t8-t0, between_time_untreated_t24-t0, between_time_untreated_t24-t8
 #>  Consider naming your enrich_results starting with one of the following prefixes: 'topGO_', 'clusterProfiler_','GeneTonic_', 'DAVID_','gsea_', 'fgsea_', 'enrichr_', 'gPro_',followed by the contrast name
 #> ℹ No shaking method available for this functional enrichment results.
 #> Returning only the original object.
-summary(dde)
-```
-
-```
-#> DE Results Summary:
-#>                              DEA_name Up Down  FDR
-#>     between_group_IFNgamma-IFNbeta_T0  0    0 0.05
-#>     between_group_IFNgamma-IFNbeta_T2  3    1 0.05
-#>     between_group_IFNgamma-IFNbeta_T4  8    8 0.05
-#>     between_group_IFNgamma-IFNbeta_T6 17    9 0.05
-#>     between_group_IFNgamma-IFNbeta_T8  8    4 0.05
-#>    between_group_IFNgamma-IFNbeta_T24 20   16 0.05
-#>          between_group_LPS-IFNbeta_T0  0    0 0.05
-#>          between_group_LPS-IFNbeta_T2  2    5 0.05
-#>          between_group_LPS-IFNbeta_T4  8    4 0.05
-#>          between_group_LPS-IFNbeta_T6  7    8 0.05
-#>          between_group_LPS-IFNbeta_T8 12   15 0.05
-#>         between_group_LPS-IFNbeta_T24 24    6 0.05
-#>    between_group_untreated-IFNbeta_T0  0    0 0.05
-#>    between_group_untreated-IFNbeta_T8 31    5 0.05
-#>   between_group_untreated-IFNbeta_T24 13   14 0.05
-#>     between_group_IFNbeta-IFNgamma_T0  0    0 0.05
-#>     between_group_IFNbeta-IFNgamma_T2  1    3 0.05
-#>     between_group_IFNbeta-IFNgamma_T4  8    8 0.05
-#>     between_group_IFNbeta-IFNgamma_T6  9   17 0.05
-#>     between_group_IFNbeta-IFNgamma_T8  4    8 0.05
-#>    between_group_IFNbeta-IFNgamma_T24 16   20 0.05
-#>         between_group_LPS-IFNgamma_T0  0    0 0.05
-#>         between_group_LPS-IFNgamma_T2  6   10 0.05
-#>         between_group_LPS-IFNgamma_T4 13   21 0.05
-#>         between_group_LPS-IFNgamma_T6  6   13 0.05
-#>         between_group_LPS-IFNgamma_T8  5    8 0.05
-#>        between_group_LPS-IFNgamma_T24 25   14 0.05
-#>   between_group_untreated-IFNgamma_T0  0    0 0.05
-#>   between_group_untreated-IFNgamma_T8 13    3 0.05
-#>  between_group_untreated-IFNgamma_T24  7    6 0.05
-#>          between_group_IFNbeta-LPS_T0  0    0 0.05
-#>          between_group_IFNbeta-LPS_T2  5    2 0.05
-#>          between_group_IFNbeta-LPS_T4  4    8 0.05
-#>          between_group_IFNbeta-LPS_T6  8    7 0.05
-#>          between_group_IFNbeta-LPS_T8 15   12 0.05
-#>         between_group_IFNbeta-LPS_T24  6   24 0.05
-#>         between_group_IFNgamma-LPS_T0  0    0 0.05
-#>         between_group_IFNgamma-LPS_T2 10    6 0.05
-#>         between_group_IFNgamma-LPS_T4 21   13 0.05
-#>         between_group_IFNgamma-LPS_T6 13    6 0.05
-#>         between_group_IFNgamma-LPS_T8  8    5 0.05
-#>        between_group_IFNgamma-LPS_T24 14   25 0.05
-#>        between_group_untreated-LPS_T0  0    0 0.05
-#>        between_group_untreated-LPS_T8 18    3 0.05
-#>       between_group_untreated-LPS_T24  3   17 0.05
-#>    between_group_IFNbeta-untreated_T0  0    0 0.05
-#>    between_group_IFNbeta-untreated_T8  5   31 0.05
-#>   between_group_IFNbeta-untreated_T24 14   13 0.05
-#>   between_group_IFNgamma-untreated_T0  0    0 0.05
-#>   between_group_IFNgamma-untreated_T8  3   13 0.05
-#>  between_group_IFNgamma-untreated_T24  6    7 0.05
-#>        between_group_LPS-untreated_T0  0    0 0.05
-#>        between_group_LPS-untreated_T8  3   18 0.05
-#>       between_group_LPS-untreated_T24 17    3 0.05
-#>            between_time_IFNbeta_t2-t0  5    6 0.05
-#>            between_time_IFNbeta_t4-t0 18   38 0.05
-#>            between_time_IFNbeta_t6-t0 29   79 0.05
-#>            between_time_IFNbeta_t8-t0 15   34 0.05
-#>           between_time_IFNbeta_t24-t0 19   30 0.05
-#>            between_time_IFNbeta_t4-t2  1    0 0.05
-#>            between_time_IFNbeta_t6-t2  3    6 0.05
-#>            between_time_IFNbeta_t8-t2  0    9 0.05
-#>           between_time_IFNbeta_t24-t2 12    6 0.05
-#>            between_time_IFNbeta_t6-t4  1    3 0.05
-#>            between_time_IFNbeta_t8-t4  3    7 0.05
-#>           between_time_IFNbeta_t24-t4 22   21 0.05
-#>            between_time_IFNbeta_t8-t6  1    3 0.05
-#>           between_time_IFNbeta_t24-t6 22   15 0.05
-#>           between_time_IFNbeta_t24-t8 15    4 0.05
-#>           between_time_IFNgamma_t2-t0  6    5 0.05
-#>           between_time_IFNgamma_t4-t0  9    9 0.05
-#>           between_time_IFNgamma_t6-t0 13   13 0.05
-#>           between_time_IFNgamma_t8-t0  5   10 0.05
-#>          between_time_IFNgamma_t24-t0  1    6 0.05
-#>           between_time_IFNgamma_t4-t2  2    2 0.05
-#>           between_time_IFNgamma_t6-t2  4    9 0.05
-#>           between_time_IFNgamma_t8-t2  1    2 0.05
-#>          between_time_IFNgamma_t24-t2  4    8 0.05
-#>           between_time_IFNgamma_t6-t4  1    2 0.05
-#>           between_time_IFNgamma_t8-t4  3    1 0.05
-#>          between_time_IFNgamma_t24-t4  3    4 0.05
-#>           between_time_IFNgamma_t8-t6  4    4 0.05
-#>          between_time_IFNgamma_t24-t6  4    7 0.05
-#>          between_time_IFNgamma_t24-t8  4    3 0.05
-#>                between_time_LPS_t2-t0  7    6 0.05
-#>                between_time_LPS_t4-t0 11   24 0.05
-#>                between_time_LPS_t6-t0  9   35 0.05
-#>                between_time_LPS_t8-t0 10   20 0.05
-#>               between_time_LPS_t24-t0 14   14 0.05
-#>                between_time_LPS_t4-t2  5    6 0.05
-#>                between_time_LPS_t6-t2  5    9 0.05
-#>                between_time_LPS_t8-t2  5    8 0.05
-#>               between_time_LPS_t24-t2 21    7 0.05
-#>                between_time_LPS_t6-t4  1    5 0.05
-#>                between_time_LPS_t8-t4  5    6 0.05
-#>               between_time_LPS_t24-t4 12    0 0.05
-#>                between_time_LPS_t8-t6  0    0 0.05
-#>               between_time_LPS_t24-t6 18    2 0.05
-#>               between_time_LPS_t24-t8 15    3 0.05
-#>          between_time_untreated_t8-t0  5    1 0.05
-#>         between_time_untreated_t24-t0  2    2 0.05
-#>         between_time_untreated_t24-t8  1   13 0.05
-#> 
-#> FE Results Summary:
-#>                         FEA_Name Linked_DE         FE_Type Term_Number
-#>  clusterProfiler_GO_modules_BP_1         . clusterProfiler           0
-#>  clusterProfiler_GO_modules_BP_2         . clusterProfiler         119
-#>  clusterProfiler_GO_modules_BP_3         . clusterProfiler           7
-#>  clusterProfiler_GO_modules_BP_4         . clusterProfiler          46
-#>  clusterProfiler_GO_modules_BP_5         . clusterProfiler           0
-#>  clusterProfiler_GO_modules_MF_1         . clusterProfiler           6
-#>  clusterProfiler_GO_modules_MF_2         . clusterProfiler           0
-#>  clusterProfiler_GO_modules_MF_3         . clusterProfiler           0
-#>  clusterProfiler_GO_modules_MF_4         . clusterProfiler          45
-#>  clusterProfiler_GO_modules_MF_5         . clusterProfiler          45
-#>  clusterProfiler_GO_modules_CC_1         . clusterProfiler          21
-#>  clusterProfiler_GO_modules_CC_2         . clusterProfiler           3
-#>  clusterProfiler_GO_modules_CC_3         . clusterProfiler           7
-#>  clusterProfiler_GO_modules_CC_4         . clusterProfiler          65
-#>  clusterProfiler_GO_modules_CC_5         . clusterProfiler          13
-#>        clusterProfiler_MSigDB_MH         . clusterProfiler           2
 ```
 
 ## Common usage scenarios
@@ -2467,6 +2418,7 @@ in TiDEomics to answer them. For example:
 ## Session information
 
 ``` r
+
 sessionInfo()
 ```
 
@@ -2493,180 +2445,174 @@ sessionInfo()
 #> [8] base     
 #> 
 #> other attached packages:
-#>  [1] SingleCellExperiment_1.35.1 org.Mm.eg.db_3.23.0        
-#>  [3] AnnotationDbi_1.75.0        SummarizedExperiment_1.43.0
-#>  [5] Biobase_2.73.1              GenomicRanges_1.65.0       
-#>  [7] Seqinfo_1.3.0               IRanges_2.47.1             
-#>  [9] S4Vectors_0.51.2            BiocGenerics_0.59.8        
-#> [11] generics_0.1.4              MatrixGenerics_1.25.0      
-#> [13] matrixStats_1.5.0           TiDEomics_0.99.2           
-#> [15] BiocStyle_2.41.0           
+#>  [1] org.Mm.eg.db_3.23.0         AnnotationDbi_1.75.0       
+#>  [3] SummarizedExperiment_1.43.0 Biobase_2.73.1             
+#>  [5] GenomicRanges_1.65.1        Seqinfo_1.3.0              
+#>  [7] IRanges_2.47.1              S4Vectors_0.51.2           
+#>  [9] BiocGenerics_0.59.10        generics_0.1.4             
+#> [11] MatrixGenerics_1.25.0       matrixStats_1.5.0          
+#> [13] TiDEomics_0.99.4            BiocStyle_2.41.0           
 #> 
 #> loaded via a namespace (and not attached):
-#>   [1] segmented_2.2-1           fs_2.1.0                 
-#>   [3] bitops_1.0-9              enrichplot_1.33.0        
-#>   [5] httr_1.4.8                RColorBrewer_1.1-3       
-#>   [7] doParallel_1.0.17         ggsci_5.1.0              
-#>   [9] DeeDeeExperiment_1.3.0    dynamicTreeCut_1.63-1    
-#>  [11] tools_4.6.0               backports_1.5.1          
-#>  [13] utf8_1.2.6                R6_2.6.1                 
-#>  [15] lazyeval_0.2.3            GetoptLong_1.1.1         
-#>  [17] withr_3.0.3               gridExtra_2.3.1          
-#>  [19] preprocessCore_1.75.0     WGCNA_1.74               
-#>  [21] cli_3.6.6                 textshaping_1.0.5        
-#>  [23] scatterpie_0.2.6          labeling_0.4.3           
-#>  [25] sass_0.4.10               S7_0.2.2                 
-#>  [27] ggridges_0.5.7            pbapply_1.7-4            
-#>  [29] askpass_1.2.1             pkgdown_2.2.0            
-#>  [31] systemfonts_1.3.2         yulab.utils_0.2.4        
-#>  [33] gson_0.1.0                foreign_0.8-91           
-#>  [35] DOSE_4.7.0                limma_3.69.2             
-#>  [37] rstudioapi_0.19.0         impute_1.87.0            
-#>  [39] RSQLite_3.53.2            gridGraphics_0.5-1       
-#>  [41] shape_1.4.6.1             gtools_3.9.5             
-#>  [43] crosstalk_1.2.2           car_3.1-5                
-#>  [45] dplyr_1.2.1               GO.db_3.23.1             
-#>  [47] Matrix_1.7-5              abind_1.4-8              
-#>  [49] PCAtools_2.25.0           lifecycle_1.0.5          
-#>  [51] edgeR_4.11.4              yaml_2.3.12              
-#>  [53] carData_3.0-6             qvalue_2.45.0            
-#>  [55] gplots_3.3.0              SparseArray_1.13.2       
-#>  [57] grid_4.6.0                blob_1.3.0               
-#>  [59] promises_1.5.0            dqrng_0.4.1              
-#>  [61] crayon_1.5.3              ggtangle_0.1.2           
-#>  [63] lattice_0.22-9            msigdbr_26.1.0           
-#>  [65] beachmat_2.29.0           cowplot_1.2.0            
-#>  [67] KEGGREST_1.53.1           magick_2.9.1             
-#>  [69] pillar_1.11.1             knitr_1.51               
-#>  [71] ComplexHeatmap_2.29.0     rjson_0.2.23             
-#>  [73] boot_1.3-32               codetools_0.2-20         
-#>  [75] glue_1.8.1                ggiraph_0.9.6            
-#>  [77] fontLiberation_0.1.0      ggfun_0.2.0              
-#>  [79] data.table_1.18.4         treeio_1.37.0            
-#>  [81] vctrs_0.7.3               png_0.1-9                
-#>  [83] Rdpack_2.6.6              gtable_0.3.6             
-#>  [85] assertthat_0.2.1          cachem_1.1.0             
-#>  [87] xfun_0.59                 rbibutils_2.4.1          
-#>  [89] S4Arrays_1.13.0           mime_0.13                
-#>  [91] reformulas_0.4.4          survival_3.8-6           
-#>  [93] aisdk_1.4.12              iterators_1.0.14         
-#>  [95] statmod_1.5.2             nlme_3.1-169             
-#>  [97] ggtree_4.3.0              fontquiver_0.2.1         
-#>  [99] bit64_4.8.2               bslib_0.11.0             
-#> [101] irlba_2.3.7               KernSmooth_2.23-26       
-#> [103] otel_0.2.0                rpart_4.1.27             
-#> [105] colorspace_2.1-2          DBI_1.3.0                
-#> [107] Hmisc_5.2-6               nnet_7.3-20              
-#> [109] DESeq2_1.53.0             processx_3.9.0           
-#> [111] tidyselect_1.2.1          curl_7.1.0               
-#> [113] bit_4.6.0                 compiler_4.6.0           
-#> [115] httr2_1.2.3               htmlTable_2.5.0          
-#> [117] fontBitstreamVera_0.1.1   randtests_1.0.2          
-#> [119] desc_1.4.3                DelayedArray_0.39.3      
-#> [121] plotly_4.12.0             bookdown_0.47            
-#> [123] checkmate_2.3.4           scales_1.4.0             
-#> [125] caTools_1.18.3            callr_3.8.0              
-#> [127] rappdirs_0.3.4            stringr_1.6.0            
-#> [129] digest_0.6.39             minqa_1.2.8              
-#> [131] rmarkdown_2.31            XVector_0.53.0           
-#> [133] htmltools_0.5.9           pkgconfig_2.0.3          
-#> [135] base64enc_0.1-6           lme4_2.0-1               
-#> [137] umap_0.2.10.0             sparseMatrixStats_1.25.0 
-#> [139] fastmap_1.2.0             rlang_1.2.0              
-#> [141] GlobalOptions_0.1.4       htmlwidgets_1.6.4        
-#> [143] shiny_1.14.0              DelayedMatrixStats_1.35.0
-#> [145] ggh4x_0.3.1               farver_2.1.2             
-#> [147] jquerylib_0.1.4           jsonlite_2.0.0           
-#> [149] BiocParallel_1.47.0       GOSemSim_2.39.2          
-#> [151] BiocSingular_1.29.0       magrittr_2.0.5           
-#> [153] Formula_1.2-5             ggplotify_0.1.3          
-#> [155] patchwork_1.3.2           Rcpp_1.1.1-1.1           
-#> [157] babelgene_22.9            gdtools_0.5.1            
-#> [159] ape_5.8-1                 ggnewscale_0.5.2         
-#> [161] reticulate_1.46.0         stringi_1.8.7            
-#> [163] MASS_7.3-65               plyr_1.8.9               
-#> [165] shinyFiles_0.9.3          parallel_4.6.0           
-#> [167] ggrepel_0.9.8             Biostrings_2.81.1        
-#> [169] splines_4.6.0             circlize_0.4.18          
-#> [171] locfit_1.5-9.12           igraph_2.3.3             
-#> [173] ggpubr_0.6.3              fastcluster_1.3.0        
-#> [175] enrichit_0.1.5            ggsignif_0.6.4           
-#> [177] reshape2_1.4.5            ScaledMatrix_1.21.0      
-#> [179] evaluate_1.0.5            BiocManager_1.30.27      
-#> [181] nloptr_2.2.1              foreach_1.5.2            
-#> [183] tweenr_2.0.3              httpuv_1.6.17            
-#> [185] tidyr_1.3.2               openssl_2.4.2            
-#> [187] purrr_1.2.2               polyclip_1.10-7          
-#> [189] clue_0.3-68               ggplot2_4.0.3            
-#> [191] Trendy_1.35.0             ggforce_0.5.0            
-#> [193] rsvd_1.0.5                broom_1.0.13             
-#> [195] xtable_1.8-8              tidytree_0.4.7           
-#> [197] RSpectra_0.16-2           tidydr_0.0.6             
-#> [199] rstatix_0.7.3             later_1.4.8              
-#> [201] viridisLite_0.4.3         ragg_1.5.2               
-#> [203] tibble_3.3.1              aplot_0.3.0              
-#> [205] clusterProfiler_4.21.0    memoise_2.0.1            
-#> [207] writexl_1.5.4             cluster_2.1.8.2
+#>   [1] segmented_2.2-1             fs_2.1.0                   
+#>   [3] bitops_1.0-9                enrichplot_1.33.0          
+#>   [5] httr_1.4.8                  RColorBrewer_1.1-3         
+#>   [7] doParallel_1.0.17           ggsci_5.1.0                
+#>   [9] DeeDeeExperiment_1.3.0      dynamicTreeCut_1.63-1      
+#>  [11] tools_4.6.0                 backports_1.5.1            
+#>  [13] utf8_1.2.6                  R6_2.6.1                   
+#>  [15] lazyeval_0.2.3              GetoptLong_1.1.1           
+#>  [17] withr_3.0.3                 gridExtra_2.3.1            
+#>  [19] preprocessCore_1.75.0       WGCNA_1.74                 
+#>  [21] cli_3.6.6                   textshaping_1.0.5          
+#>  [23] scatterpie_0.2.6            labeling_0.4.3             
+#>  [25] sass_0.4.10                 S7_0.2.2                   
+#>  [27] askpass_1.2.1               pbapply_1.7-4              
+#>  [29] ggridges_0.5.7              pkgdown_2.2.1              
+#>  [31] systemfonts_1.3.2           yulab.utils_0.2.4          
+#>  [33] gson_0.2.0                  foreign_0.8-91             
+#>  [35] DOSE_4.7.2                  limma_3.69.2               
+#>  [37] rstudioapi_0.19.0           impute_1.87.0              
+#>  [39] RSQLite_3.53.3              gridGraphics_0.5-1         
+#>  [41] shape_1.4.6.1               crosstalk_1.2.2            
+#>  [43] gtools_3.9.5                car_3.1-5                  
+#>  [45] dplyr_1.2.1                 GO.db_3.23.1               
+#>  [47] Matrix_1.7-5                abind_1.4-8                
+#>  [49] PCAtools_2.25.0             lifecycle_1.0.5            
+#>  [51] edgeR_4.11.4                yaml_2.3.12                
+#>  [53] carData_3.0-6               gplots_3.3.0               
+#>  [55] qvalue_2.45.0               SparseArray_1.13.2         
+#>  [57] grid_4.6.0                  blob_1.3.0                 
+#>  [59] promises_1.5.0              dqrng_0.4.1                
+#>  [61] crayon_1.5.3                ggtangle_0.1.2             
+#>  [63] lattice_0.22-9              msigdbr_26.1.0             
+#>  [65] beachmat_2.29.0             cowplot_1.2.0              
+#>  [67] KEGGREST_1.53.1             magick_2.9.1               
+#>  [69] pillar_1.11.1               knitr_1.51                 
+#>  [71] ComplexHeatmap_2.29.0       rjson_0.2.23               
+#>  [73] boot_1.3-32                 codetools_0.2-20           
+#>  [75] glue_1.8.1                  ggiraph_0.9.6              
+#>  [77] ggfun_0.2.1                 fontLiberation_0.1.0       
+#>  [79] data.table_1.18.4           vctrs_0.7.3                
+#>  [81] png_0.1-9                   treeio_1.37.0              
+#>  [83] Rdpack_2.6.6                gtable_0.3.6               
+#>  [85] assertthat_0.2.1            cachem_1.1.0               
+#>  [87] xfun_0.60                   rbibutils_2.4.1            
+#>  [89] S4Arrays_1.13.0             mime_0.13                  
+#>  [91] reformulas_0.4.4            survival_3.8-9             
+#>  [93] aisdk_1.4.12                SingleCellExperiment_1.35.2
+#>  [95] iterators_1.0.14            statmod_1.5.2              
+#>  [97] nlme_3.1-170                ggtree_4.3.0               
+#>  [99] bit64_4.8.2                 fontquiver_0.2.1           
+#> [101] bslib_0.11.0                irlba_2.3.7                
+#> [103] KernSmooth_2.23-26          otel_0.2.0                 
+#> [105] rpart_4.1.27                colorspace_2.1-3           
+#> [107] DBI_1.3.0                   Hmisc_5.2-6                
+#> [109] nnet_7.3-20                 DESeq2_1.53.2              
+#> [111] tidyselect_1.2.1            processx_3.9.0             
+#> [113] curl_7.1.0                  bit_4.6.0                  
+#> [115] compiler_4.6.0              httr2_1.3.0                
+#> [117] htmlTable_2.5.0             plotly_4.12.0              
+#> [119] randtests_1.0.2             desc_1.4.3                 
+#> [121] fontBitstreamVera_0.1.1     DelayedArray_0.39.3        
+#> [123] bookdown_0.47               checkmate_2.3.4            
+#> [125] scales_1.4.0                caTools_1.18.4             
+#> [127] callr_3.8.0                 rappdirs_0.3.4             
+#> [129] stringr_1.6.0               digest_0.6.39              
+#> [131] minqa_1.2.8                 rmarkdown_2.31             
+#> [133] XVector_0.53.0              htmltools_0.5.9            
+#> [135] pkgconfig_2.0.3             base64enc_0.1-6            
+#> [137] umap_0.2.10.0               lme4_2.0-6                 
+#> [139] sparseMatrixStats_1.25.0    fastmap_1.2.0              
+#> [141] rlang_1.3.0                 GlobalOptions_0.1.4        
+#> [143] htmlwidgets_1.6.4           shiny_1.14.0               
+#> [145] DelayedMatrixStats_1.35.0   ggh4x_0.3.1                
+#> [147] farver_2.1.2                jquerylib_0.1.4            
+#> [149] jsonlite_2.0.0              BiocParallel_1.47.0        
+#> [151] GOSemSim_2.39.2             BiocSingular_1.29.0        
+#> [153] magrittr_2.0.5              Formula_1.2-5              
+#> [155] ggplotify_0.1.3             patchwork_1.3.2            
+#> [157] Rcpp_1.1.2                  babelgene_22.9             
+#> [159] reticulate_1.46.0           ape_5.8-1                  
+#> [161] ggnewscale_0.5.2            gdtools_0.5.1              
+#> [163] stringi_1.8.7               MASS_7.3-66                
+#> [165] plyr_1.8.9                  shinyFiles_0.9.3           
+#> [167] parallel_4.6.0              ggrepel_0.9.8              
+#> [169] Biostrings_2.81.5           splines_4.6.0              
+#> [171] circlize_0.4.18             locfit_1.5-9.12            
+#> [173] igraph_2.3.3                ggpubr_1.0.0               
+#> [175] fastcluster_1.3.0           ggsignif_0.6.4             
+#> [177] enrichit_0.2.0              reshape2_1.4.5             
+#> [179] ScaledMatrix_1.21.0         evaluate_1.0.5             
+#> [181] BiocManager_1.30.27         nloptr_2.2.1               
+#> [183] foreach_1.5.2               tweenr_2.0.3               
+#> [185] httpuv_1.6.17               openssl_2.4.2              
+#> [187] tidyr_1.3.2                 purrr_1.2.2                
+#> [189] polyclip_1.10-7             clue_0.3-68                
+#> [191] ggplot2_4.0.3               Trendy_1.35.0              
+#> [193] ggforce_0.5.0               rsvd_1.0.5                 
+#> [195] broom_1.0.13                xtable_1.8-8               
+#> [197] RSpectra_0.16-2             tidytree_0.4.8             
+#> [199] tidydr_0.0.6                rstatix_1.0.0              
+#> [201] later_1.4.8                 viridisLite_0.4.3          
+#> [203] ragg_1.5.2                  tibble_3.3.1               
+#> [205] clusterProfiler_4.21.0      aplot_0.3.1                
+#> [207] memoise_2.0.1               writexl_1.5.4              
+#> [209] cluster_2.1.8.2
 ```
 
 ## References
 
-Bacher, Rhonda, Ning Leng, Li-Fang Chu, Zijian Ni, James A. Thomson,
-Christina Kendziorski, and Ron M. Stewart. 2018. “Trendy: Segmented
+Bacher, Rhonda, Ning Leng, Li-Fang Chu, et al. 2018. “Trendy: Segmented
 Regression Analysis of Expression Dynamics in High-Throughput Ordered
 Profiling Experiments.” *BMC Bioinformatics*.
 <https://bmcbioinformatics.biomedcentral.com/articles/10.1186/s12859-018-2405-x>.
 
-Gu, Zuguang. 2022. “Complex Heatmap Visualization.” *iMeta*.
-<https://doi.org/10.1002/imt2.43>.
+Gu, Zuguang. 2022. “Complex Heatmap Visualization.” *iMeta*, ahead of
+print. <https://doi.org/10.1002/imt2.43>.
 
 Gu, Zuguang, Roland Eils, and Matthias Schlesner. 2016. “Complex
 Heatmaps Reveal Patterns and Correlations in Multidimensional Genomic
-Data.” *Bioinformatics*.
+Data.” *Bioinformatics*, ahead of print.
 <https://doi.org/10.1093/bioinformatics/btw313>.
 
-Huber, W., Carey, V. J., Gentleman, R., Anders, et al. 2015.
-“Orchestrating High-Throughput Genomic Analysis with Bioconductor.”
-*Nature Methods* 12 (2): 115–21.
+Huber, W., Carey, et al. 2015. “Orchestrating High-Throughput Genomic
+Analysis with Bioconductor.” *Nature Methods* 12 (2): 115–21.
 [http://www.nature.com/nmeth/journal/v12/n2/full/nmeth.3252.html](http://www.nature.com/nmeth/journal/v12/n2/full/nmeth.3252.md).
 
 Langfelder, Peter, and Steve Horvath. 2008. “WGCNA: An r Package for
 Weighted Correlation Network Analysis.” *BMC Bioinformatics*, no. 1:
 559. <https://link.springer.com/article/10.1186/1471-2105-9-559>.
 
-———. 2012. “Fast R Functions for Robust Correlations and Hierarchical
-Clustering.” *Journal of Statistical Software* 46 (11): 1–17.
-<https://www.jstatsoft.org/v46/i11/>.
+Langfelder, Peter, and Steve Horvath. 2012. “Fast R Functions for Robust
+Correlations and Hierarchical Clustering.” *Journal of Statistical
+Software* 46 (11): 1–17. <https://www.jstatsoft.org/v46/i11/>.
 
-Ritchie, Matthew E, Belinda Phipson, Di Wu, Yifang Hu, Charity W Law,
-Wei Shi, and Gordon K Smyth. 2015. “limma Powers Differential Expression
-Analyses for RNA-Sequencing and Microarray Studies.” *Nucleic Acids
-Research* 43 (7): e47. <https://doi.org/10.1093/nar/gkv007>.
+Ritchie, Matthew E, Belinda Phipson, Di Wu, et al. 2015. “limma Powers
+Differential Expression Analyses for RNA-Sequencing and Microarray
+Studies.” *Nucleic Acids Research* 43 (7): e47.
+<https://doi.org/10.1093/nar/gkv007>.
 
-Traxler, Peter, Stephan Reichl, Lukas Folkman, Lisa Shaw, Victoria Fife,
-Amelie Nemc, Djurdja Pasajlic, et al. 2025. “Integrated Time-Series
-Analysis and High-Content CRISPR Screening Delineate the Dynamics of
-Macrophage Immune Regulation.” *Cell Systems* 16 (8): 101346.
-https://doi.org/<https://doi.org/10.1016/j.cels.2025.101346>.
+Traxler, Peter, Stephan Reichl, Lukas Folkman, et al. 2025. “Integrated
+Time-Series Analysis and High-Content CRISPR Screening Delineate the
+Dynamics of Macrophage Immune Regulation.” *Cell Systems* 16 (8):
+101346. https://doi.org/<https://doi.org/10.1016/j.cels.2025.101346>.
 
-Vasaikar, Suhas V, Adam K Savage, Qiuyu Gong, Elliott Swanson, Aarthi
-Talla, Cara Lord, Alexander T Heubeck, et al. 2023. “A Comprehensive
-Platform for Analyzing Longitudinal Multi-Omics Data.” *Nature
-Communications* 14 (1): 1684.
+Vasaikar, Suhas V, Adam K Savage, Qiuyu Gong, et al. 2023. “A
+Comprehensive Platform for Analyzing Longitudinal Multi-Omics Data.”
+*Nature Communications* 14 (1): 1684.
 <https://www.nature.com/articles/s41467-023-37432-w>.
 
 Wickham, Hadley. 2016. *Ggplot2: Elegant Graphics for Data Analysis*.
 Springer-Verlag New York. <https://ggplot2.tidyverse.org>.
 
-Wu, Tianzhi, Erqiang Hu, Shuangbin Xu, Meijun Chen, Pingfan Guo, Zehan
-Dai, Tingze Feng, et al. 2021. “clusterProfiler 4.0: A Universal
-Enrichment Tool for Interpreting Omics Data.” *The Innovation* 2 (3):
-100141. <https://doi.org/10.1016/j.xinn.2021.100141>.
+Wu, Tianzhi, Erqiang Hu, Shuangbin Xu, et al. 2021. “clusterProfiler
+4.0: A Universal Enrichment Tool for Interpreting Omics Data.” *The
+Innovation* 2 (3): 100141. <https://doi.org/10.1016/j.xinn.2021.100141>.
 
-Xu, Shuangbin, Erqiang Hu, Yantong Cai, Zijing Xie, Xiao Luo, Li Zhan,
-Wenli Tang, et al. 2024. “Using clusterProfiler to Characterize
-Multiomics Data.” *Nature Protocols* 19 (11): 3292–3320.
-<https://doi.org/10.1038/s41596-024-01020-z>.
+Xu, Shuangbin, Erqiang Hu, Yantong Cai, et al. 2024. “Using
+clusterProfiler to Characterize Multiomics Data.” *Nature Protocols* 19
+(11): 3292–320. <https://doi.org/10.1038/s41596-024-01020-z>.
 
 Yu, Guangchuang. 2024. “Thirteen Years of clusterProfiler.” *The
 Innovation* 5 (6): 100722. <https://doi.org/10.1016/j.xinn.2024.100722>.

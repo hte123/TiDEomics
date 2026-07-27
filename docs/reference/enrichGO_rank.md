@@ -82,9 +82,11 @@ if (requireNamespace("org.Mm.eg.db", quietly = TRUE)) {
     data(example_obj)
     example_obj <- normalise_to_start(example_obj)
 
-    var_decomp <- decomp_variance(example_obj, assay = 1)
+    var_decomp <- decomp_variance(example_obj,
+        features = rownames(example_obj)[1:100], assay = 1)
     example_go_rank <- enrichGO_rank(var_decomp, gene_rank_by = "Time",
-        OrgDb = org.Mm.eg.db, keyType = "SYMBOL", category = "BP")
+        OrgDb = org.Mm.eg.db, keyType = "SYMBOL",
+        category = "BP")
 }
 #> Normalising to group baseline at each feature's first non-NA time point.
 #> LMM: exp ~ (1|Group) + (1|Time)  |  Output: Group, Time, Residual

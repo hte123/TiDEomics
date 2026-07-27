@@ -179,7 +179,4 @@ DE_between_time_out <- DE_between_time(example_obj, assay = 1)
 #> Warning: Zero sample variances detected, have been offset away from zero
 plot_DE_between_time(DE_between_time_out,
     fontsize = 8, value = TRUE, nrow = 1, heatmap_width = 3)
-#> Registered S3 method overwritten by 'car':
-#>   method           from
-#>   na.action.merMod lme4
 ```

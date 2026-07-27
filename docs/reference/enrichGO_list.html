@@ -11,7 +11,7 @@ genes for each gene set"><meta property="og:image" content="https://hte123.githu
 
     <a class="navbar-brand me-2" href="../index.html">TiDEomics</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -23,7 +23,7 @@ genes for each gene set"><meta property="og:image" content="https://hte123.githu
 <li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-applications" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Applications</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-applications"><li><a class="dropdown-item" href="../articles/TiDEomics_application_1_0.99.2.html">Transcriptome of macrophage response to six immune stimuli</a></li>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-applications"><li><a class="dropdown-item" href="../articles/TiDEomics_application_1_0.99.4.html">Transcriptome of macrophage response to six immune stimuli</a></li>
   </ul></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
@@ -176,17 +176,15 @@ all or simplified terms for each gene set and GO category.</p>
 <span class="r-in"><span>        <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Module</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"1"</span>, <span class="st">"2"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="co"># set cutoff to 1 to show all results for demonstration</span></span></span>
 <span class="r-in"><span>    <span class="va">example_go_list</span> <span class="op">=</span> <span class="fu">enrichGO_list</span><span class="op">(</span><span class="va">example_module</span>, OrgDb <span class="op">=</span> <span class="va">org.Mm.eg.db</span>,</span></span>
-<span class="r-in"><span>        universe <span class="op">=</span> <span class="va">example_module</span><span class="op">$</span><span class="va">Feature</span>,</span></span>
+<span class="r-in"><span>        universe <span class="op">=</span> <span class="fu"><a href="WGCNA_module.html">WGCNA_module</a></span><span class="op">(</span><span class="va">example_net</span>, exclude_grey <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">$</span><span class="va">Feature</span>,</span></span>
 <span class="r-in"><span>        pvalueCutoff <span class="op">=</span> <span class="fl">1</span>, qvalueCutoff <span class="op">=</span> <span class="fl">1</span>,</span></span>
 <span class="r-in"><span>        category <span class="op">=</span> <span class="st">"BP"</span>, simplify <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>replacing previous import 'BiocGenerics::transform' by 'S4Vectors::transform' when loading 'AnnotationDbi'</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>replacing previous import 'utils::data' by 'BiocGenerics::data' when loading 'Biostrings'</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>replacing previous import 'BiocGenerics::transform' by 'S4Vectors::transform' when loading 'Biostrings'</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: AnnotationDbi</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: stats4</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: BiocGenerics</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>package 'BiocGenerics' was built under R version 4.6.1</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: generics</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>package 'generics' was built under R version 4.6.1</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
@@ -232,7 +230,6 @@ all or simplified terms for each gene set and GO category.</p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> The following object is masked from 'package:grDevices':</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>     windows</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> clusterProfiler v4.21.0 Learn more at https://yulab-smu.top/contribution-knowledge-mining/</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Please cite:</span>
@@ -273,7 +270,7 @@ all or simplified terms for each gene set and GO category.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer></div>

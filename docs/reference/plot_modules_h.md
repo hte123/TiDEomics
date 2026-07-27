@@ -182,40 +182,26 @@ https://github.com/junjunlab/ClusterGVis
 ## Examples
 
 ``` r
-if (requireNamespace("org.Mm.eg.db", quietly = TRUE)) {
-    library(org.Mm.eg.db)
-
-    data(example_obj)
-    example_obj <- normalise_to_start(example_obj)
-    example_obj_list <- split_groups(example_obj)
-    example_obj_merged_list <- merge_replicates(example_obj_list)
-    example_obj_merged <- merge_groups(example_obj_merged_list)
-
-    data(example_net)
-    # select two modules for demonstration
-    example_module <- WGCNA_module(example_net) |>
-        dplyr::filter(Module %in% c("1", "2"))
-    # set cutoff to 1 to show all results for demonstration
-    example_go_list = enrichGO_list(example_module, OrgDb = org.Mm.eg.db,
-        universe = example_module$Feature,
-        pvalueCutoff = 1, qvalueCutoff = 1,
-        category = "BP", simplify = FALSE)
-
-    plot_modules_h(example_module |> dplyr::filter(Module != '0'),
-        example_obj_merged, scale = TRUE,
-        ylabel = "Z-score of log2 expression",
-        enrich_list = example_go_list$all, enrich_category = "BP",
-        heatmap_width = 6, heatmap_height = 4)
-}
+data(example_obj)
+example_obj <- normalise_to_start(example_obj)
 #> Normalising to group baseline at each feature's first non-NA time point.
-#> Performing GO enrichment for category: BP
-#> Processing gene list: 1
-#> 'select()' returned 1:1 mapping between keys and columns
-#> 'select()' returned 1:1 mapping between keys and columns
-#> Processing gene list: 2
-#> 'select()' returned 1:1 mapping between keys and columns
-#> 'select()' returned 1:1 mapping between keys and columns
-#> Merging GO enrichment results across gene lists for each category.
+example_obj_list <- split_groups(example_obj)
+example_obj_merged_list <- merge_replicates(example_obj_list)
+example_obj_merged <- merge_groups(example_obj_merged_list)
+
+data(example_net)
+# select two modules for demonstration
+example_module <- WGCNA_module(example_net) |>
+    dplyr::filter(Module %in% c("1", "2"))
+
+data(example_go)
+
+plot_modules_h(example_module |> dplyr::filter(Module != '0'),
+    example_obj_merged, scale = TRUE,
+    ylabel = "Z-score of log2 expression",
+    enrich_list = example_go$all,
+    enrich_category = "BP",
+    heatmap_width = 6, heatmap_height = 4)
 #> Warning: Removed 156 rows containing non-finite outside the scale range
 #> (`stat_summary()`).
 #> Warning: Removed 48 rows containing non-finite outside the scale range

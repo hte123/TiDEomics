@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">TiDEomics</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -19,7 +19,7 @@
 <li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-applications" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Applications</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-applications"><li><a class="dropdown-item" href="../articles/TiDEomics_application_1_0.99.2.html">Transcriptome of macrophage response to six immune stimuli</a></li>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-applications"><li><a class="dropdown-item" href="../articles/TiDEomics_application_1_0.99.4.html">Transcriptome of macrophage response to six immune stimuli</a></li>
   </ul></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
@@ -41,7 +41,7 @@
     </div>
 
     <div class="section level2">
-      <h2 id="data-preparation">Data preparation<a class="anchor" aria-label="anchor" href="#data-preparation"></a></h2>
+      <h2 id="data-preparation-normalisation">Data preparation &amp; normalisation<a class="anchor" aria-label="anchor" href="#data-preparation-normalisation"></a></h2>
 
 
 
@@ -56,6 +56,13 @@
 
         </dt>
         <dd>Create object</dd>
+
+        <dt>
+
+          <code><a href="prepare_tide.html">prepare_tide()</a></code>
+
+        </dt>
+        <dd>Prepare TiDEomics input</dd>
 
         <dt>
 
@@ -92,7 +99,7 @@
         </dt>
         <dd>Impute missing values</dd>
       </dl></div><div class="section level2">
-      <h2 id="quality-control">Quality control<a class="anchor" aria-label="anchor" href="#quality-control"></a></h2>
+      <h2 id="quality-control-exploration">Quality control &amp; exploration<a class="anchor" aria-label="anchor" href="#quality-control-exploration"></a></h2>
 
 
 
@@ -128,75 +135,8 @@
 
         </dt>
         <dd>Plot coefficient of variation (CV)</dd>
-      </dl></div><div class="section level2">
-      <h2 id="feature-properties">Feature properties<a class="anchor" aria-label="anchor" href="#feature-properties"></a></h2>
-
-
-
-      <dl></dl></div><div class="section level2">
-
-
-
-
-      <dl><dt>
-
-          <code><a href="calc_mean_sd.html">calc_mean_sd()</a></code>
-
-        </dt>
-        <dd>Calculate mean and SD</dd>
 
         <dt>
-
-          <code><a href="plot_trend.html">plot_trend()</a></code>
-
-        </dt>
-        <dd>Plot feature abundance over time</dd>
-
-        <dt>
-
-          <code><a href="calc_feature_property.html">calc_feature_property()</a></code>
-
-        </dt>
-        <dd>Calculate feature property</dd>
-
-        <dt>
-
-          <code><a href="summarise_feature_property.html">summarise_feature_property()</a></code>
-
-        </dt>
-        <dd>Summarise feature properties</dd>
-
-        <dt>
-
-          <code><a href="group_specific_features.html">group_specific_features()</a></code>
-
-        </dt>
-        <dd>Group specific features</dd>
-
-        <dt>
-
-          <code><a href="decomp_variance.html">decomp_variance()</a></code>
-
-        </dt>
-        <dd>Variance decomposition</dd>
-
-        <dt>
-
-          <code><a href="plot_variance.html">plot_variance()</a></code>
-
-        </dt>
-        <dd>Plot variance decomposition</dd>
-      </dl></div><div class="section level2">
-      <h2 id="sample-relationship">Sample relationship<a class="anchor" aria-label="anchor" href="#sample-relationship"></a></h2>
-
-
-
-      <dl></dl></div><div class="section level2">
-
-
-
-
-      <dl><dt>
 
           <code><a href="plot_cor_matrix.html">plot_cor_matrix()</a></code>
 
@@ -244,6 +184,64 @@
 
         </dt>
         <dd>Plot UMAP by group</dd>
+      </dl></div><div class="section level2">
+      <h2 id="feature-properties-variance-decomposition">Feature properties &amp; variance decomposition<a class="anchor" aria-label="anchor" href="#feature-properties-variance-decomposition"></a></h2>
+
+
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="calc_mean_sd.html">calc_mean_sd()</a></code>
+
+        </dt>
+        <dd>Calculate mean and SD</dd>
+
+        <dt>
+
+          <code><a href="calc_feature_property.html">calc_feature_property()</a></code>
+
+        </dt>
+        <dd>Calculate feature property</dd>
+
+        <dt>
+
+          <code><a href="summarise_feature_property.html">summarise_feature_property()</a></code>
+
+        </dt>
+        <dd>Summarise feature properties</dd>
+
+        <dt>
+
+          <code><a href="group_specific_features.html">group_specific_features()</a></code>
+
+        </dt>
+        <dd>Group specific features</dd>
+
+        <dt>
+
+          <code><a href="decomp_variance.html">decomp_variance()</a></code>
+
+        </dt>
+        <dd>Variance decomposition</dd>
+
+        <dt>
+
+          <code><a href="plot_variance.html">plot_variance()</a></code>
+
+        </dt>
+        <dd>Plot variance decomposition</dd>
+
+        <dt>
+
+          <code><a href="plot_trend.html">plot_trend()</a></code>
+
+        </dt>
+        <dd>Plot feature abundance over time</dd>
       </dl></div><div class="section level2">
       <h2 id="pairwise-differential-expression">Pairwise differential expression<a class="anchor" aria-label="anchor" href="#pairwise-differential-expression"></a></h2>
 
@@ -333,7 +331,7 @@
         </dt>
         <dd>Plot breakpoint distribution</dd>
       </dl></div><div class="section level2">
-      <h2 id="temporal-module-identification-with-wgcna">Temporal module identification with WGCNA<a class="anchor" aria-label="anchor" href="#temporal-module-identification-with-wgcna"></a></h2>
+      <h2 id="co-expression-module-identification-with-wgcna">Co-expression module identification with WGCNA<a class="anchor" aria-label="anchor" href="#co-expression-module-identification-with-wgcna"></a></h2>
 
 
 
@@ -449,7 +447,7 @@
         </dt>
         <dd>Plot GO enrichment</dd>
       </dl></div><div class="section level2">
-      <h2 id="bundled-workflow">Bundled workflow<a class="anchor" aria-label="anchor" href="#bundled-workflow"></a></h2>
+      <h2 id="interoperability-settings">Interoperability &amp; settings<a class="anchor" aria-label="anchor" href="#interoperability-settings"></a></h2>
 
 
 
@@ -460,28 +458,19 @@
 
       <dl><dt>
 
-          <code><a href="prepare_tide.html">prepare_tide()</a></code>
+          <code><a href="flatten_DE.html">flatten_DE()</a></code>
 
         </dt>
-        <dd>Prepare TiDEomics input</dd>
+        <dd>Flatten nested differential expression results</dd>
 
         <dt>
 
-          <code><a href="as_DeeDeeExperiment.html">as_DeeDeeExperiment()</a></code>
+          <code><a href="flatten_enrich.html">flatten_enrich()</a></code>
 
         </dt>
-        <dd>Convert a TiDEomics result to DeeDeeExperiment</dd>
-      </dl></div><div class="section level2">
-      <h2 id="visualization-settings">Visualization settings<a class="anchor" aria-label="anchor" href="#visualization-settings"></a></h2>
+        <dd>Flatten nested enrichment results</dd>
 
-
-
-      <dl></dl></div><div class="section level2">
-
-
-
-
-      <dl><dt>
+        <dt>
 
           <code><a href="set_custom_palette.html">set_custom_palette()</a></code>
 
@@ -545,6 +534,13 @@
 
         </dt>
         <dd><code><a href="../reference/run_WGCNA.html">run_WGCNA()</a></code> output object for runnable examples</dd>
+
+        <dt>
+
+          <code><a href="example_go.html">example_go</a></code>
+
+        </dt>
+        <dd><code><a href="../reference/enrichGO_list.html">enrichGO_list()</a></code> output object for runnable examples</dd>
       </dl></div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
@@ -555,7 +551,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer></div>

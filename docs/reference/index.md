@@ -1,9 +1,11 @@
 # Package index
 
-## Data preparation
+## Data preparation & normalisation
 
 - [`create_input()`](https://hte123.github.io/TiDEomics/reference/create_input.md)
   : Create object
+- [`prepare_tide()`](https://hte123.github.io/TiDEomics/reference/prepare_tide.md)
+  : Prepare TiDEomics input
 - [`normalise_to_start()`](https://hte123.github.io/TiDEomics/reference/normalise_to_start.md)
   : Normalise to starting time point
 - [`split_groups()`](https://hte123.github.io/TiDEomics/reference/split_groups.md)
@@ -15,7 +17,7 @@
 - [`impute_groups()`](https://hte123.github.io/TiDEomics/reference/impute_groups.md)
   : Impute missing values
 
-## Quality control
+## Quality control & exploration
 
 - [`plot_distribution()`](https://hte123.github.io/TiDEomics/reference/plot_distribution.md)
   : Abundance distribution plot
@@ -25,26 +27,6 @@
   : Plot number of identified features
 - [`plot_cv()`](https://hte123.github.io/TiDEomics/reference/plot_cv.md)
   : Plot coefficient of variation (CV)
-
-## Feature properties
-
-- [`calc_mean_sd()`](https://hte123.github.io/TiDEomics/reference/calc_mean_sd.md)
-  : Calculate mean and SD
-- [`plot_trend()`](https://hte123.github.io/TiDEomics/reference/plot_trend.md)
-  : Plot feature abundance over time
-- [`calc_feature_property()`](https://hte123.github.io/TiDEomics/reference/calc_feature_property.md)
-  : Calculate feature property
-- [`summarise_feature_property()`](https://hte123.github.io/TiDEomics/reference/summarise_feature_property.md)
-  : Summarise feature properties
-- [`group_specific_features()`](https://hte123.github.io/TiDEomics/reference/group_specific_features.md)
-  : Group specific features
-- [`decomp_variance()`](https://hte123.github.io/TiDEomics/reference/decomp_variance.md)
-  : Variance decomposition
-- [`plot_variance()`](https://hte123.github.io/TiDEomics/reference/plot_variance.md)
-  : Plot variance decomposition
-
-## Sample relationship
-
 - [`plot_cor_matrix()`](https://hte123.github.io/TiDEomics/reference/plot_cor_matrix.md)
   : Plot correlation matrix
 - [`plot_pca()`](https://hte123.github.io/TiDEomics/reference/plot_pca.md)
@@ -59,6 +41,23 @@
   : Plot UMAP
 - [`plot_umap_by_group()`](https://hte123.github.io/TiDEomics/reference/plot_umap_by_group.md)
   : Plot UMAP by group
+
+## Feature properties & variance decomposition
+
+- [`calc_mean_sd()`](https://hte123.github.io/TiDEomics/reference/calc_mean_sd.md)
+  : Calculate mean and SD
+- [`calc_feature_property()`](https://hte123.github.io/TiDEomics/reference/calc_feature_property.md)
+  : Calculate feature property
+- [`summarise_feature_property()`](https://hte123.github.io/TiDEomics/reference/summarise_feature_property.md)
+  : Summarise feature properties
+- [`group_specific_features()`](https://hte123.github.io/TiDEomics/reference/group_specific_features.md)
+  : Group specific features
+- [`decomp_variance()`](https://hte123.github.io/TiDEomics/reference/decomp_variance.md)
+  : Variance decomposition
+- [`plot_variance()`](https://hte123.github.io/TiDEomics/reference/plot_variance.md)
+  : Plot variance decomposition
+- [`plot_trend()`](https://hte123.github.io/TiDEomics/reference/plot_trend.md)
+  : Plot feature abundance over time
 
 ## Pairwise differential expression
 
@@ -86,7 +85,7 @@
 - [`plot_breakpoints()`](https://hte123.github.io/TiDEomics/reference/plot_breakpoints.md)
   : Plot breakpoint distribution
 
-## Temporal module identification with WGCNA
+## Co-expression module identification with WGCNA
 
 - [`prepare_WGCNA()`](https://hte123.github.io/TiDEomics/reference/prepare_WGCNA.md)
   : Prepare data and choose power for WGCNA
@@ -120,15 +119,12 @@
 - [`plot_GO()`](https://hte123.github.io/TiDEomics/reference/plot_GO.md)
   : Plot GO enrichment
 
-## Bundled workflow
+## Interoperability & settings
 
-- [`prepare_tide()`](https://hte123.github.io/TiDEomics/reference/prepare_tide.md)
-  : Prepare TiDEomics input
-- [`as_DeeDeeExperiment()`](https://hte123.github.io/TiDEomics/reference/as_DeeDeeExperiment.md)
-  : Convert a TiDEomics result to DeeDeeExperiment
-
-## Visualization settings
-
+- [`flatten_DE()`](https://hte123.github.io/TiDEomics/reference/flatten_DE.md)
+  : Flatten nested differential expression results
+- [`flatten_enrich()`](https://hte123.github.io/TiDEomics/reference/flatten_enrich.md)
+  : Flatten nested enrichment results
 - [`set_custom_palette()`](https://hte123.github.io/TiDEomics/reference/set_custom_palette.md)
   : Set custom color palette
 - [`get_custom_palette()`](https://hte123.github.io/TiDEomics/reference/get_custom_palette.md)
@@ -156,4 +152,10 @@
   :
 
   [`run_WGCNA()`](https://hte123.github.io/TiDEomics/reference/run_WGCNA.md)
+  output object for runnable examples
+
+- [`example_go`](https://hte123.github.io/TiDEomics/reference/example_go.md)
+  :
+
+  [`enrichGO_list()`](https://hte123.github.io/TiDEomics/reference/enrichGO_list.md)
   output object for runnable examples
