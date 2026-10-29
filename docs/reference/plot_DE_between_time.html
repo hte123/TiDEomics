@@ -15,7 +15,7 @@ plotting."><meta property="og:image" content="https://hte123.github.io/TiDEomics
 
     <a class="navbar-brand me-2" href="../index.html">TiDEomics</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.7</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -26,9 +26,15 @@ plotting."><meta property="og:image" content="https://hte123.github.io/TiDEomics
       <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../articles/TiDEomics.html">Get started</a></li>
 <li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
-  <button class="nav-link dropdown-toggle" type="button" id="dropdown-applications" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Applications</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-applications"><li><a class="dropdown-item" href="../articles/TiDEomics_application_1_0.99.4.html">Transcriptome of macrophage response to six immune stimuli</a></li>
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-tutorials-applications" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Tutorials &amp; Applications</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-tutorials-applications"><li><a class="dropdown-item" href="../articles/index.html">All articles</a></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Tutorials</h6></li>
+    <li><a class="dropdown-item" href="../articles/TiDEomics.html">TiDEomics main tutorial</a></li>
+    <li><a class="dropdown-item" href="../articles/TiDEomics_multi.html">Multi-dataset/multi-omics tutorial</a></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Applications</h6></li>
+    <li><a class="dropdown-item" href="../articles/TiDEomics_application_1_0.99.7.html">Transcriptome of macrophage response to six immune stimuli</a></li>
   </ul></li>
+<li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
 <li class="nav-item"><a class="external-link nav-link" href="https://github.com/hte123/TiDEomics/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
@@ -87,8 +93,7 @@ heatmap cell (default is TRUE)</p></dd>
 
 
 <dt id="arg-fontsize">fontsize<a class="anchor" aria-label="anchor" href="#arg-fontsize"></a></dt>
-<dd><p>Font size for the heatmap displaying the number of DE
-features between time points (default is 8)</p></dd>
+<dd><p>Font size for the plot (default is 8)</p></dd>
 
 
 <dt id="arg-nrow">nrow<a class="anchor" aria-label="anchor" href="#arg-nrow"></a></dt>
@@ -104,13 +109,13 @@ features between time points (default is 8)</p></dd>
 
 
 <dt id="arg-adjp-thres">adjP_thres<a class="anchor" aria-label="anchor" href="#arg-adjp-thres"></a></dt>
-<dd><p>(Optional) Threshold for adjusted p-value to consider a
+<dd><p>Threshold for adjusted p-value to consider a
 feature as differentially expressed, for re-filtering
 the DE features. (default is NULL, no re-filtering)</p></dd>
 
 
 <dt id="arg-logfc-thres">logFC_thres<a class="anchor" aria-label="anchor" href="#arg-logfc-thres"></a></dt>
-<dd><p>(Optional) Threshold for log2 fold change to consider a
+<dd><p>Threshold for log2 fold change to consider a
 feature as differentially expressed, for re-filtering
 the DE features. (default is NULL, no re-filtering)</p></dd>
 
@@ -126,8 +131,6 @@ features.</p>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">example_obj</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">example_obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="normalise_to_start.html">normalise_to_start</a></span><span class="op">(</span><span class="va">example_obj</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Normalising to group baseline at each feature's first non-NA time point.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">DE_between_time_out</span> <span class="op">&lt;-</span> <span class="fu"><a href="DE_between_time.html">DE_between_time</a></span><span class="op">(</span><span class="va">example_obj</span>, assay <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Non-NA replicate number filter not specified. Using minimum number of replicates across all groups and time points: 0</span>

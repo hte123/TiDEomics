@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">TiDEomics</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.7</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -18,9 +18,15 @@
       <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../articles/TiDEomics.html">Get started</a></li>
 <li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
-  <button class="nav-link dropdown-toggle" type="button" id="dropdown-applications" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Applications</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-applications"><li><a class="dropdown-item" href="../articles/TiDEomics_application_1_0.99.4.html">Transcriptome of macrophage response to six immune stimuli</a></li>
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-tutorials-applications" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Tutorials &amp; Applications</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-tutorials-applications"><li><a class="dropdown-item" href="../articles/index.html">All articles</a></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Tutorials</h6></li>
+    <li><a class="dropdown-item" href="../articles/TiDEomics.html">TiDEomics main tutorial</a></li>
+    <li><a class="dropdown-item" href="../articles/TiDEomics_multi.html">Multi-dataset/multi-omics tutorial</a></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Applications</h6></li>
+    <li><a class="dropdown-item" href="../articles/TiDEomics_application_1_0.99.7.html">Transcriptome of macrophage response to six immune stimuli</a></li>
   </ul></li>
+<li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
 <li class="nav-item"><a class="external-link nav-link" href="https://github.com/hte123/TiDEomics/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
@@ -243,7 +249,7 @@
         </dt>
         <dd>Plot feature abundance over time</dd>
       </dl></div><div class="section level2">
-      <h2 id="pairwise-differential-expression">Pairwise differential expression<a class="anchor" aria-label="anchor" href="#pairwise-differential-expression"></a></h2>
+      <h2 id="model-based-differential-expression">Model-based differential expression<a class="anchor" aria-label="anchor" href="#model-based-differential-expression"></a></h2>
 
 
 
@@ -286,6 +292,13 @@
 
         </dt>
         <dd>Volcano plot of DE results</dd>
+
+        <dt>
+
+          <code><a href="DE_timecourse.html">DE_timecourse()</a></code>
+
+        </dt>
+        <dd>DE over time course</dd>
       </dl></div><div class="section level2">
       <h2 id="segmented-regression-with-trendy">Segmented regression with Trendy<a class="anchor" aria-label="anchor" href="#segmented-regression-with-trendy"></a></h2>
 
@@ -402,6 +415,57 @@
 
         </dt>
         <dd>Summarise WGCNA module metrics</dd>
+      </dl></div><div class="section level2">
+      <h2 id="multi-dataset-multi-omics-integration">Multi-dataset / multi-omics integration<a class="anchor" aria-label="anchor" href="#multi-dataset-multi-omics-integration"></a></h2>
+
+
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="combine_tide.html">combine_tide()</a></code>
+
+        </dt>
+        <dd>Combine multiple <code><a href="../reference/prepare_tide.html">prepare_tide()</a></code> outputs</dd>
+
+        <dt>
+
+          <code><a href="run_consensus_WGCNA.html">run_consensus_WGCNA()</a></code>
+
+        </dt>
+        <dd>Consensus WGCNA across multiple datasets</dd>
+
+        <dt>
+
+          <code><a href="extract_consensus_hubs.html">extract_consensus_hubs()</a></code>
+
+        </dt>
+        <dd>Extract hub features from consensus WGCNA network</dd>
+
+        <dt>
+
+          <code><a href="plot_scatter.html">plot_scatter()</a></code>
+
+        </dt>
+        <dd>Feature property scatter plot between two datasets</dd>
+
+        <dt>
+
+          <code><a href="plot_upset_h.html">plot_upset_h()</a></code>
+
+        </dt>
+        <dd>UpSet plot of feature sets with horizontally aligned enrichment terms</dd>
+
+        <dt>
+
+          <code><a href="plot_upset_v.html">plot_upset_v()</a></code>
+
+        </dt>
+        <dd>UpSet plot of feature sets with vertically aligned enrichment dot matrix</dd>
       </dl></div><div class="section level2">
       <h2 id="functional-enrichment">Functional enrichment<a class="anchor" aria-label="anchor" href="#functional-enrichment"></a></h2>
 
@@ -541,6 +605,27 @@
 
         </dt>
         <dd><code><a href="../reference/enrichGO_list.html">enrichGO_list()</a></code> output object for runnable examples</dd>
+
+        <dt>
+
+          <code><a href="example_obj_2.html">example_obj_2</a></code>
+
+        </dt>
+        <dd>SummarizedExperiment object for the simulated second dataset (Exp2)</dd>
+
+        <dt>
+
+          <code><a href="example_net_2.html">example_net_2</a></code>
+
+        </dt>
+        <dd><code><a href="../reference/run_WGCNA.html">run_WGCNA()</a></code> output object for the simulated second dataset (Exp2)</dd>
+
+        <dt>
+
+          <code><a href="example_cons.html">example_cons</a></code>
+
+        </dt>
+        <dd><code><a href="../reference/run_consensus_WGCNA.html">run_consensus_WGCNA()</a></code> output object for runnable examples</dd>
       </dl></div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>

@@ -59,7 +59,7 @@
 - [`plot_trend()`](https://hte123.github.io/TiDEomics/reference/plot_trend.md)
   : Plot feature abundance over time
 
-## Pairwise differential expression
+## Model-based differential expression
 
 - [`DE_between_group()`](https://hte123.github.io/TiDEomics/reference/DE_between_group.md)
   : DE between groups
@@ -71,6 +71,8 @@
   : DE number between time points
 - [`plot_volcano()`](https://hte123.github.io/TiDEomics/reference/plot_volcano.md)
   : Volcano plot of DE results
+- [`DE_timecourse()`](https://hte123.github.io/TiDEomics/reference/DE_timecourse.md)
+  : DE over time course
 
 ## Segmented regression with Trendy
 
@@ -105,6 +107,32 @@
   : Summarise module patterns
 - [`summarise_module_metrics()`](https://hte123.github.io/TiDEomics/reference/summarise_module_metrics.md)
   : Summarise WGCNA module metrics
+
+## Multi-dataset / multi-omics integration
+
+- [`combine_tide()`](https://hte123.github.io/TiDEomics/reference/combine_tide.md)
+  :
+
+  Combine multiple
+  [`prepare_tide()`](https://hte123.github.io/TiDEomics/reference/prepare_tide.md)
+  outputs
+
+- [`run_consensus_WGCNA()`](https://hte123.github.io/TiDEomics/reference/run_consensus_WGCNA.md)
+  : Consensus WGCNA across multiple datasets
+
+- [`extract_consensus_hubs()`](https://hte123.github.io/TiDEomics/reference/extract_consensus_hubs.md)
+  : Extract hub features from consensus WGCNA network
+
+- [`plot_scatter()`](https://hte123.github.io/TiDEomics/reference/plot_scatter.md)
+  : Feature property scatter plot between two datasets
+
+- [`plot_upset_h()`](https://hte123.github.io/TiDEomics/reference/plot_upset_h.md)
+  : UpSet plot of feature sets with horizontally aligned enrichment
+  terms
+
+- [`plot_upset_v()`](https://hte123.github.io/TiDEomics/reference/plot_upset_v.md)
+  : UpSet plot of feature sets with vertically aligned enrichment dot
+  matrix
 
 ## Functional enrichment
 
@@ -158,4 +186,19 @@
   :
 
   [`enrichGO_list()`](https://hte123.github.io/TiDEomics/reference/enrichGO_list.md)
+  output object for runnable examples
+
+- [`example_obj_2`](https://hte123.github.io/TiDEomics/reference/example_obj_2.md)
+  : SummarizedExperiment object for the simulated second dataset (Exp2)
+
+- [`example_net_2`](https://hte123.github.io/TiDEomics/reference/example_net_2.md)
+  :
+
+  [`run_WGCNA()`](https://hte123.github.io/TiDEomics/reference/run_WGCNA.md)
+  output object for the simulated second dataset (Exp2)
+
+- [`example_cons`](https://hte123.github.io/TiDEomics/reference/example_cons.md)
+  :
+
+  [`run_consensus_WGCNA()`](https://hte123.github.io/TiDEomics/reference/run_consensus_WGCNA.md)
   output object for runnable examples

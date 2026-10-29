@@ -66,9 +66,11 @@ enrichR_list(
 
 A named list of data.frames, one per database. Each data.frame has
 columns `Cluster`, `Description`, `p.adjust` (Adjusted.P.value from
-enrichR output), `Combined.Score`, `Genes`, and any additional columns
-returned by the enrichR API. Compatible with
+enrichR output), `Count`, `Combined.Score`, `Genes`, and any additional
+columns returned by the enrichR API. Compatible with
 `plot_modules_h(enrich_list = result, enrich_category = "DSigDB")`.
+`Count` is parsed from `Overlap` column, counted from `Genes` column
+when `Overlap` is absent or invalid, or `NA` if both are unavailable.
 
 ## Details
 

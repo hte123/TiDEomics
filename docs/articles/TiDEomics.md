@@ -2,11 +2,11 @@
 
 ## Introduction
 
-[**TiDEomics**](https://github.com/hte123/TiDEomics) (Time-course
-Differential Expression analysis of omics data) is an R package for
-**multi-group time-course omics analysis** built on
-`SummarizedExperiment`, especially for comparison of more than two
-conditions across time.
+[**TiDEomics**](https://bioconductor.org/packages/TiDEomics)
+(Time-course Differential Expression analysis of omics data) is an R
+package for **multi-group time-course omics analysis** built on
+`SummarizedExperiment`, with a particular focus on comparing more than
+two conditions across time.
 
 `TiDEomics` provides:
 
@@ -16,7 +16,7 @@ conditions across time.
 
 - An approach to separate **time-dominant**, **group-dominant**, and
   **group-specific temporal** effects through the combination of
-  pairwise differential expression, variance decomposition, and
+  limma-based differential expression, variance decomposition, and
   co-expression module analysis (WGCNA).
 
 - A filtering strategy based on **residual variance** after mixed-model
@@ -26,22 +26,29 @@ conditions across time.
   less appropriate when biological variation across groups and time
   course is expected.
 
+This vignette demonstrates the workflow on a single dataset with
+multiple groups. TiDEomics also supports **multi-dataset / multi-omics**
+analyses, covered in a separate vignette:
+`TiDEomics Tutorial: Multi-Dataset/Multi-Omics Analysis`
+(`browseVignettes("TiDEomics")`).
+
 Existing packages on time-course omics analysis are available, typically
-designed for transcriptomics data. Some packages are limited to
-two-group comparisons (e.g. `splineTimeR`) or expect raw sequencing
-counts (e.g. `ImpulseDE2`, `TCseq`). `maSigPro` supports multi-group
-time-course DE analysis via polynomial regression, complementary to
-`TiDEomics` with fewer assumptions about temporal trends. `TiDEomics`
-also integrates QC, filtering and downstream functional enrichment
-within the same workflow.
+focus on particular data types or analytical tasks. Some packages are
+limited to two-group comparisons (e.g. `splineTimeR`) or expect raw
+sequencing counts (e.g. `ImpulseDE2`, `TCseq`). `maSigPro` and
+`timeOmics` focus on temporal modelling and profile clustering,
+complementary to `TiDEomics`. `maSigPro` supports multi-group
+time-course DE analysis via polynomial regression, while `timeOmics`
+supports multi-omics integration. `TiDEomics` also integrates QC,
+filtering and downstream functional enrichment within the same workflow.
 
 TiDEomics incorporates `Trendy` (Bacher et al. 2018) which operates on
 single time series to estimate breakpoints per group per feature, and
 derived variance decomposition from `PALMO` (Vasaikar et al. 2023) and
 introduced residual variance as a filtering criterion.
 
-This tutorial demonstrates a basic workflow, explains key parameters,
-and gives practical tips.
+This tutorial demonstrates the basic workflow, explains key parameters,
+and provides practical tips.
 
 Key features covered:
 
@@ -60,9 +67,10 @@ Key features covered:
   Explore global structure and major sources of variance, check for
   batch effects, and identify features driving PCs.
 
-- *Pairwise differential expression (by time or group)*: Identify DE
+- *Differential expression (pairwise and time-course)*: Identify DE
   features between pairs of time points within each group, and between
-  pairs of groups at each time point.
+  pairs of groups at each time point, or model changes over the whole
+  time course within or across groups.
 
 - *Classification by feature property (randomness and overall fold
   change)*: Classify features into different categories (e.g.,
@@ -73,8 +81,9 @@ Key features covered:
   feature in each group and summarise dynamic patterns.
 
 - *Variance decomposition modified from PALMO*: Quantify relative
-  contributions from `Time`, `Group`, and `Residual`, distinguish time
-  or group-dependent DE features and “noisy” features.
+  contributions from `Time`, `Group`, `Subject` when present, optional
+  interaction terms, and `Residual`, distinguish time or group-dependent
+  DE features and “noisy” features.
 
 - *Module identification with WGCNA*: Identify co-expression modules
   with different temporal and group-specific patterns.
@@ -96,28 +105,6 @@ BiocManager::install("TiDEomics")
 ``` r
 
 library(TiDEomics)
-#> Warning: multiple methods tables found for 'transform'
-#> Warning: replacing previous import 'BiocGenerics::transform' by
-#> 'S4Vectors::transform' when loading 'SummarizedExperiment'
-#> Warning: replacing previous import 'BiocGenerics::transform' by
-#> 'S4Vectors::transform' when loading 'IRanges'
-#> Warning: multiple methods tables found for 'transform'
-#> Warning: replacing previous import 'BiocGenerics::transform' by
-#> 'S4Vectors::transform' when loading 'Seqinfo'
-#> Warning: replacing previous import 'BiocGenerics::transform' by
-#> 'S4Vectors::transform' when loading 'GenomicRanges'
-#> Warning: replacing previous import 'BiocGenerics::transform' by
-#> 'S4Vectors::transform' when loading 'S4Arrays'
-#> Warning: replacing previous import 'BiocGenerics::transform' by
-#> 'S4Vectors::transform' when loading 'DelayedArray'
-#> Warning: replacing previous import 'BiocGenerics::transform' by
-#> 'S4Vectors::transform' when loading 'SparseArray'
-#> Warning: replacing previous import 'BiocGenerics::transform' by
-#> 'S4Vectors::transform' when loading 'XVector'
-#> Warning: replacing previous import 'BiocGenerics::transform' by
-#> 'S4Vectors::transform' when loading 'AnnotationDbi'
-#> Warning: replacing previous import 'BiocGenerics::transform' by
-#> 'S4Vectors::transform' when loading 'Biostrings'
 #> 
 #> Registered S3 method overwritten by 'lme4':
 #>   method           from
@@ -145,12 +132,9 @@ library(SummarizedExperiment)
 #>     rowWeightedMads, rowWeightedMeans, rowWeightedMedians,
 #>     rowWeightedSds, rowWeightedVars
 #> Loading required package: GenomicRanges
-#> Warning: package 'GenomicRanges' was built under R version 4.6.1
 #> Loading required package: stats4
 #> Loading required package: BiocGenerics
-#> Warning: package 'BiocGenerics' was built under R version 4.6.1
 #> Loading required package: generics
-#> Warning: package 'generics' was built under R version 4.6.1
 #> 
 #> Attaching package: 'generics'
 #> The following objects are masked from 'package:base':
@@ -257,18 +241,18 @@ For the most common scenarios in transcriptomics and proteomics:
 
 - RNA-seq data should be normalised for sequencing depth and composition
   bias before TiDEomics, e.g. with TMM. The tutorial uses
-  `log2(CPM + 1)` for simplicity. For pairwise differential expression,
-  `trend = TRUE` can be used to account for the mean-variance
-  relationship. See below section on [pairwise differential
-  expression](#pairwise-de) for details.
+  `log2(CPM + 1)` for simplicity. For limma-based differential
+  expression, `trend = TRUE` can be used to account for the
+  mean-variance relationship. See below section on [pairwise
+  differential expression](#pairwise-de) for details.
 
 - MS-based proteomics data processing software may include normalisation
   when producing protein x sample matrix. Depending on software and
   settings, manual normalisation and log transformation may be required,
   e.g. median normalisation. Missing values are accepted in most
-  TiDEomics functions, and a basic imputation function
+  TiDEomics functions, and
   [`impute_groups()`](https://hte123.github.io/TiDEomics/reference/impute_groups.md)
-  is provided.
+  provides optional imputation.
 
 ## Workflow
 
@@ -1185,6 +1169,152 @@ plot_volcano(DE_between_group_out,
 
 ![](TiDEomics_files/figure-html/volcano-1.png)
 
+### Model-based time course differential expression
+
+[`DE_timecourse()`](https://hte123.github.io/TiDEomics/reference/DE_timecourse.md)
+provides a model-based alternative to pairwise comparisons by testing
+temporal changes across the whole time course.
+
+- `group_mode = "per_group"` tests temporal changes separately per
+  group. `group_mode = "joint_group"` fits one Group x Time model for
+  all groups.
+
+- `time_mode = "factor"` treats time points as categories and tests
+  whether a feature changes across time overall, `time_mode = "numeric"`
+  treats time as continuous and tests for a linear trend, and
+  `time_mode = "spline"` models smooth non-linear changes.
+
+- If `Subject` exists in the input, repeated measurements are modelled
+  using
+  [`limma::duplicateCorrelation()`](https://rdrr.io/pkg/limma/man/dupcor.html).
+
+See
+[`?DE_timecourse`](https://hte123.github.io/TiDEomics/reference/DE_timecourse.md)
+for more details about the tests and output.
+
+``` r
+
+DE_timecourse_out <- DE_timecourse(
+    data_obj,
+    assay = 1,
+    group = c("untreated", "IFNbeta"),
+    group_mode = "joint_group",
+    time_mode = "factor"
+)
+#> 'reference_group' not specified. Using 'untreated' as the reference group.
+#> Some Group-Time combinations contain only one sample; replicate-level variance cannot be estimated for them.
+#> Warning: Zero sample variances detected, have been offset away from zero
+#> Warning: Zero sample variances detected, have been offset away from zero
+
+DE_timecourse_out$results$group_effect |> utils::head()
+```
+
+```
+#>    Feature Group         Test TimePointsTested ReferenceTime
+#> 1   Scpep1  <NA> group_effect           0,8,24             0
+#> 2      Dbt  <NA> group_effect           0,8,24             0
+#> 3   Tmigd3  <NA> group_effect           0,8,24             0
+#> 4    Clcn4  <NA> group_effect           0,8,24             0
+#> 5 Serpinf1  <NA> group_effect           0,8,24             0
+#> 6   Sema6b  <NA> group_effect           0,8,24             0
+#>   logFC_GroupIFNbeta_at_reference_time   AveExpr            F P.Value adj.P.Val
+#> 1                        -1.445388e-15 14.313263 7.374118e-29       1         1
+#> 2                        -2.142872e-16  9.365898 1.729032e-31       1         1
+#> 3                        -1.949593e-15  3.218457 3.543740e-31       1         1
+#> 4                         2.726909e-15 11.425192 1.340653e-28       1         1
+#> 5                        -5.310960e-15  2.415547 3.611320e-30       1         1
+#> 6                        -7.899213e-16  8.654322 7.150309e-30       1         1
+#>           B
+#> 1 -6.230668
+#> 2 -6.230668
+#> 3 -6.230668
+#> 4 -6.230668
+#> 5 -6.230668
+#> 6 -6.230668
+DE_timecourse_out$results$reference_time_effect |> utils::head()
+```
+
+```
+#>    Feature     Group                  Test TimePointsTested ReferenceTime
+#> 1   Scpep1 untreated reference_time_effect           0,8,24             0
+#> 2      Dbt untreated reference_time_effect           0,8,24             0
+#> 3   Tmigd3 untreated reference_time_effect           0,8,24             0
+#> 4    Clcn4 untreated reference_time_effect           0,8,24             0
+#> 5 Serpinf1 untreated reference_time_effect           0,8,24             0
+#> 6   Sema6b untreated reference_time_effect           0,8,24             0
+#>   logFC_TimeFactor8 logFC_TimeFactor24   AveExpr         F    P.Value adj.P.Val
+#> 1        -0.6440495         -0.5338437 14.313263 7.0377363 0.03152193 0.4093839
+#> 2         0.1772706          0.6138435  9.365898 0.7347255 0.52228335 1.0000000
+#> 3        -2.4671473          0.4339172  3.218457 0.2774559 0.76793183 1.0000000
+#> 4        -0.1693544          0.4197441 11.425192 2.6253606 0.16012560 0.7356911
+#> 5        -2.9552536          2.5623549  2.415547 1.3394455 0.33726091 0.9291524
+#> 6        -0.4424538         -0.9045470  8.654322 4.6884624 0.06628655 0.4874011
+#>    B
+#> 1 NA
+#> 2 NA
+#> 3 NA
+#> 4 NA
+#> 5 NA
+#> 6 NA
+DE_timecourse_out$results$global_time_effect |> utils::head()
+```
+
+```
+#>    Feature Group               Test TimePointsTested ReferenceTime
+#> 1   Scpep1  <NA> global_time_effect           0,8,24             0
+#> 2      Dbt  <NA> global_time_effect           0,8,24             0
+#> 3   Tmigd3  <NA> global_time_effect           0,8,24             0
+#> 4    Clcn4  <NA> global_time_effect           0,8,24             0
+#> 5 Serpinf1  <NA> global_time_effect           0,8,24             0
+#> 6   Sema6b  <NA> global_time_effect           0,8,24             0
+#>   logFC_TimeFactor8 logFC_TimeFactor24 delta_logFC_GroupIFNbeta_TimeFactor8
+#> 1        -0.6440495         -0.5338437                             0.272890
+#> 2         0.1772706          0.6138435                            -1.943050
+#> 3        -2.4671473          0.4339172                             7.064350
+#> 4        -0.1693544          0.4197441                            -1.475110
+#> 5        -2.9552536          2.5623549                             1.857391
+#> 6        -0.4424538         -0.9045470                            -2.300506
+#>   delta_logFC_GroupIFNbeta_TimeFactor24   AveExpr          F     P.Value
+#> 1                            0.94557432 14.313263  8.9322844 0.014071587
+#> 2                           -1.22366369  9.365898  3.3960579 0.098804913
+#> 3                           -0.09926122  3.218457  0.7512060 0.595331698
+#> 4                           -0.78614719 11.425192 14.7502618 0.004372742
+#> 5                           -5.51760845  2.415547  0.9554212 0.499794170
+#> 6                           -1.25277972  8.654322 26.2575537 0.001053167
+#>     adj.P.Val  B
+#> 1 0.052900701 NA
+#> 2 0.238659210 NA
+#> 3 0.829152782 NA
+#> 4 0.022539905 NA
+#> 5 0.799387776 NA
+#> 6 0.008435779 NA
+DE_timecourse_out$results$group_time_interaction |> utils::head()
+```
+
+```
+#>    Feature Group                   Test TimePointsTested ReferenceTime
+#> 1   Scpep1  <NA> group_time_interaction           0,8,24             0
+#> 2      Dbt  <NA> group_time_interaction           0,8,24             0
+#> 3   Tmigd3  <NA> group_time_interaction           0,8,24             0
+#> 4    Clcn4  <NA> group_time_interaction           0,8,24             0
+#> 5 Serpinf1  <NA> group_time_interaction           0,8,24             0
+#> 6   Sema6b  <NA> group_time_interaction           0,8,24             0
+#>   delta_logFC_GroupIFNbeta_TimeFactor8 delta_logFC_GroupIFNbeta_TimeFactor24
+#> 1                             0.272890                            0.94557432
+#> 2                            -1.943050                           -1.22366369
+#> 3                             7.064350                           -0.09926122
+#> 4                            -1.475110                           -0.78614719
+#> 5                             1.857391                           -5.51760845
+#> 6                            -2.300506                           -1.25277972
+#>     AveExpr         F     P.Value  adj.P.Val  B
+#> 1 14.313263  8.242530 0.023028023 0.10169338 NA
+#> 2  9.365898  3.077735 0.128547691 0.33828340 NA
+#> 3  3.218457  1.179842 0.375987542 0.72720491 NA
+#> 4 11.425192  8.062766 0.024077902 0.10202501 NA
+#> 5  2.415547  1.656524 0.275099417 0.59288667 NA
+#> 6  8.654322 12.525341 0.009467414 0.05541831 NA
+```
+
 ### Feature properties and classification
 
 [`calc_feature_property()`](https://hte123.github.io/TiDEomics/reference/calc_feature_property.md)
@@ -1204,6 +1334,10 @@ computes per-feature properties:
 - `Max_FC_time`: the difference between time points with maximum and
   minimum abundance, providing information about the direction (up or
   down) and duration of changing.
+
+- `Net_FC`: signed fold change between the latest and earliest time
+  points. Positive values indicate a net increase and negative values a
+  net decrease. `NA` when only one time point is available.
 
 - `Exp_threshold`: user-set value threshold for a feature to be
   considered expressed in a sample. This can be used to filter features
@@ -1264,13 +1398,13 @@ utils::head(property_tb)
 #> 4 1700018A04Rik IFNbeta             0     1       6        NA 2.129232
 #> 5 1700029J03Rik IFNbeta             0     0       6        NA       NA
 #> 6 1700066O22Rik IFNbeta             0     1       6        NA 1.937443
-#>   Max_FC_time  Rho_time Peak_ratio   Log2_CV        AUC Exp_ratio
-#> 1          24        NA         NA        NA  20.362109 0.3333333
-#> 2          NA        NA         NA        NA         NA 0.0000000
-#> 3          20 0.3142857  0.1666667 0.1725568 -13.328532 1.0000000
-#> 4          24        NA         NA        NA  17.033857 0.1666667
-#> 5          NA        NA         NA        NA         NA 0.0000000
-#> 6           6        NA         NA        NA   3.874887 0.1666667
+#>   Max_FC_time    Net_FC  Rho_time Peak_ratio   Log2_CV        AUC Exp_ratio
+#> 1          24 2.0383984        NA         NA        NA  20.362109 0.3333333
+#> 2          NA        NA        NA         NA        NA         NA 0.0000000
+#> 3          20 0.4612489 0.3142857  0.1666667 0.1725568 -13.328532 1.0000000
+#> 4          24 2.1292321        NA         NA        NA  17.033857 0.1666667
+#> 5          NA        NA        NA         NA        NA         NA 0.0000000
+#> 6           6 0.0000000        NA         NA        NA   3.874887 0.1666667
 ```
 
 Features expressed in only one group or a subset of groups can be
@@ -1557,6 +1691,7 @@ var_decomp <- decomp_variance(data_obj,
     assay = 1, core = 2
 )
 #> LMM: exp ~ (1|Group) + (1|Time)  |  Output: Group, Time, Residual
+#> 340 features evaluated: 267 successful; 0 errors; 73 warnings; 0 skipped before fitting for insufficient observations or variance.
 
 plot_variance(var_decomp, rank = "Time", top_n = 20)
 #> Features not specified. Plotting top 20 features ranked by Time.
@@ -1576,15 +1711,17 @@ plot_variance(var_decomp, rank = "Group", top_n = 20)
 
 Detailed tutorials of weighted gene correlation network analysis
 ([WGCNA](https://cran.r-project.org/web/packages/WGCNA/index.html))
-(Langfelder and Horvath 2008, 2012) can be found
+(Zhang and Horvath 2005; Langfelder and Horvath 2008, 2012) can be found
 [online](https://github.com/edo98811/WGCNA_official_documentation/). The
 following is a brief demonstration of how to prepare input and run WGCNA
 with TiDEomics functions.
 
 **Filtering strategies**:
 
-- Features with too many missing values will be automatically removed
-  with
+- Features and samples with excessive missing values will be
+  automatically removed by WGCNA’s quality control functions
+  [`WGCNA::goodSamples()`](https://rdrr.io/pkg/WGCNA/man/goodSamples.html)
+  and
   [`WGCNA::goodGenes()`](https://rdrr.io/pkg/WGCNA/man/goodGenes.html)
   included in the
   [`prepare_WGCNA()`](https://hte123.github.io/TiDEomics/reference/prepare_WGCNA.md)
@@ -1602,9 +1739,9 @@ with TiDEomics functions.
 
 ``` r
 
-# Example filtering by residual variance < Q3
+# Example filtering by residual variance <= Q3
 var_res_q3 <- stats::quantile(var_decomp$Residual, 0.75, na.rm = TRUE)
-filter_wgcna <- var_decomp |> dplyr::filter(Residual < var_res_q3) |>
+filter_wgcna <- var_decomp |> dplyr::filter(Residual <= var_res_q3) |>
     dplyr::pull(Feature)
 
 data_obj_wgcna <- data_obj[filter_wgcna, ]
@@ -1615,7 +1752,14 @@ data_obj_wgcna <- data_obj[filter_wgcna, ]
 [`prepare_WGCNA()`](https://hte123.github.io/TiDEomics/reference/prepare_WGCNA.md)
 prepares the input for WGCNA and helps to choose the soft-thresholding
 power. Check the scale-free topology fit indices to confirm that the
-chosen power is appropriate.
+chosen power is appropriate. The returned `custom_powerEstimate` is the
+lowest power at which the signed scale-free fit (signed R^2) exceeds
+`RsquaredCut`, consistent with the “Scale independence” panel of the
+diagnostic plot. WGCNA’s default `powerEstimate` uses the unsigned R^2
+and may therefore be the same as, or differ from,
+`custom_powerEstimate`. `custom_powerEstimate` is preferred in this
+workflow because it accounts for the direction of the connectivity
+distribution.
 
 Reasonable powers are less than 15 for unsigned or signed hybrid
 networks, and less than 30 for signed networks, to reach scale-free
@@ -1658,6 +1802,7 @@ wgcna_input <- prepare_WGCNA(data_obj_wgcna, assay = 2,
 #> 18    18    0.839 -1.340          0.934    2.16      1.46  10.50
 #> 19    19    0.858 -1.370          0.949    1.86      1.22   9.42
 #> 20    20    0.873 -1.380          0.961    1.61      1.05   8.51
+#> WGCNA powerEstimate: 17 (unsigned SFT.R.sq > 0.8); custom_powerEstimate: 17 (signed R-squared > 0.8).
 wgcna_input$plot
 ```
 
@@ -1665,8 +1810,13 @@ wgcna_input$plot
 
 ``` r
 
-picked_power <- wgcna_input$powerEstimate
+picked_power <- wgcna_input$custom_powerEstimate # using signed R^2
 picked_power
+```
+
+```
+#> [1] 17
+wgcna_input$powerEstimate # using unsigned R^2
 ```
 
 ```
@@ -1767,18 +1917,18 @@ summarise_module_metrics(net)
 ```
 
 ```
-#>   Module Size Proportion   MeanKME  MeanKME2 MedianKME     SDKME    MinKME
-#> 1     M1   98  0.3843137 0.7166913 0.5313366 0.7320244 0.1336884 0.3196666
-#> 2     M2   38  0.1490196 0.6866064 0.4943502 0.7007783 0.1534317 0.3302328
-#> 3     M3   32  0.1254902 0.7590110 0.5892009 0.7500435 0.1163005 0.5432322
-#> 4     M4   31  0.1215686 0.7595552 0.5868847 0.7715531 0.1014526 0.4817727
-#> 5     M5   26  0.1019608 0.7114097 0.5250610 0.7268856 0.1404120 0.4715007
-#>      MaxKME
-#> 1 0.9491812
-#> 2 0.9751396
-#> 3 0.9680882
-#> 4 0.9387840
-#> 5 0.9187550
+#>   Module Size Proportion   MeanKME  MeanKME2 MedianKME     SDKME    Q25KME
+#> 1     M1   98  0.3843137 0.7166913 0.5313366 0.7320244 0.1336884 0.6388258
+#> 2     M2   38  0.1490196 0.6866064 0.4943502 0.7007783 0.1534317 0.5900192
+#> 3     M3   32  0.1254902 0.7590110 0.5892009 0.7500435 0.1163005 0.6704224
+#> 4     M4   31  0.1215686 0.7595552 0.5868847 0.7715531 0.1014526 0.7021215
+#> 5     M5   26  0.1019608 0.7114097 0.5250610 0.7268856 0.1404120 0.5842224
+#>      Q75KME    MinKME    MaxKME
+#> 1 0.8151648 0.3196666 0.9491812
+#> 2 0.8095460 0.3302328 0.9751396
+#> 3 0.8511722 0.5432322 0.9680882
+#> 4 0.8317364 0.4817727 0.9387840
+#> 5 0.8323094 0.4715007 0.9187550
 ```
 
 **Plot module profiles**:
@@ -1786,7 +1936,7 @@ summarise_module_metrics(net)
 ``` r
 
 plot_modules_v(gene_module,
-    data_obj_merged, scale = TRUE,
+    data_obj_merged, assay = 2, scale = TRUE,
     ylabel = "Z-score of log2(CPM + 1)",
     height_ratio = 2
 )
@@ -1816,21 +1966,12 @@ and plot with
 gse_group <- enrichGO_rank(var_decomp,
     gene_rank_by = "Group",
     OrgDb = org.Mm.eg.db,
-    keyType = "SYMBOL", category = "BP",
+    keyType = "SYMBOL", category = "CC",
+    pvalueCutoff = 1,
     go_rank_by = "p.adjust")
-#> Warning in gsea(geneList = geneList, gene_sets = geneSets, weight = weight, :
-#> There were 3643 pathways for which P-values were not calculated properly due to
-#> unbalanced gene-level statistic values. For such pathways pvalue, NES and
-#> log2err are set to NA. You can try to increase nPermSimple.
-#> Warning in calculate_qvalue(gsea_res$pvalue): Invalid p-values detected (NA,
-#> non-finite, <0, or >1). qvalue will be computed on valid p-values only.
-#> Warning in enrichit::gsea_gson(geneList = geneList, exponent = exponent, : NA
-#> values detected in gene set IDs. Replacing with string 'NA'.
-#> Warning in enrichit::gsea_gson(geneList = geneList, exponent = exponent, :
-#> Duplicate gene set IDs detected: NA... (Total 1). Unique suffixes added.
-#> Removing NA ID gene sets for BP.
+#> Removing NA ID gene sets for CC.
 
-enrichplot::gseaplot2(gse_group[["BP"]], geneSetID = 1:3, base_size = 8)
+enrichplot::gseaplot2(gse_group$all[["CC"]], geneSetID = 1:3, base_size = 8)
 ```
 
 ![](TiDEomics_files/figure-html/go_rank-1.png)
@@ -1860,52 +2001,22 @@ go_list <- enrichGO_list(
 #> GO category not specified. Using all three: BP, MF, CC.
 #> Performing GO enrichment for category: BP
 #> Processing gene list: 1
-#> 'select()' returned 1:1 mapping between keys and columns
-#> 'select()' returned 1:1 mapping between keys and columns
 #> Processing gene list: 2
-#> 'select()' returned 1:1 mapping between keys and columns
-#> 'select()' returned 1:1 mapping between keys and columns
 #> Processing gene list: 3
-#> 'select()' returned 1:1 mapping between keys and columns
-#> 'select()' returned 1:1 mapping between keys and columns
 #> Processing gene list: 4
-#> 'select()' returned 1:1 mapping between keys and columns
-#> 'select()' returned 1:1 mapping between keys and columns
 #> Processing gene list: 5
-#> 'select()' returned 1:1 mapping between keys and columns
-#> 'select()' returned 1:1 mapping between keys and columns
 #> Performing GO enrichment for category: MF
 #> Processing gene list: 1
-#> 'select()' returned 1:1 mapping between keys and columns
-#> 'select()' returned 1:1 mapping between keys and columns
 #> Processing gene list: 2
-#> 'select()' returned 1:1 mapping between keys and columns
-#> 'select()' returned 1:1 mapping between keys and columns
 #> Processing gene list: 3
-#> 'select()' returned 1:1 mapping between keys and columns
-#> 'select()' returned 1:1 mapping between keys and columns
 #> Processing gene list: 4
-#> 'select()' returned 1:1 mapping between keys and columns
-#> 'select()' returned 1:1 mapping between keys and columns
 #> Processing gene list: 5
-#> 'select()' returned 1:1 mapping between keys and columns
-#> 'select()' returned 1:1 mapping between keys and columns
 #> Performing GO enrichment for category: CC
 #> Processing gene list: 1
-#> 'select()' returned 1:1 mapping between keys and columns
-#> 'select()' returned 1:1 mapping between keys and columns
 #> Processing gene list: 2
-#> 'select()' returned 1:1 mapping between keys and columns
-#> 'select()' returned 1:1 mapping between keys and columns
 #> Processing gene list: 3
-#> 'select()' returned 1:1 mapping between keys and columns
-#> 'select()' returned 1:1 mapping between keys and columns
 #> Processing gene list: 4
-#> 'select()' returned 1:1 mapping between keys and columns
-#> 'select()' returned 1:1 mapping between keys and columns
 #> Processing gene list: 5
-#> 'select()' returned 1:1 mapping between keys and columns
-#> 'select()' returned 1:1 mapping between keys and columns
 #> Merging GO enrichment results across gene lists for each category.
 
 plot_GO(go_list$all, plot_dotplot = TRUE,
@@ -1989,7 +2100,7 @@ Available databases can be checked with
 [`enrich_msigdb()`](https://hte123.github.io/TiDEomics/reference/enrich_msigdb.md)
 and
 [`enrichR_list()`](https://hte123.github.io/TiDEomics/reference/enrichR_list.md)
-all return a named list of data.frames (one per category for
+all return a named list of data frames (one per category for
 `enrichGO_list`, one for
 [`enrich_msigdb()`](https://hte123.github.io/TiDEomics/reference/enrich_msigdb.md),
 one per database for
@@ -2007,26 +2118,23 @@ above but horizontally aligned with annotation of the modules with their
 top enriched GO terms. The plotting function is adapted from ClusterGVis
 package (Zhang et al. 2026).
 
+[`plot_modules_h()`](https://hte123.github.io/TiDEomics/reference/plot_modules_h.md)
+supports extensive customisation, e.g. `group_annotation` controls
+whether groups are labelled above the heatmap by names (default), colour
+strips, both, or neither. See
+[`?plot_modules_h`](https://hte123.github.io/TiDEomics/reference/plot_modules_h.md)
+for details.
+
 ``` r
 
 plot_modules_h(gene_module,
-    data_obj_merged, scale = TRUE,
+    data_obj_merged, assay = 2, scale = TRUE,
     ylabel = "Z-score of log2(CPM + 1)",
     enrich_list = go_list$all,
     enrich_category = "BP",
     heatmap_width = 6,
     heatmap_height = 8
 )
-#> Warning: Removed 294 rows containing non-finite outside the scale range
-#> (`stat_summary()`).
-#> Warning: Removed 114 rows containing non-finite outside the scale range
-#> (`stat_summary()`).
-#> Warning: Removed 96 rows containing non-finite outside the scale range
-#> (`stat_summary()`).
-#> Warning: Removed 93 rows containing non-finite outside the scale range
-#> (`stat_summary()`).
-#> Warning: Removed 78 rows containing non-finite outside the scale range
-#> (`stat_summary()`).
 ```
 
 ![](TiDEomics_files/figure-html/plot-wgcna-modules-go-1.png)
@@ -2035,9 +2143,9 @@ Multiple enrichment categories (e.g. GO BP, CC, MF, MSigDB collections,
 enrichR databases) can be displayed side-by-side by passing a vector to
 `enrich_category`. Features of interest can be marked on the heatmap or
 shown as an annotation column via `mark_features` and
-`enrich_category = "Hub features"`. The `enrich_p_threshold` parameter
+`enrich_category = "Features"`. The `enrich_threshold` parameter
 controls per-category p-value colour-coding of enrichment terms; set to
-`NA` for “Hub features”, which use auto-assigned colours instead.
+`NA` for “Features”, which use auto-assigned colours instead.
 
 Hub features can be extracted by WGCNA module membership (the
 correlation of the feature with the corresponding module eigengene) with
@@ -2048,25 +2156,15 @@ correlation of the feature with the corresponding module eigengene) with
 hub_features <- extract_hubs(net, top_n = 3)
 
 plot_modules_h(gene_module,
-    data_obj_merged, scale = TRUE,
+    data_obj_merged, assay = 2, scale = TRUE,
     ylabel = "Z-score of log2(CPM + 1)",
     enrich_list = c(go_list$all, hallmark_msigdb),
     enrich_category = c("BP", "CC", "MH"),
-    enrich_p_threshold = c(0.05, 0.05, 0.05),
+    enrich_threshold = c(0.05, 0.05, 0.05),
     mark_features = hub_features,
     heatmap_width = 6,
     heatmap_height = 8
 )
-#> Warning: Removed 294 rows containing non-finite outside the scale range
-#> (`stat_summary()`).
-#> Warning: Removed 114 rows containing non-finite outside the scale range
-#> (`stat_summary()`).
-#> Warning: Removed 96 rows containing non-finite outside the scale range
-#> (`stat_summary()`).
-#> Warning: Removed 93 rows containing non-finite outside the scale range
-#> (`stat_summary()`).
-#> Warning: Removed 78 rows containing non-finite outside the scale range
-#> (`stat_summary()`).
 ```
 
 ![](TiDEomics_files/figure-html/plot-wgcna-modules-multi-1.png)
@@ -2139,14 +2237,23 @@ variance decomposition, and feature filtering. It is convenient for
 standard analyses, while running each step individually allows for more
 control over parameters.
 
+By default,
+[`prepare_tide()`](https://hte123.github.io/TiDEomics/reference/prepare_tide.md)
+keeps features with mean values greater than `feature_threshold` (or
+non-NA when `feature_threshold` is NULL) in at least 50% time points in
+at least two groups. It then retains features with residual variance at
+or below the 75th percentile, applied separately to the original and
+time-0-normalised data.
+
 ``` r
 
 tide <- prepare_tide(
     data = tutorial_data,
     sample_ann = tutorial_sample_info,
     filter_ratio = 0.5,
+    feature_threshold = 0,
     min_groups = 2,
-    keep = "below_quantile",
+    keep = "quantile",
     residual_threshold = 0.75
 )
 #> No Subject column specified. Samples treated as independent. For repeated-measures designs, set subject_col to the column identifying biological subjects.
@@ -2159,19 +2266,26 @@ tide <- prepare_tide(
 #> Cross-group filter (Exp_ratio >= 0.5 in >= 2 groups): kept 340 of 500 features (68%)
 #> --- assay: orig ---
 #> LMM: exp ~ (1|Group) + (1|Time)  |  Output: Group, Time, Residual
-#> Residual filter (below_quantile): kept 255 of 340 features (75%)
+#> 340 features evaluated: 267 successful; 0 errors; 73 warnings; 0 skipped before fitting for insufficient observations or variance.
+#> Residual filter (quantile): kept 255 of 340 features (75%)
 #> --- assay: norm ---
 #> LMM: exp ~ (1|Group) + (1|Time)  |  Output: Group, Time, Residual
-#> Residual filter (below_quantile): kept 255 of 340 features (75%)
+#> 340 features evaluated: 267 successful; 0 errors; 73 warnings; 0 skipped before fitting for insufficient observations or variance.
+#> Residual filter (quantile): kept 255 of 340 features (75%)
 tide$filter_summary
 ```
 
 ```
-#>                stage assay n_features pct_kept                       threshold
-#> 1              input  <NA>        500      100                            <NA>
-#> 2 cross_group_filter  <NA>        340       68 Exp_ratio >= 0.5 in >= 2 groups
-#> 3    residual_filter  orig        255       51          below_quantile = 69.03
-#> 4    residual_filter  norm        255       51          below_quantile = 69.03
+#>                stage assay n_features pct_kept residual_cutoff
+#> 1              input  <NA>        500      100              NA
+#> 2 cross_group_filter  <NA>        340       68              NA
+#> 3    residual_filter  orig        255       51        69.02961
+#> 4    residual_filter  norm        255       51        69.02961
+#>                         threshold
+#> 1                            <NA>
+#> 2 Exp_ratio >= 0.5 in >= 2 groups
+#> 3                quantile = 69.03
+#> 4                quantile = 69.03
 ```
 
 Variance decomposition and filtering are run on both `"orig"` and
@@ -2179,7 +2293,7 @@ Variance decomposition and filtering are run on both `"orig"` and
 
 | Element | Description | Use for | Step-by-step equivalent in the tutorial |
 |----|----|----|----|
-| `tide$se` | Unmerged SE, all features | Correlation matrix, PCA, UMAP, Pairwise DE, plot_trend | `data_obj` |
+| `tide$se` | Unmerged SE, all features | Correlation matrix, PCA, UMAP, DE, plot_trend | `data_obj` |
 | `tide$se_filtered$orig/norm` | Unmerged SE, filtered features | WGCNA | `data_obj_wgcna` |
 | `tide$merged_list` | Per-group merged SEs, all features | calc_feature_property, run_Trendy | `data_obj_merged_list` |
 | `tide$merged_list_filtered$orig/norm` | Per-group merged SEs, filtered features | \- | \- |
@@ -2252,8 +2366,6 @@ dde <- DeeDeeExperiment::DeeDeeExperiment(
     de_results = de_flat,
     enrich_results = enrich_flat
 )
-#> Warning: replacing previous import 'BiocGenerics::transform' by
-#> 'IRanges::transform' when loading 'DESeq2'
 #> Warning in DeeDeeExperiment::DeeDeeExperiment(sce = tide$se, de_results = de_flat, : Could not match FEA 'clusterProfiler_GO_modules_BP_1' to any DE contrast.
 #> Available DE results: between_group_IFNgamma-IFNbeta_T0, between_group_IFNgamma-IFNbeta_T2, between_group_IFNgamma-IFNbeta_T4, between_group_IFNgamma-IFNbeta_T6, between_group_IFNgamma-IFNbeta_T8, between_group_IFNgamma-IFNbeta_T24, between_group_LPS-IFNbeta_T0, between_group_LPS-IFNbeta_T2, between_group_LPS-IFNbeta_T4, between_group_LPS-IFNbeta_T6, between_group_LPS-IFNbeta_T8, between_group_LPS-IFNbeta_T24, between_group_untreated-IFNbeta_T0, between_group_untreated-IFNbeta_T8, between_group_untreated-IFNbeta_T24, between_group_IFNbeta-IFNgamma_T0, between_group_IFNbeta-IFNgamma_T2, between_group_IFNbeta-IFNgamma_T4, between_group_IFNbeta-IFNgamma_T6, between_group_IFNbeta-IFNgamma_T8, between_group_IFNbeta-IFNgamma_T24, between_group_LPS-IFNgamma_T0, between_group_LPS-IFNgamma_T2, between_group_LPS-IFNgamma_T4, between_group_LPS-IFNgamma_T6, between_group_LPS-IFNgamma_T8, between_group_LPS-IFNgamma_T24, between_group_untreated-IFNgamma_T0, between_group_untreated-IFNgamma_T8, between_group_untreated-IFNgamma_T24, between_group_IFNbeta-LPS_T0, between_group_IFNbeta-LPS_T2, between_group_IFNbeta-LPS_T4, between_group_IFNbeta-LPS_T6, between_group_IFNbeta-LPS_T8, between_group_IFNbeta-LPS_T24, between_group_IFNgamma-LPS_T0, between_group_IFNgamma-LPS_T2, between_group_IFNgamma-LPS_T4, between_group_IFNgamma-LPS_T6, between_group_IFNgamma-LPS_T8, between_group_IFNgamma-LPS_T24, between_group_untreated-LPS_T0, between_group_untreated-LPS_T8, between_group_untreated-LPS_T24, between_group_IFNbeta-untreated_T0, between_group_IFNbeta-untreated_T8, between_group_IFNbeta-untreated_T24, between_group_IFNgamma-untreated_T0, between_group_IFNgamma-untreated_T8, between_group_IFNgamma-untreated_T24, between_group_LPS-untreated_T0, between_group_LPS-untreated_T8, between_group_LPS-untreated_T24, between_time_IFNbeta_t2-t0, between_time_IFNbeta_t4-t0, between_time_IFNbeta_t6-t0, between_time_IFNbeta_t8-t0, between_time_IFNbeta_t24-t0, between_time_IFNbeta_t4-t2, between_time_IFNbeta_t6-t2, between_time_IFNbeta_t8-t2, between_time_IFNbeta_t24-t2, between_time_IFNbeta_t6-t4, between_time_IFNbeta_t8-t4, between_time_IFNbeta_t24-t4, between_time_IFNbeta_t8-t6, between_time_IFNbeta_t24-t6, between_time_IFNbeta_t24-t8, between_time_IFNgamma_t2-t0, between_time_IFNgamma_t4-t0, between_time_IFNgamma_t6-t0, between_time_IFNgamma_t8-t0, between_time_IFNgamma_t24-t0, between_time_IFNgamma_t4-t2, between_time_IFNgamma_t6-t2, between_time_IFNgamma_t8-t2, between_time_IFNgamma_t24-t2, between_time_IFNgamma_t6-t4, between_time_IFNgamma_t8-t4, between_time_IFNgamma_t24-t4, between_time_IFNgamma_t8-t6, between_time_IFNgamma_t24-t6, between_time_IFNgamma_t24-t8, between_time_LPS_t2-t0, between_time_LPS_t4-t0, between_time_LPS_t6-t0, between_time_LPS_t8-t0, between_time_LPS_t24-t0, between_time_LPS_t4-t2, between_time_LPS_t6-t2, between_time_LPS_t8-t2, between_time_LPS_t24-t2, between_time_LPS_t6-t4, between_time_LPS_t8-t4, between_time_LPS_t24-t4, between_time_LPS_t8-t6, between_time_LPS_t24-t6, between_time_LPS_t24-t8, between_time_untreated_t8-t0, between_time_untreated_t24-t0, between_time_untreated_t24-t8
 #>  Consider naming your enrich_results starting with one of the following prefixes: 'topGO_', 'clusterProfiler_','GeneTonic_', 'DAVID_','gsea_', 'fgsea_', 'enrichr_', 'gPro_',followed by the contrast name
@@ -2423,7 +2535,7 @@ sessionInfo()
 ```
 
 ```
-#> R version 4.6.0 (2026-04-24 ucrt)
+#> R version 4.6.1 (2026-06-24 ucrt)
 #> Platform: x86_64-w64-mingw32/x64
 #> Running under: Windows 11 x64 (build 26200)
 #> 
@@ -2445,104 +2557,104 @@ sessionInfo()
 #> [8] base     
 #> 
 #> other attached packages:
-#>  [1] org.Mm.eg.db_3.23.0         AnnotationDbi_1.75.0       
-#>  [3] SummarizedExperiment_1.43.0 Biobase_2.73.1             
-#>  [5] GenomicRanges_1.65.1        Seqinfo_1.3.0              
-#>  [7] IRanges_2.47.1              S4Vectors_0.51.2           
-#>  [9] BiocGenerics_0.59.10        generics_0.1.4             
+#>  [1] org.Mm.eg.db_3.23.0         AnnotationDbi_1.75.2       
+#>  [3] SummarizedExperiment_1.43.0 Biobase_2.73.2             
+#>  [5] GenomicRanges_1.65.4        Seqinfo_1.3.2              
+#>  [7] IRanges_2.47.5              S4Vectors_0.51.10          
+#>  [9] BiocGenerics_0.59.12        generics_0.1.4             
 #> [11] MatrixGenerics_1.25.0       matrixStats_1.5.0          
-#> [13] TiDEomics_0.99.4            BiocStyle_2.41.0           
+#> [13] TiDEomics_0.99.7            BiocStyle_2.41.0           
 #> 
 #> loaded via a namespace (and not attached):
-#>   [1] segmented_2.2-1             fs_2.1.0                   
-#>   [3] bitops_1.0-9                enrichplot_1.33.0          
-#>   [5] httr_1.4.8                  RColorBrewer_1.1-3         
-#>   [7] doParallel_1.0.17           ggsci_5.1.0                
+#>   [1] segmented_2.2-2             fs_2.1.0                   
+#>   [3] bitops_1.1-0                enrichplot_1.99.8          
+#>   [5] httr_1.4.9                  RColorBrewer_1.1-3         
+#>   [7] doParallel_1.0.17           ggsci_5.2.0                
 #>   [9] DeeDeeExperiment_1.3.0      dynamicTreeCut_1.63-1      
-#>  [11] tools_4.6.0                 backports_1.5.1            
+#>  [11] tools_4.6.1                 backports_1.5.1            
 #>  [13] utf8_1.2.6                  R6_2.6.1                   
 #>  [15] lazyeval_0.2.3              GetoptLong_1.1.1           
 #>  [17] withr_3.0.3                 gridExtra_2.3.1            
-#>  [19] preprocessCore_1.75.0       WGCNA_1.74                 
+#>  [19] preprocessCore_1.75.1       WGCNA_1.74                 
 #>  [21] cli_3.6.6                   textshaping_1.0.5          
 #>  [23] scatterpie_0.2.6            labeling_0.4.3             
 #>  [25] sass_0.4.10                 S7_0.2.2                   
-#>  [27] askpass_1.2.1               pbapply_1.7-4              
+#>  [27] askpass_1.2.1               pbapply_1.7-5              
 #>  [29] ggridges_0.5.7              pkgdown_2.2.1              
-#>  [31] systemfonts_1.3.2           yulab.utils_0.2.4          
-#>  [33] gson_0.2.0                  foreign_0.8-91             
-#>  [35] DOSE_4.7.2                  limma_3.69.2               
-#>  [37] rstudioapi_0.19.0           impute_1.87.0              
-#>  [39] RSQLite_3.53.3              gridGraphics_0.5-1         
-#>  [41] shape_1.4.6.1               crosstalk_1.2.2            
-#>  [43] gtools_3.9.5                car_3.1-5                  
-#>  [45] dplyr_1.2.1                 GO.db_3.23.1               
-#>  [47] Matrix_1.7-5                abind_1.4-8                
-#>  [49] PCAtools_2.25.0             lifecycle_1.0.5            
-#>  [51] edgeR_4.11.4                yaml_2.3.12                
-#>  [53] carData_3.0-6               gplots_3.3.0               
-#>  [55] qvalue_2.45.0               SparseArray_1.13.2         
-#>  [57] grid_4.6.0                  blob_1.3.0                 
-#>  [59] promises_1.5.0              dqrng_0.4.1                
-#>  [61] crayon_1.5.3                ggtangle_0.1.2             
-#>  [63] lattice_0.22-9              msigdbr_26.1.0             
-#>  [65] beachmat_2.29.0             cowplot_1.2.0              
-#>  [67] KEGGREST_1.53.1             magick_2.9.1               
-#>  [69] pillar_1.11.1               knitr_1.51                 
-#>  [71] ComplexHeatmap_2.29.0       rjson_0.2.23               
-#>  [73] boot_1.3-32                 codetools_0.2-20           
-#>  [75] glue_1.8.1                  ggiraph_0.9.6              
-#>  [77] ggfun_0.2.1                 fontLiberation_0.1.0       
-#>  [79] data.table_1.18.4           vctrs_0.7.3                
-#>  [81] png_0.1-9                   treeio_1.37.0              
-#>  [83] Rdpack_2.6.6                gtable_0.3.6               
-#>  [85] assertthat_0.2.1            cachem_1.1.0               
-#>  [87] xfun_0.60                   rbibutils_2.4.1            
-#>  [89] S4Arrays_1.13.0             mime_0.13                  
-#>  [91] reformulas_0.4.4            survival_3.8-9             
-#>  [93] aisdk_1.4.12                SingleCellExperiment_1.35.2
-#>  [95] iterators_1.0.14            statmod_1.5.2              
-#>  [97] nlme_3.1-170                ggtree_4.3.0               
-#>  [99] bit64_4.8.2                 fontquiver_0.2.1           
-#> [101] bslib_0.11.0                irlba_2.3.7                
-#> [103] KernSmooth_2.23-26          otel_0.2.0                 
-#> [105] rpart_4.1.27                colorspace_2.1-3           
-#> [107] DBI_1.3.0                   Hmisc_5.2-6                
-#> [109] nnet_7.3-20                 DESeq2_1.53.2              
-#> [111] tidyselect_1.2.1            processx_3.9.0             
-#> [113] curl_7.1.0                  bit_4.6.0                  
-#> [115] compiler_4.6.0              httr2_1.3.0                
-#> [117] htmlTable_2.5.0             plotly_4.12.0              
+#>  [31] systemfonts_1.3.2           yulab.utils_0.2.5          
+#>  [33] gson_0.2.2                  foreign_0.8-92             
+#>  [35] DOSE_4.7.3                  dichromat_2.0-1            
+#>  [37] limma_3.99.3                rstudioapi_0.19.0          
+#>  [39] impute_1.87.0               RSQLite_3.53.3             
+#>  [41] gridGraphics_0.5-1          shape_1.4.6.1              
+#>  [43] crosstalk_1.2.2             gtools_3.9.5               
+#>  [45] car_3.1-5                   dplyr_1.2.1                
+#>  [47] GO.db_3.23.1                Matrix_1.7-6               
+#>  [49] abind_1.4-8                 PCAtools_2.25.1            
+#>  [51] lifecycle_1.0.5             edgeR_4.99.10              
+#>  [53] yaml_2.3.12                 carData_3.0-6              
+#>  [55] gplots_3.3.0                qvalue_2.45.0              
+#>  [57] SparseArray_1.13.4          grid_4.6.1                 
+#>  [59] blob_1.3.0                  promises_1.5.0             
+#>  [61] dqrng_0.4.1                 crayon_1.5.3               
+#>  [63] ggtangle_0.1.4              lattice_0.23-1             
+#>  [65] msigdbr_26.1.1              beachmat_2.29.3            
+#>  [67] cowplot_1.2.0               KEGGREST_1.53.6            
+#>  [69] magick_2.9.1                pillar_1.11.1              
+#>  [71] knitr_1.52                  ComplexHeatmap_2.29.0      
+#>  [73] rjson_0.2.23                boot_1.3-32                
+#>  [75] codetools_0.2-20            glue_1.8.1                 
+#>  [77] ggiraph_0.9.6               ggfun_0.2.2                
+#>  [79] fontLiberation_0.1.0        data.table_1.18.6.1        
+#>  [81] vctrs_0.7.3                 png_0.1-9                  
+#>  [83] treeio_1.37.1               Rdpack_2.6.6               
+#>  [85] gtable_0.3.6                assertthat_0.2.1           
+#>  [87] cachem_1.1.0                xfun_0.62                  
+#>  [89] rbibutils_2.4.1             S4Arrays_1.13.2            
+#>  [91] mime_0.13                   reformulas_0.4.4           
+#>  [93] survival_3.8-12             aisdk_1.4.12               
+#>  [95] SingleCellExperiment_1.35.2 iterators_1.0.14           
+#>  [97] statmod_1.5.2               nlme_3.1-171               
+#>  [99] ggtree_4.3.0                bit64_4.8.6                
+#> [101] fontquiver_0.2.1            bslib_0.12.0               
+#> [103] irlba_2.4.1                 KernSmooth_2.23-27         
+#> [105] otel_0.2.0                  rpart_4.1.27               
+#> [107] colorspace_2.1-4            DBI_1.3.0                  
+#> [109] Hmisc_5.3-0                 nnet_7.3-21                
+#> [111] DESeq2_1.53.6               tidyselect_1.2.1           
+#> [113] processx_3.9.0              bit_4.6.0                  
+#> [115] compiler_4.6.1              httr2_1.3.0                
+#> [117] htmlTable_2.5.0             plotly_4.12.1              
 #> [119] randtests_1.0.2             desc_1.4.3                 
-#> [121] fontBitstreamVera_0.1.1     DelayedArray_0.39.3        
-#> [123] bookdown_0.47               checkmate_2.3.4            
+#> [121] fontBitstreamVera_0.1.1     DelayedArray_0.39.8        
+#> [123] bookdown_0.48               checkmate_2.3.4            
 #> [125] scales_1.4.0                caTools_1.18.4             
 #> [127] callr_3.8.0                 rappdirs_0.3.4             
 #> [129] stringr_1.6.0               digest_0.6.39              
-#> [131] minqa_1.2.8                 rmarkdown_2.31             
+#> [131] minqa_1.2.8                 rmarkdown_2.32             
 #> [133] XVector_0.53.0              htmltools_0.5.9            
 #> [135] pkgconfig_2.0.3             base64enc_0.1-6            
-#> [137] umap_0.2.10.0               lme4_2.0-6                 
+#> [137] umap_0.2.10.0               lme4_2.1-0                 
 #> [139] sparseMatrixStats_1.25.0    fastmap_1.2.0              
 #> [141] rlang_1.3.0                 GlobalOptions_0.1.4        
 #> [143] htmlwidgets_1.6.4           shiny_1.14.0               
 #> [145] DelayedMatrixStats_1.35.0   ggh4x_0.3.1                
 #> [147] farver_2.1.2                jquerylib_0.1.4            
 #> [149] jsonlite_2.0.0              BiocParallel_1.47.0        
-#> [151] GOSemSim_2.39.2             BiocSingular_1.29.0        
-#> [153] magrittr_2.0.5              Formula_1.2-5              
-#> [155] ggplotify_0.1.3             patchwork_1.3.2            
+#> [151] GOSemSim_2.39.4             BiocSingular_1.29.2        
+#> [153] magrittr_2.0.5              Formula_1.2-6              
+#> [155] ggplotify_0.1.4             patchwork_1.3.2            
 #> [157] Rcpp_1.1.2                  babelgene_22.9             
-#> [159] reticulate_1.46.0           ape_5.8-1                  
-#> [161] ggnewscale_0.5.2            gdtools_0.5.1              
-#> [163] stringi_1.8.7               MASS_7.3-66                
+#> [159] reticulate_1.47.0           ape_5.8-1                  
+#> [161] ggnewscale_0.5.2            gdtools_0.5.2              
+#> [163] stringi_1.8.9               MASS_7.3-66                
 #> [165] plyr_1.8.9                  shinyFiles_0.9.3           
-#> [167] parallel_4.6.0              ggrepel_0.9.8              
-#> [169] Biostrings_2.81.5           splines_4.6.0              
+#> [167] parallel_4.6.1              ggrepel_0.9.8              
+#> [169] Biostrings_2.81.9           splines_4.6.1              
 #> [171] circlize_0.4.18             locfit_1.5-9.12            
-#> [173] igraph_2.3.3                ggpubr_1.0.0               
+#> [173] igraph_2.3.4                ggpubr_1.0.0               
 #> [175] fastcluster_1.3.0           ggsignif_0.6.4             
-#> [177] enrichit_0.2.0              reshape2_1.4.5             
+#> [177] enrichit_0.2.7              reshape2_1.4.5             
 #> [179] ScaledMatrix_1.21.0         evaluate_1.0.5             
 #> [181] BiocManager_1.30.27         nloptr_2.2.1               
 #> [183] foreach_1.5.2               tweenr_2.0.3               
@@ -2550,15 +2662,15 @@ sessionInfo()
 #> [187] tidyr_1.3.2                 purrr_1.2.2                
 #> [189] polyclip_1.10-7             clue_0.3-68                
 #> [191] ggplot2_4.0.3               Trendy_1.35.0              
-#> [193] ggforce_0.5.0               rsvd_1.0.5                 
-#> [195] broom_1.0.13                xtable_1.8-8               
-#> [197] RSpectra_0.16-2             tidytree_0.4.8             
-#> [199] tidydr_0.0.6                rstatix_1.0.0              
-#> [201] later_1.4.8                 viridisLite_0.4.3          
-#> [203] ragg_1.5.2                  tibble_3.3.1               
-#> [205] clusterProfiler_4.21.0      aplot_0.3.1                
-#> [207] memoise_2.0.1               writexl_1.5.4              
-#> [209] cluster_2.1.8.2
+#> [193] BiocBaseUtils_1.15.1        ggforce_0.5.0              
+#> [195] rsvd_1.0.6                  broom_1.0.13               
+#> [197] xtable_1.8-8                RSpectra_0.16-2            
+#> [199] tidytree_0.4.8              tidydr_0.0.7               
+#> [201] rstatix_1.1.0               later_1.4.8                
+#> [203] viridisLite_0.4.3           ragg_1.5.2                 
+#> [205] tibble_3.3.1                clusterProfiler_4.21.4     
+#> [207] aplot_0.3.2                 memoise_2.0.1              
+#> [209] writexl_2.0.1               cluster_2.1.8.3
 ```
 
 ## References
@@ -2621,6 +2733,10 @@ Yu, Guangchuang, Li-Gen Wang, Yanyan Han, and Qing-Yu He. 2012.
 “clusterProfiler: An r Package for Comparing Biological Themes Among
 Gene Clusters.” *OMICS: A Journal of Integrative Biology* 16 (5):
 284–87. <https://doi.org/10.1089/omi.2011.0118>.
+
+Zhang, Bin, and Steve Horvath. 2005. “A General Framework for Weighted
+Gene Co-Expression Network Analysis.” *Statistical Applications in
+Genetics and Molecular Biology* 4 (1): 1128.
 
 Zhang, Jun, Hongyuan Li, Wenjun Tao, and Jun Zhou. 2026. “ClusterGVis:
 An Advanced Visualization and Clustering Tool for Gene Expression

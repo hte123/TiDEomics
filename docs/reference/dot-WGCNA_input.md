@@ -23,8 +23,9 @@ to remove noisy features before preparing the data for WGCNA.
 
 - assay:
 
-  Which assay slot of the SummarizedExperiment object to use for WGCNA
-  input.
+  The assay to use in the SummarizedExperiment object: a numeric index
+  or character name, e.g. 1 or "orig" for original data, 2 or "norm" for
+  time 0 normalised data. (Default: 2.)
 
 ## Value
 

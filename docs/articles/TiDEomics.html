@@ -26,7 +26,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">TiDEomics</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.7</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -38,11 +38,17 @@
 <li class="active nav-item"><a class="nav-link" href="../articles/TiDEomics.html">Get started</a></li>
 <li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
-  <button class="nav-link dropdown-toggle" type="button" id="dropdown-applications" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Applications</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-applications">
-<li><a class="dropdown-item" href="../articles/TiDEomics_application_1_0.99.4.html">Transcriptome of macrophage response to six immune stimuli</a></li>
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-tutorials-applications" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Tutorials &amp; Applications</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-tutorials-applications">
+<li><a class="dropdown-item" href="../articles/index.html">All articles</a></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Tutorials</h6></li>
+    <li><a class="dropdown-item" href="../articles/TiDEomics.html">TiDEomics main tutorial</a></li>
+    <li><a class="dropdown-item" href="../articles/TiDEomics_multi.html">Multi-dataset/multi-omics tutorial</a></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Applications</h6></li>
+    <li><a class="dropdown-item" href="../articles/TiDEomics_application_1_0.99.7.html">Transcriptome of macrophage response to six immune stimuli</a></li>
   </ul>
 </li>
+<li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul>
 <ul class="navbar-nav">
 <li class="nav-item"><form class="form-inline" role="search">
@@ -67,7 +73,7 @@
 
 
 <link href="TiDEomics_files/htmltools-fill-0.5.9/fill.css" rel="stylesheet">
-<script src="TiDEomics_files/htmlwidgets-1.6.4/htmlwidgets.js"></script><script src="TiDEomics_files/plotly-binding-4.12.0/plotly.js"></script><script src="TiDEomics_files/typedarray-0.1/typedarray.min.js"></script><link href="TiDEomics_files/crosstalk-1.2.2/css/crosstalk.min.css" rel="stylesheet">
+<script src="TiDEomics_files/htmlwidgets-1.6.4/htmlwidgets.js"></script><script src="TiDEomics_files/plotly-binding-4.12.1/plotly.js"></script><script src="TiDEomics_files/typedarray-0.1/typedarray.min.js"></script><link href="TiDEomics_files/crosstalk-1.2.2/css/crosstalk.min.css" rel="stylesheet">
 <script src="TiDEomics_files/crosstalk-1.2.2/js/crosstalk.min.js"></script><link href="TiDEomics_files/plotly-htmlwidgets-css-2.25.2/plotly-htmlwidgets.css" rel="stylesheet">
 <script src="TiDEomics_files/plotly-main-2.25.2/plotly-latest.min.js"></script><div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
@@ -78,7 +84,7 @@
 Oxford<br><a class="author_email" href="mailto:#"></a><a href="mailto:tianen.he@ndm.ox.ac.uk" class="email">tianen.he@ndm.ox.ac.uk</a>
       </address>
                   
-            <h4 data-toc-skip class="date">27 July 2026</h4>
+            <h4 data-toc-skip class="date">29 October 2026</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/hte123/TiDEomics/blob/HEAD/vignettes/TiDEomics.Rmd" class="external-link"><code>vignettes/TiDEomics.Rmd</code></a></small>
       <div class="d-none name"><code>TiDEomics.Rmd</code></div>
@@ -89,11 +95,11 @@ Oxford<br><a class="author_email" href="mailto:#"></a><a href="mailto:tianen.he@
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
-<p><a href="https://github.com/hte123/TiDEomics" class="external-link"><strong>TiDEomics</strong></a>
+<p><a href="https://bioconductor.org/packages/TiDEomics" class="external-link"><strong>TiDEomics</strong></a>
 (Time-course Differential Expression analysis of omics data) is an R
 package for <strong>multi-group time-course omics analysis</strong>
-built on <code>SummarizedExperiment</code>, especially for comparison of
-more than two conditions across time.</p>
+built on <code>SummarizedExperiment</code>, with a particular focus on
+comparing more than two conditions across time.</p>
 <p><code>TiDEomics</code> provides:</p>
 <ul>
 <li><p>An integrated workflow from data processing to functional
@@ -101,7 +107,7 @@ interpretation, on different omics data types in feature x sample matrix
 format, with handling of missing values.</p></li>
 <li><p>An approach to separate <strong>time-dominant</strong>,
 <strong>group-dominant</strong>, and <strong>group-specific
-temporal</strong> effects through the combination of pairwise
+temporal</strong> effects through the combination of limma-based
 differential expression, variance decomposition, and co-expression
 module analysis (WGCNA).</p></li>
 <li><p>A filtering strategy based on <strong>residual variance</strong>
@@ -111,22 +117,29 @@ comparison, traditional filtering by total variance or coefficient of
 variation is less appropriate when biological variation across groups
 and time course is expected.</p></li>
 </ul>
+<p>This vignette demonstrates the workflow on a single dataset with
+multiple groups. TiDEomics also supports <strong>multi-dataset /
+multi-omics</strong> analyses, covered in a separate vignette:
+<code>TiDEomics Tutorial: Multi-Dataset/Multi-Omics Analysis</code>
+(<code>browseVignettes("TiDEomics")</code>).</p>
 <p>Existing packages on time-course omics analysis are available,
-typically designed for transcriptomics data. Some packages are limited
-to two-group comparisons (e.g. <code>splineTimeR</code>) or expect raw
-sequencing counts (e.g. <code>ImpulseDE2</code>, <code>TCseq</code>).
+typically focus on particular data types or analytical tasks. Some
+packages are limited to two-group comparisons
+(e.g. <code>splineTimeR</code>) or expect raw sequencing counts (e.g.
+<code>ImpulseDE2</code>, <code>TCseq</code>). <code>maSigPro</code> and
+<code>timeOmics</code> focus on temporal modelling and profile
+clustering, complementary to <code>TiDEomics</code>.
 <code>maSigPro</code> supports multi-group time-course DE analysis via
-polynomial regression, complementary to <code>TiDEomics</code> with
-fewer assumptions about temporal trends. <code>TiDEomics</code> also
-integrates QC, filtering and downstream functional enrichment within the
-same workflow.</p>
+polynomial regression, while <code>timeOmics</code> supports multi-omics
+integration. <code>TiDEomics</code> also integrates QC, filtering and
+downstream functional enrichment within the same workflow.</p>
 <p>TiDEomics incorporates <code>Trendy</code> <span class="citation">(Bacher et al. 2018)</span> which operates on single
 time series to estimate breakpoints per group per feature, and derived
 variance decomposition from <code>PALMO</code> <span class="citation">(<span class="nocase">Vasaikar et al.</span>
 2023)</span> and introduced residual variance as a filtering
 criterion.</p>
-<p>This tutorial demonstrates a basic workflow, explains key parameters,
-and gives practical tips.</p>
+<p>This tutorial demonstrates the basic workflow, explains key
+parameters, and provides practical tips.</p>
 <p>Key features covered:</p>
 <ul>
 <li><p><em>Preparing input</em>: Create a
@@ -141,9 +154,10 @@ single groups or single time series.</p></li>
 <li><p><em>Sample relationships visualisation (correlation matrix, PCA,
 UMAP)</em>: Explore global structure and major sources of variance,
 check for batch effects, and identify features driving PCs.</p></li>
-<li><p><em>Pairwise differential expression (by time or group)</em>:
+<li><p><em>Differential expression (pairwise and time-course)</em>:
 Identify DE features between pairs of time points within each group, and
-between pairs of groups at each time point.</p></li>
+between pairs of groups at each time point, or model changes over the
+whole time course within or across groups.</p></li>
 <li><p><em>Classification by feature property (randomness and overall
 fold change)</em>: Classify features into different categories (e.g.,
 non-random vs. random, differentially expressed vs. stable) based on
@@ -152,7 +166,8 @@ change.</p></li>
 <li><p><em>Segmented regression with Trendy</em>: Estimate breakpoints
 for each feature in each group and summarise dynamic patterns.</p></li>
 <li><p><em>Variance decomposition modified from PALMO</em>: Quantify
-relative contributions from <code>Time</code>, <code>Group</code>, and
+relative contributions from <code>Time</code>, <code>Group</code>,
+<code>Subject</code> when present, optional interaction terms, and
 <code>Residual</code>, distinguish time or group-dependent DE features
 and “noisy” features.</p></li>
 <li><p><em>Module identification with WGCNA</em>: Identify co-expression
@@ -172,29 +187,7 @@ modules.</p></li>
 <span></span>
 <span><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://bioconductor.github.io/BiocManager/reference/install.html" class="external-link">install</a></span><span class="op">(</span><span class="st">"TiDEomics"</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/hte123/TiDEomics" class="external-link">TiDEomics</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning: multiple methods tables found for 'transform'</span></span>
-<span><span class="co">#&gt; Warning: replacing previous import 'BiocGenerics::transform' by</span></span>
-<span><span class="co">#&gt; 'S4Vectors::transform' when loading 'SummarizedExperiment'</span></span>
-<span><span class="co">#&gt; Warning: replacing previous import 'BiocGenerics::transform' by</span></span>
-<span><span class="co">#&gt; 'S4Vectors::transform' when loading 'IRanges'</span></span>
-<span><span class="co">#&gt; Warning: multiple methods tables found for 'transform'</span></span>
-<span><span class="co">#&gt; Warning: replacing previous import 'BiocGenerics::transform' by</span></span>
-<span><span class="co">#&gt; 'S4Vectors::transform' when loading 'Seqinfo'</span></span>
-<span><span class="co">#&gt; Warning: replacing previous import 'BiocGenerics::transform' by</span></span>
-<span><span class="co">#&gt; 'S4Vectors::transform' when loading 'GenomicRanges'</span></span>
-<span><span class="co">#&gt; Warning: replacing previous import 'BiocGenerics::transform' by</span></span>
-<span><span class="co">#&gt; 'S4Vectors::transform' when loading 'S4Arrays'</span></span>
-<span><span class="co">#&gt; Warning: replacing previous import 'BiocGenerics::transform' by</span></span>
-<span><span class="co">#&gt; 'S4Vectors::transform' when loading 'DelayedArray'</span></span>
-<span><span class="co">#&gt; Warning: replacing previous import 'BiocGenerics::transform' by</span></span>
-<span><span class="co">#&gt; 'S4Vectors::transform' when loading 'SparseArray'</span></span>
-<span><span class="co">#&gt; Warning: replacing previous import 'BiocGenerics::transform' by</span></span>
-<span><span class="co">#&gt; 'S4Vectors::transform' when loading 'XVector'</span></span>
-<span><span class="co">#&gt; Warning: replacing previous import 'BiocGenerics::transform' by</span></span>
-<span><span class="co">#&gt; 'S4Vectors::transform' when loading 'AnnotationDbi'</span></span>
-<span><span class="co">#&gt; Warning: replacing previous import 'BiocGenerics::transform' by</span></span>
-<span><span class="co">#&gt; 'S4Vectors::transform' when loading 'Biostrings'</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://bioconductor.org/packages/TiDEomics/" class="external-link">TiDEomics</a></span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Registered S3 method overwritten by 'lme4':</span></span>
 <span><span class="co">#&gt;   method           from</span></span>
@@ -222,12 +215,9 @@ modules.</p></li>
 <span><span class="co">#&gt;     rowWeightedMads, rowWeightedMeans, rowWeightedMedians,</span></span>
 <span><span class="co">#&gt;     rowWeightedSds, rowWeightedVars</span></span>
 <span><span class="co">#&gt; Loading required package: GenomicRanges</span></span>
-<span><span class="co">#&gt; Warning: package 'GenomicRanges' was built under R version 4.6.1</span></span>
 <span><span class="co">#&gt; Loading required package: stats4</span></span>
 <span><span class="co">#&gt; Loading required package: BiocGenerics</span></span>
-<span><span class="co">#&gt; Warning: package 'BiocGenerics' was built under R version 4.6.1</span></span>
 <span><span class="co">#&gt; Loading required package: generics</span></span>
-<span><span class="co">#&gt; Warning: package 'generics' was built under R version 4.6.1</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Attaching package: 'generics'</span></span>
 <span><span class="co">#&gt; The following objects are masked from 'package:base':</span></span>
@@ -349,7 +339,7 @@ present.</p>
 <ul>
 <li><p>RNA-seq data should be normalised for sequencing depth and
 composition bias before TiDEomics, e.g. with TMM. The tutorial uses
-<code>log2(CPM + 1)</code> for simplicity. For pairwise differential
+<code>log2(CPM + 1)</code> for simplicity. For limma-based differential
 expression, <code>trend = TRUE</code> can be used to account for the
 mean-variance relationship. See below section on <a href="#pairwise-de">pairwise differential expression</a> for
 details.</p></li>
@@ -357,8 +347,8 @@ details.</p></li>
 normalisation when producing protein x sample matrix. Depending on
 software and settings, manual normalisation and log transformation may
 be required, e.g. median normalisation. Missing values are accepted in
-most TiDEomics functions, and a basic imputation function
-<code><a href="../reference/impute_groups.html">impute_groups()</a></code> is provided.</p></li>
+most TiDEomics functions, and <code><a href="../reference/impute_groups.html">impute_groups()</a></code> provides
+optional imputation.</p></li>
 </ul>
 </div>
 </div>
@@ -681,7 +671,7 @@ PCA and UMAP.</p>
 <span><span class="co">#&gt; Warning: `line.width` does not currently support multiple values.</span></span>
 <span><span class="co">#&gt; Warning: `line.width` does not currently support multiple values.</span></span></code></pre></div>
 <div class="plotly html-widget html-fill-item" id="htmlwidget-ac96cb3ee4656e2e9ec3" style="width:576px;height:384px;"></div>
-<script type="application/json" data-for="htmlwidget-ac96cb3ee4656e2e9ec3">{"x":{"visdat":{"3d48723225d5":["function () ","plotlyVisDat"]},"cur_data":"3d48723225d5","attrs":{"3d48723225d5":{"x":[-12.900991808060786,-19.989168765047268,-0.68936100879287332,1.6644934201912185,2.4881415233211817,0.028182386568809635,7.9874170790889174,7.0633727133915976,10.804478231014748,10.050102467253407,11.068245277126218,7.427066106031714,-12.900991808060761,-19.989168765047307,-5.4545294087590763,-7.4729392047005785,-3.9216469487079877,-7.4905913509579234,1.3989712303729054,-1.4505511107654065,-2.7115278011466275,-2.3669255350248943,-2.8943224392051174,-2.7416686281304079,-12.900991808060761,-19.989168765047303,6.3460814309193694,6.7330395533652592,2.1002665099823559,21.71007856301021,19.520930226277745,29.823351317201976,22.134202539477219,19.445795792306651,18.706574201641132,-12.900991808060761,-19.989168765047303,-13.152342067726803,-11.363066733450289,-13.230676038742493],"y":[8.2235750385692068,3.8042096103757532,-14.866869305952028,-9.4785581058945638,-7.9699410998969711,-5.5608408193287593,-12.947551690189851,-11.249089104161195,-20.771761860967676,-16.582924774431593,-16.4177318942093,-17.775232052673633,8.2235750385692086,3.8042096103757563,-8.8018543809284999,-3.1976544381009946,1.0713661968294828,0.20211958831959814,-4.3875354833327584,-2.3145920213491382,-6.99702602479229,-6.8498052197008521,-1.8873055997101555,-3.1197702148520543,8.2235750385692068,3.8042096103757563,17.435225163548889,14.030476293907677,11.695044469769911,9.1483449499784371,9.1338029329810873,12.149114291506658,7.1395418120941336,13.30914596153694,15.919821798217214,8.2235750385692068,3.8042096103757563,4.9515508353651363,0.92557766051570545,5.9537735401216247],"z":[2.5650532504695569,-8.3980599377004861,17.384337908375556,23.05129799960169,-3.0905908296185713,-7.8596086906004405,-8.4291958236040934,-7.1517726526329941,-2.6560013717032485,0.20519770553321059,-2.3814403481522572,4.4663306634143414,2.5650532504695551,-8.3980599377004808,2.7325496884593239,-1.1714458582577967,-2.7184263121792216,-1.9976193236584183,-2.7670984874278659,-3.5631641866532138,1.7050975411487153,3.1960590300634708,-4.9160510765876788,-1.554300688718079,2.5650532504695547,-8.3980599377004808,19.722803443162324,-5.6307165575370206,-1.273792777124964,-9.0972814386184133,-4.5043884147195818,-5.7979869184352744,-1.0297572333312253,0.6781557276605914,9.1068208163256763,2.5650532504695547,-8.3980599377004808,4.8711951043356896,6.8072172414803163,6.9956028689230818],"text":{},"mode":"markers","color":{},"size":{},"colors":["#d95f02","#7570b3","#e7298a","#1b9e77"],"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"scatter3d"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"scene":{"xaxis":{"title":"PC1: 20.86%"},"yaxis":{"title":"PC2: 12.96%"},"zaxis":{"title":"PC3: 7.10%"}},"hovermode":"closest","showlegend":true},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":[-12.900991808060786,-19.989168765047268,-0.68936100879287332,1.6644934201912185,2.4881415233211817,0.028182386568809635,7.9874170790889174,7.0633727133915976,10.804478231014748,10.050102467253407,11.068245277126218,7.427066106031714],"y":[8.2235750385692068,3.8042096103757532,-14.866869305952028,-9.4785581058945638,-7.9699410998969711,-5.5608408193287593,-12.947551690189851,-11.249089104161195,-20.771761860967676,-16.582924774431593,-16.4177318942093,-17.775232052673633],"z":[2.5650532504695569,-8.3980599377004861,17.384337908375556,23.05129799960169,-3.0905908296185713,-7.8596086906004405,-8.4291958236040934,-7.1517726526329941,-2.6560013717032485,0.20519770553321059,-2.3814403481522572,4.4663306634143414],"text":["RNA_IFNbeta_0h_R1_1","RNA_IFNbeta_0h_R2_1","RNA_IFNbeta_24h_R1_2","RNA_IFNbeta_24h_R2_2","RNA_IFNbeta_2h_R1_1","RNA_IFNbeta_2h_R2_1","RNA_IFNbeta_4h_R1_1","RNA_IFNbeta_4h_R2_1","RNA_IFNbeta_6h_R1_1","RNA_IFNbeta_6h_R2_1","RNA_IFNbeta_8h_R1_2","RNA_IFNbeta_8h_R2_2"],"mode":"markers","type":"scatter3d","name":"IFNbeta","marker":{"color":"rgba(217,95,2,1)","size":[10,10,100,100,17.5,17.5,25,25,32.5,32.5,40,40],"sizemode":"area","line":{"color":"rgba(217,95,2,1)"}},"textfont":{"color":"rgba(217,95,2,1)","size":[10,10,100,100,17.5,17.5,25,25,32.5,32.5,40,40]},"error_y":{"color":"rgba(217,95,2,1)","width":[]},"error_x":{"color":"rgba(217,95,2,1)","width":[]},"line":{"color":"rgba(217,95,2,1)"},"frame":null},{"x":[-12.900991808060761,-19.989168765047307,-5.4545294087590763,-7.4729392047005785,-3.9216469487079877,-7.4905913509579234,1.3989712303729054,-1.4505511107654065,-2.7115278011466275,-2.3669255350248943,-2.8943224392051174,-2.7416686281304079],"y":[8.2235750385692086,3.8042096103757563,-8.8018543809284999,-3.1976544381009946,1.0713661968294828,0.20211958831959814,-4.3875354833327584,-2.3145920213491382,-6.99702602479229,-6.8498052197008521,-1.8873055997101555,-3.1197702148520543],"z":[2.5650532504695551,-8.3980599377004808,2.7325496884593239,-1.1714458582577967,-2.7184263121792216,-1.9976193236584183,-2.7670984874278659,-3.5631641866532138,1.7050975411487153,3.1960590300634708,-4.9160510765876788,-1.554300688718079],"text":["RNA_IFNgamma_0h_R1_1","RNA_IFNgamma_0h_R2_1","RNA_IFNgamma_24h_R1_2","RNA_IFNgamma_24h_R2_2","RNA_IFNgamma_2h_R1_1","RNA_IFNgamma_2h_R2_1","RNA_IFNgamma_4h_R1_1","RNA_IFNgamma_4h_R2_1","RNA_IFNgamma_6h_R1_1","RNA_IFNgamma_6h_R2_1","RNA_IFNgamma_8h_R1_2","RNA_IFNgamma_8h_R2_2"],"mode":"markers","type":"scatter3d","name":"IFNgamma","marker":{"color":"rgba(117,112,179,1)","size":[10,10,100,100,17.5,17.5,25,25,32.5,32.5,40,40],"sizemode":"area","line":{"color":"rgba(117,112,179,1)"}},"textfont":{"color":"rgba(117,112,179,1)","size":[10,10,100,100,17.5,17.5,25,25,32.5,32.5,40,40]},"error_y":{"color":"rgba(117,112,179,1)","width":[]},"error_x":{"color":"rgba(117,112,179,1)","width":[]},"line":{"color":"rgba(117,112,179,1)"},"frame":null},{"x":[-12.900991808060761,-19.989168765047303,6.3460814309193694,6.7330395533652592,2.1002665099823559,21.71007856301021,19.520930226277745,29.823351317201976,22.134202539477219,19.445795792306651,18.706574201641132],"y":[8.2235750385692068,3.8042096103757563,17.435225163548889,14.030476293907677,11.695044469769911,9.1483449499784371,9.1338029329810873,12.149114291506658,7.1395418120941336,13.30914596153694,15.919821798217214],"z":[2.5650532504695547,-8.3980599377004808,19.722803443162324,-5.6307165575370206,-1.273792777124964,-9.0972814386184133,-4.5043884147195818,-5.7979869184352744,-1.0297572333312253,0.6781557276605914,9.1068208163256763],"text":["RNA_LPS_0h_R1_1","RNA_LPS_0h_R2_1","RNA_LPS_24h_R2_2","RNA_LPS_2h_R1_1","RNA_LPS_2h_R2_1","RNA_LPS_4h_R1_1","RNA_LPS_4h_R2_1","RNA_LPS_6h_R1_1","RNA_LPS_6h_R2_1","RNA_LPS_8h_R1_2","RNA_LPS_8h_R2_2"],"mode":"markers","type":"scatter3d","name":"LPS","marker":{"color":"rgba(231,41,138,1)","size":[10,10,100,17.5,17.5,25,25,32.5,32.5,40,40],"sizemode":"area","line":{"color":"rgba(231,41,138,1)"}},"textfont":{"color":"rgba(231,41,138,1)","size":[10,10,100,17.5,17.5,25,25,32.5,32.5,40,40]},"error_y":{"color":"rgba(231,41,138,1)","width":[]},"error_x":{"color":"rgba(231,41,138,1)","width":[]},"line":{"color":"rgba(231,41,138,1)"},"frame":null},{"x":[-12.900991808060761,-19.989168765047303,-13.152342067726803,-11.363066733450289,-13.230676038742493],"y":[8.2235750385692068,3.8042096103757563,4.9515508353651363,0.92557766051570545,5.9537735401216247],"z":[2.5650532504695547,-8.3980599377004808,4.8711951043356896,6.8072172414803163,6.9956028689230818],"text":["RNA_untreated_0h_R1_1","RNA_untreated_0h_R2_1","RNA_untreated_24h_R1_2","RNA_untreated_24h_R2_2","RNA_untreated_8h_R2_2"],"mode":"markers","type":"scatter3d","name":"untreated","marker":{"color":"rgba(27,158,119,1)","size":[10,10,100,100,40],"sizemode":"area","line":{"color":"rgba(27,158,119,1)"}},"textfont":{"color":"rgba(27,158,119,1)","size":[10,10,100,100,40]},"error_y":{"color":"rgba(27,158,119,1)","width":[]},"error_x":{"color":"rgba(27,158,119,1)","width":[]},"line":{"color":"rgba(27,158,119,1)"},"frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script><p>Note: the 3D plot may not display properly in some html, but should
+<script type="application/json" data-for="htmlwidget-ac96cb3ee4656e2e9ec3">{"x":{"visdat":{"bcac30c26cba":["function () ","plotlyVisDat"]},"cur_data":"bcac30c26cba","attrs":{"bcac30c26cba":{"x":[-12.900991808060786,-19.989168765047264,-0.68936100879286666,1.6644934201912203,2.4881415233211821,0.028182386568810735,7.9874170790889218,7.0633727133915905,10.804478231014752,10.050102467253401,11.068245277126211,7.4270661060317105,-12.900991808060754,-19.989168765047289,-5.4545294087590719,-7.4729392047005696,-3.9216469487079828,-7.4905913509579181,1.3989712303729063,-1.450551110765405,-2.7115278011466248,-2.3669255350248846,-2.8943224392051103,-2.7416686281304052,-12.900991808060754,-19.989168765047289,6.3460814309193658,6.7330395533652521,2.1002665099823545,21.710078563010196,19.520930226277738,29.823351317201954,22.134202539477204,19.445795792306626,18.706574201641121,-12.900991808060754,-19.989168765047289,-13.152342067726789,-11.363066733450271,-13.230676038742473],"y":[8.2235750385691908,3.8042096103757705,-14.866869305952005,-9.4785581058945549,-7.9699410998969782,-5.5608408193287353,-12.94755169018983,-11.24908910416117,-20.77176186096764,-16.582924774431564,-16.417731894209272,-17.775232052673609,8.2235750385691855,3.8042096103757701,-8.8018543809284875,-3.197654438100991,1.0713661968294821,0.20211958831960039,-4.387535483332754,-2.3145920213491333,-6.9970260247922864,-6.8498052197008397,-1.8873055997101496,-3.1197702148520499,8.2235750385691837,3.8042096103757705,17.435225163548868,14.03047629390765,11.695044469769892,9.1483449499784264,9.1338029329810748,12.149114291506638,7.1395418120941159,13.309145961536915,15.919821798217185,8.2235750385691837,3.8042096103757705,4.9515508353651283,0.92557766051570745,5.9537735401216079],"z":[2.5650532504696248,-8.3980599377005731,17.384337908375564,23.051297999601729,-3.0905908296185793,-7.8596086906004832,-8.4291958236040934,-7.1517726526330341,-2.6560013717032569,0.2051977055331978,-2.3814403481522737,4.4663306634143298,2.565053250469624,-8.3980599377005731,2.7325496884593563,-1.1714458582578058,-2.7184263121792198,-1.9976193236584314,-2.7670984874278317,-3.5631641866532102,1.7050975411487614,3.1960590300634988,-4.9160510765876522,-1.5543006887180808,2.5650532504696231,-8.3980599377005696,19.722803443162274,-5.6307165575369575,-1.2737927771249169,-9.0972814386184258,-4.5043884147195525,-5.797986918435333,-1.0297572333312186,0.67815572766055243,9.1068208163256621,2.5650532504696231,-8.3980599377005696,4.8711951043357224,6.8072172414803367,6.9956028689230987],"text":{},"mode":"markers","color":{},"size":{},"colors":["#d95f02","#7570b3","#e7298a","#1b9e77"],"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"scatter3d"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"scene":{"xaxis":{"title":"PC1: 20.86%"},"yaxis":{"title":"PC2: 12.96%"},"zaxis":{"title":"PC3: 7.10%"}},"hovermode":"closest","showlegend":true},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":[-12.900991808060786,-19.989168765047264,-0.68936100879286666,1.6644934201912203,2.4881415233211821,0.028182386568810735,7.9874170790889218,7.0633727133915905,10.804478231014752,10.050102467253401,11.068245277126211,7.4270661060317105],"y":[8.2235750385691908,3.8042096103757705,-14.866869305952005,-9.4785581058945549,-7.9699410998969782,-5.5608408193287353,-12.94755169018983,-11.24908910416117,-20.77176186096764,-16.582924774431564,-16.417731894209272,-17.775232052673609],"z":[2.5650532504696248,-8.3980599377005731,17.384337908375564,23.051297999601729,-3.0905908296185793,-7.8596086906004832,-8.4291958236040934,-7.1517726526330341,-2.6560013717032569,0.2051977055331978,-2.3814403481522737,4.4663306634143298],"text":["RNA_IFNbeta_0h_R1_1","RNA_IFNbeta_0h_R2_1","RNA_IFNbeta_24h_R1_2","RNA_IFNbeta_24h_R2_2","RNA_IFNbeta_2h_R1_1","RNA_IFNbeta_2h_R2_1","RNA_IFNbeta_4h_R1_1","RNA_IFNbeta_4h_R2_1","RNA_IFNbeta_6h_R1_1","RNA_IFNbeta_6h_R2_1","RNA_IFNbeta_8h_R1_2","RNA_IFNbeta_8h_R2_2"],"mode":"markers","type":"scatter3d","name":"IFNbeta","marker":{"color":"rgba(217,95,2,1)","size":[10,10,100,100,17.5,17.5,25,25,32.5,32.5,40,40],"sizemode":"area","line":{"color":"rgba(217,95,2,1)"}},"textfont":{"color":"rgba(217,95,2,1)","size":[10,10,100,100,17.5,17.5,25,25,32.5,32.5,40,40]},"error_y":{"color":"rgba(217,95,2,1)","width":[]},"error_x":{"color":"rgba(217,95,2,1)","width":[]},"line":{"color":"rgba(217,95,2,1)"},"frame":null},{"x":[-12.900991808060754,-19.989168765047289,-5.4545294087590719,-7.4729392047005696,-3.9216469487079828,-7.4905913509579181,1.3989712303729063,-1.450551110765405,-2.7115278011466248,-2.3669255350248846,-2.8943224392051103,-2.7416686281304052],"y":[8.2235750385691855,3.8042096103757701,-8.8018543809284875,-3.197654438100991,1.0713661968294821,0.20211958831960039,-4.387535483332754,-2.3145920213491333,-6.9970260247922864,-6.8498052197008397,-1.8873055997101496,-3.1197702148520499],"z":[2.565053250469624,-8.3980599377005731,2.7325496884593563,-1.1714458582578058,-2.7184263121792198,-1.9976193236584314,-2.7670984874278317,-3.5631641866532102,1.7050975411487614,3.1960590300634988,-4.9160510765876522,-1.5543006887180808],"text":["RNA_IFNgamma_0h_R1_1","RNA_IFNgamma_0h_R2_1","RNA_IFNgamma_24h_R1_2","RNA_IFNgamma_24h_R2_2","RNA_IFNgamma_2h_R1_1","RNA_IFNgamma_2h_R2_1","RNA_IFNgamma_4h_R1_1","RNA_IFNgamma_4h_R2_1","RNA_IFNgamma_6h_R1_1","RNA_IFNgamma_6h_R2_1","RNA_IFNgamma_8h_R1_2","RNA_IFNgamma_8h_R2_2"],"mode":"markers","type":"scatter3d","name":"IFNgamma","marker":{"color":"rgba(117,112,179,1)","size":[10,10,100,100,17.5,17.5,25,25,32.5,32.5,40,40],"sizemode":"area","line":{"color":"rgba(117,112,179,1)"}},"textfont":{"color":"rgba(117,112,179,1)","size":[10,10,100,100,17.5,17.5,25,25,32.5,32.5,40,40]},"error_y":{"color":"rgba(117,112,179,1)","width":[]},"error_x":{"color":"rgba(117,112,179,1)","width":[]},"line":{"color":"rgba(117,112,179,1)"},"frame":null},{"x":[-12.900991808060754,-19.989168765047289,6.3460814309193658,6.7330395533652521,2.1002665099823545,21.710078563010196,19.520930226277738,29.823351317201954,22.134202539477204,19.445795792306626,18.706574201641121],"y":[8.2235750385691837,3.8042096103757705,17.435225163548868,14.03047629390765,11.695044469769892,9.1483449499784264,9.1338029329810748,12.149114291506638,7.1395418120941159,13.309145961536915,15.919821798217185],"z":[2.5650532504696231,-8.3980599377005696,19.722803443162274,-5.6307165575369575,-1.2737927771249169,-9.0972814386184258,-4.5043884147195525,-5.797986918435333,-1.0297572333312186,0.67815572766055243,9.1068208163256621],"text":["RNA_LPS_0h_R1_1","RNA_LPS_0h_R2_1","RNA_LPS_24h_R2_2","RNA_LPS_2h_R1_1","RNA_LPS_2h_R2_1","RNA_LPS_4h_R1_1","RNA_LPS_4h_R2_1","RNA_LPS_6h_R1_1","RNA_LPS_6h_R2_1","RNA_LPS_8h_R1_2","RNA_LPS_8h_R2_2"],"mode":"markers","type":"scatter3d","name":"LPS","marker":{"color":"rgba(231,41,138,1)","size":[10,10,100,17.5,17.5,25,25,32.5,32.5,40,40],"sizemode":"area","line":{"color":"rgba(231,41,138,1)"}},"textfont":{"color":"rgba(231,41,138,1)","size":[10,10,100,17.5,17.5,25,25,32.5,32.5,40,40]},"error_y":{"color":"rgba(231,41,138,1)","width":[]},"error_x":{"color":"rgba(231,41,138,1)","width":[]},"line":{"color":"rgba(231,41,138,1)"},"frame":null},{"x":[-12.900991808060754,-19.989168765047289,-13.152342067726789,-11.363066733450271,-13.230676038742473],"y":[8.2235750385691837,3.8042096103757705,4.9515508353651283,0.92557766051570745,5.9537735401216079],"z":[2.5650532504696231,-8.3980599377005696,4.8711951043357224,6.8072172414803367,6.9956028689230987],"text":["RNA_untreated_0h_R1_1","RNA_untreated_0h_R2_1","RNA_untreated_24h_R1_2","RNA_untreated_24h_R2_2","RNA_untreated_8h_R2_2"],"mode":"markers","type":"scatter3d","name":"untreated","marker":{"color":"rgba(27,158,119,1)","size":[10,10,100,100,40],"sizemode":"area","line":{"color":"rgba(27,158,119,1)"}},"textfont":{"color":"rgba(27,158,119,1)","size":[10,10,100,100,40]},"error_y":{"color":"rgba(27,158,119,1)","width":[]},"error_x":{"color":"rgba(27,158,119,1)","width":[]},"line":{"color":"rgba(27,158,119,1)"},"frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script><p>Note: the 3D plot may not display properly in some html, but should
 work in an interactive R session.</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">PCAtools</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/PCAtools/man/eigencorplot.html" class="external-link">eigencorplot</a></span><span class="op">(</span><span class="va">PC</span><span class="op">$</span><span class="va">pca</span>,</span>
@@ -1079,6 +1069,136 @@ group(s) and time point(s).</p>
 <p><img src="TiDEomics_files/figure-html/volcano-1.png" class="r-plt" alt="" width="576"></p>
 </div>
 <div class="section level3">
+<h3 id="model-based-time-course-differential-expression">Model-based time course differential expression<a class="anchor" aria-label="anchor" href="#model-based-time-course-differential-expression"></a>
+</h3>
+<p><code><a href="../reference/DE_timecourse.html">DE_timecourse()</a></code> provides a model-based alternative to
+pairwise comparisons by testing temporal changes across the whole time
+course.</p>
+<ul>
+<li><p><code>group_mode = "per_group"</code> tests temporal changes
+separately per group. <code>group_mode = "joint_group"</code> fits one
+Group x Time model for all groups.</p></li>
+<li><p><code>time_mode = "factor"</code> treats time points as
+categories and tests whether a feature changes across time overall,
+<code>time_mode = "numeric"</code> treats time as continuous and tests
+for a linear trend, and <code>time_mode = "spline"</code> models smooth
+non-linear changes.</p></li>
+<li><p>If <code>Subject</code> exists in the input, repeated
+measurements are modelled using
+<code><a href="https://rdrr.io/pkg/limma/man/dupcor.html" class="external-link">limma::duplicateCorrelation()</a></code>.</p></li>
+</ul>
+<p>See <code><a href="../reference/DE_timecourse.html">?DE_timecourse</a></code> for more details about the tests and
+output.</p>
+<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">DE_timecourse_out</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/DE_timecourse.html">DE_timecourse</a></span><span class="op">(</span></span>
+<span>    <span class="va">data_obj</span>,</span>
+<span>    assay <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>    group <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"untreated"</span>, <span class="st">"IFNbeta"</span><span class="op">)</span>,</span>
+<span>    group_mode <span class="op">=</span> <span class="st">"joint_group"</span>,</span>
+<span>    time_mode <span class="op">=</span> <span class="st">"factor"</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; 'reference_group' not specified. Using 'untreated' as the reference group.</span></span>
+<span><span class="co">#&gt; Some Group-Time combinations contain only one sample; replicate-level variance cannot be estimated for them.</span></span>
+<span><span class="co">#&gt; Warning: Zero sample variances detected, have been offset away from zero</span></span>
+<span><span class="co">#&gt; Warning: Zero sample variances detected, have been offset away from zero</span></span>
+<span></span>
+<span><span class="va">DE_timecourse_out</span><span class="op">$</span><span class="va">results</span><span class="op">$</span><span class="va">group_effect</span> <span class="op">|&gt;</span> <span class="fu">utils</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<pre style="max-height: 300px;"><code><span><span class="co">#&gt;    Feature Group         Test TimePointsTested ReferenceTime</span></span>
+<span><span class="co">#&gt; 1   Scpep1  &lt;NA&gt; group_effect           0,8,24             0</span></span>
+<span><span class="co">#&gt; 2      Dbt  &lt;NA&gt; group_effect           0,8,24             0</span></span>
+<span><span class="co">#&gt; 3   Tmigd3  &lt;NA&gt; group_effect           0,8,24             0</span></span>
+<span><span class="co">#&gt; 4    Clcn4  &lt;NA&gt; group_effect           0,8,24             0</span></span>
+<span><span class="co">#&gt; 5 Serpinf1  &lt;NA&gt; group_effect           0,8,24             0</span></span>
+<span><span class="co">#&gt; 6   Sema6b  &lt;NA&gt; group_effect           0,8,24             0</span></span>
+<span><span class="co">#&gt;   logFC_GroupIFNbeta_at_reference_time   AveExpr            F P.Value adj.P.Val</span></span>
+<span><span class="co">#&gt; 1                        -1.445388e-15 14.313263 7.374118e-29       1         1</span></span>
+<span><span class="co">#&gt; 2                        -2.142872e-16  9.365898 1.729032e-31       1         1</span></span>
+<span><span class="co">#&gt; 3                        -1.949593e-15  3.218457 3.543740e-31       1         1</span></span>
+<span><span class="co">#&gt; 4                         2.726909e-15 11.425192 1.340653e-28       1         1</span></span>
+<span><span class="co">#&gt; 5                        -5.310960e-15  2.415547 3.611320e-30       1         1</span></span>
+<span><span class="co">#&gt; 6                        -7.899213e-16  8.654322 7.150309e-30       1         1</span></span>
+<span><span class="co">#&gt;           B</span></span>
+<span><span class="co">#&gt; 1 -6.230668</span></span>
+<span><span class="co">#&gt; 2 -6.230668</span></span>
+<span><span class="co">#&gt; 3 -6.230668</span></span>
+<span><span class="co">#&gt; 4 -6.230668</span></span>
+<span><span class="co">#&gt; 5 -6.230668</span></span>
+<span><span class="co">#&gt; 6 -6.230668</span></span>
+<span><span class="va">DE_timecourse_out</span><span class="op">$</span><span class="va">results</span><span class="op">$</span><span class="va">reference_time_effect</span> <span class="op">|&gt;</span> <span class="fu">utils</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span></span></code></pre>
+<pre style="max-height: 300px;"><code><span><span class="co">#&gt;    Feature     Group                  Test TimePointsTested ReferenceTime</span></span>
+<span><span class="co">#&gt; 1   Scpep1 untreated reference_time_effect           0,8,24             0</span></span>
+<span><span class="co">#&gt; 2      Dbt untreated reference_time_effect           0,8,24             0</span></span>
+<span><span class="co">#&gt; 3   Tmigd3 untreated reference_time_effect           0,8,24             0</span></span>
+<span><span class="co">#&gt; 4    Clcn4 untreated reference_time_effect           0,8,24             0</span></span>
+<span><span class="co">#&gt; 5 Serpinf1 untreated reference_time_effect           0,8,24             0</span></span>
+<span><span class="co">#&gt; 6   Sema6b untreated reference_time_effect           0,8,24             0</span></span>
+<span><span class="co">#&gt;   logFC_TimeFactor8 logFC_TimeFactor24   AveExpr         F    P.Value adj.P.Val</span></span>
+<span><span class="co">#&gt; 1        -0.6440495         -0.5338437 14.313263 7.0377363 0.03152193 0.4093839</span></span>
+<span><span class="co">#&gt; 2         0.1772706          0.6138435  9.365898 0.7347255 0.52228335 1.0000000</span></span>
+<span><span class="co">#&gt; 3        -2.4671473          0.4339172  3.218457 0.2774559 0.76793183 1.0000000</span></span>
+<span><span class="co">#&gt; 4        -0.1693544          0.4197441 11.425192 2.6253606 0.16012560 0.7356911</span></span>
+<span><span class="co">#&gt; 5        -2.9552536          2.5623549  2.415547 1.3394455 0.33726091 0.9291524</span></span>
+<span><span class="co">#&gt; 6        -0.4424538         -0.9045470  8.654322 4.6884624 0.06628655 0.4874011</span></span>
+<span><span class="co">#&gt;    B</span></span>
+<span><span class="co">#&gt; 1 NA</span></span>
+<span><span class="co">#&gt; 2 NA</span></span>
+<span><span class="co">#&gt; 3 NA</span></span>
+<span><span class="co">#&gt; 4 NA</span></span>
+<span><span class="co">#&gt; 5 NA</span></span>
+<span><span class="co">#&gt; 6 NA</span></span>
+<span><span class="va">DE_timecourse_out</span><span class="op">$</span><span class="va">results</span><span class="op">$</span><span class="va">global_time_effect</span> <span class="op">|&gt;</span> <span class="fu">utils</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span></span></code></pre>
+<pre style="max-height: 300px;"><code><span><span class="co">#&gt;    Feature Group               Test TimePointsTested ReferenceTime</span></span>
+<span><span class="co">#&gt; 1   Scpep1  &lt;NA&gt; global_time_effect           0,8,24             0</span></span>
+<span><span class="co">#&gt; 2      Dbt  &lt;NA&gt; global_time_effect           0,8,24             0</span></span>
+<span><span class="co">#&gt; 3   Tmigd3  &lt;NA&gt; global_time_effect           0,8,24             0</span></span>
+<span><span class="co">#&gt; 4    Clcn4  &lt;NA&gt; global_time_effect           0,8,24             0</span></span>
+<span><span class="co">#&gt; 5 Serpinf1  &lt;NA&gt; global_time_effect           0,8,24             0</span></span>
+<span><span class="co">#&gt; 6   Sema6b  &lt;NA&gt; global_time_effect           0,8,24             0</span></span>
+<span><span class="co">#&gt;   logFC_TimeFactor8 logFC_TimeFactor24 delta_logFC_GroupIFNbeta_TimeFactor8</span></span>
+<span><span class="co">#&gt; 1        -0.6440495         -0.5338437                             0.272890</span></span>
+<span><span class="co">#&gt; 2         0.1772706          0.6138435                            -1.943050</span></span>
+<span><span class="co">#&gt; 3        -2.4671473          0.4339172                             7.064350</span></span>
+<span><span class="co">#&gt; 4        -0.1693544          0.4197441                            -1.475110</span></span>
+<span><span class="co">#&gt; 5        -2.9552536          2.5623549                             1.857391</span></span>
+<span><span class="co">#&gt; 6        -0.4424538         -0.9045470                            -2.300506</span></span>
+<span><span class="co">#&gt;   delta_logFC_GroupIFNbeta_TimeFactor24   AveExpr          F     P.Value</span></span>
+<span><span class="co">#&gt; 1                            0.94557432 14.313263  8.9322844 0.014071587</span></span>
+<span><span class="co">#&gt; 2                           -1.22366369  9.365898  3.3960579 0.098804913</span></span>
+<span><span class="co">#&gt; 3                           -0.09926122  3.218457  0.7512060 0.595331698</span></span>
+<span><span class="co">#&gt; 4                           -0.78614719 11.425192 14.7502618 0.004372742</span></span>
+<span><span class="co">#&gt; 5                           -5.51760845  2.415547  0.9554212 0.499794170</span></span>
+<span><span class="co">#&gt; 6                           -1.25277972  8.654322 26.2575537 0.001053167</span></span>
+<span><span class="co">#&gt;     adj.P.Val  B</span></span>
+<span><span class="co">#&gt; 1 0.052900701 NA</span></span>
+<span><span class="co">#&gt; 2 0.238659210 NA</span></span>
+<span><span class="co">#&gt; 3 0.829152782 NA</span></span>
+<span><span class="co">#&gt; 4 0.022539905 NA</span></span>
+<span><span class="co">#&gt; 5 0.799387776 NA</span></span>
+<span><span class="co">#&gt; 6 0.008435779 NA</span></span>
+<span><span class="va">DE_timecourse_out</span><span class="op">$</span><span class="va">results</span><span class="op">$</span><span class="va">group_time_interaction</span> <span class="op">|&gt;</span> <span class="fu">utils</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span></span></code></pre>
+<pre style="max-height: 300px;"><code><span><span class="co">#&gt;    Feature Group                   Test TimePointsTested ReferenceTime</span></span>
+<span><span class="co">#&gt; 1   Scpep1  &lt;NA&gt; group_time_interaction           0,8,24             0</span></span>
+<span><span class="co">#&gt; 2      Dbt  &lt;NA&gt; group_time_interaction           0,8,24             0</span></span>
+<span><span class="co">#&gt; 3   Tmigd3  &lt;NA&gt; group_time_interaction           0,8,24             0</span></span>
+<span><span class="co">#&gt; 4    Clcn4  &lt;NA&gt; group_time_interaction           0,8,24             0</span></span>
+<span><span class="co">#&gt; 5 Serpinf1  &lt;NA&gt; group_time_interaction           0,8,24             0</span></span>
+<span><span class="co">#&gt; 6   Sema6b  &lt;NA&gt; group_time_interaction           0,8,24             0</span></span>
+<span><span class="co">#&gt;   delta_logFC_GroupIFNbeta_TimeFactor8 delta_logFC_GroupIFNbeta_TimeFactor24</span></span>
+<span><span class="co">#&gt; 1                             0.272890                            0.94557432</span></span>
+<span><span class="co">#&gt; 2                            -1.943050                           -1.22366369</span></span>
+<span><span class="co">#&gt; 3                             7.064350                           -0.09926122</span></span>
+<span><span class="co">#&gt; 4                            -1.475110                           -0.78614719</span></span>
+<span><span class="co">#&gt; 5                             1.857391                           -5.51760845</span></span>
+<span><span class="co">#&gt; 6                            -2.300506                           -1.25277972</span></span>
+<span><span class="co">#&gt;     AveExpr         F     P.Value  adj.P.Val  B</span></span>
+<span><span class="co">#&gt; 1 14.313263  8.242530 0.023028023 0.10169338 NA</span></span>
+<span><span class="co">#&gt; 2  9.365898  3.077735 0.128547691 0.33828340 NA</span></span>
+<span><span class="co">#&gt; 3  3.218457  1.179842 0.375987542 0.72720491 NA</span></span>
+<span><span class="co">#&gt; 4 11.425192  8.062766 0.024077902 0.10202501 NA</span></span>
+<span><span class="co">#&gt; 5  2.415547  1.656524 0.275099417 0.59288667 NA</span></span>
+<span><span class="co">#&gt; 6  8.654322 12.525341 0.009467414 0.05541831 NA</span></span></code></pre>
+</div>
+<div class="section level3">
 <h3 id="feature-properties-and-classification">Feature properties and classification<a class="anchor" aria-label="anchor" href="#feature-properties-and-classification"></a>
 </h3>
 <p><code><a href="../reference/calc_feature_property.html">calc_feature_property()</a></code> computes per-feature
@@ -1096,6 +1216,10 @@ which changes occur.</p></li>
 <li><p><code>Max_FC_time</code>: the difference between time points with
 maximum and minimum abundance, providing information about the direction
 (up or down) and duration of changing.</p></li>
+<li><p><code>Net_FC</code>: signed fold change between the latest and
+earliest time points. Positive values indicate a net increase and
+negative values a net decrease. <code>NA</code> when only one time point
+is available.</p></li>
 <li><p><code>Exp_threshold</code>: user-set value threshold for a
 feature to be considered expressed in a sample. This can be used to
 filter features based on expression level, e.g. setting
@@ -1134,7 +1258,7 @@ replicates at each time point, output of
 <li><p>The function is set to require at least 3 values &gt; threshold
 to calculate <code>P_trend</code>.</p></li>
 </ul>
-<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb57"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data_obj_merged_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/calc_feature_property.html">calc_feature_property</a></span><span class="op">(</span><span class="va">data_obj_merged_list</span>,</span>
 <span>    threshold <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span>
 <span><span class="va">property_tb</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/summarise_feature_property.html">summarise_feature_property</a></span><span class="op">(</span><span class="va">data_obj_merged_list</span><span class="op">)</span></span>
@@ -1147,17 +1271,17 @@ to calculate <code>P_trend</code>.</p></li>
 <span><span class="co">#&gt; 4 1700018A04Rik IFNbeta             0     1       6        NA 2.129232</span></span>
 <span><span class="co">#&gt; 5 1700029J03Rik IFNbeta             0     0       6        NA       NA</span></span>
 <span><span class="co">#&gt; 6 1700066O22Rik IFNbeta             0     1       6        NA 1.937443</span></span>
-<span><span class="co">#&gt;   Max_FC_time  Rho_time Peak_ratio   Log2_CV        AUC Exp_ratio</span></span>
-<span><span class="co">#&gt; 1          24        NA         NA        NA  20.362109 0.3333333</span></span>
-<span><span class="co">#&gt; 2          NA        NA         NA        NA         NA 0.0000000</span></span>
-<span><span class="co">#&gt; 3          20 0.3142857  0.1666667 0.1725568 -13.328532 1.0000000</span></span>
-<span><span class="co">#&gt; 4          24        NA         NA        NA  17.033857 0.1666667</span></span>
-<span><span class="co">#&gt; 5          NA        NA         NA        NA         NA 0.0000000</span></span>
-<span><span class="co">#&gt; 6           6        NA         NA        NA   3.874887 0.1666667</span></span></code></pre>
+<span><span class="co">#&gt;   Max_FC_time    Net_FC  Rho_time Peak_ratio   Log2_CV        AUC Exp_ratio</span></span>
+<span><span class="co">#&gt; 1          24 2.0383984        NA         NA        NA  20.362109 0.3333333</span></span>
+<span><span class="co">#&gt; 2          NA        NA        NA         NA        NA         NA 0.0000000</span></span>
+<span><span class="co">#&gt; 3          20 0.4612489 0.3142857  0.1666667 0.1725568 -13.328532 1.0000000</span></span>
+<span><span class="co">#&gt; 4          24 2.1292321        NA         NA        NA  17.033857 0.1666667</span></span>
+<span><span class="co">#&gt; 5          NA        NA        NA         NA        NA         NA 0.0000000</span></span>
+<span><span class="co">#&gt; 6           6 0.0000000        NA         NA        NA   3.874887 0.1666667</span></span></code></pre>
 <p>Features expressed in only one group or a subset of groups can be
 extracted with <code><a href="../reference/group_specific_features.html">group_specific_features()</a></code> based on the
 output table of <code><a href="../reference/summarise_feature_property.html">summarise_feature_property()</a></code>.</p>
-<div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb59"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/group_specific_features.html">group_specific_features</a></span><span class="op">(</span><span class="va">property_tb</span>, groups <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"untreated"</span><span class="op">)</span>,</span>
 <span>    genename <span class="op">=</span> <span class="cn">FALSE</span>, GO <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
@@ -1188,7 +1312,7 @@ running <code><a href="../reference/calc_feature_property.html">calc_feature_pro
 samples in a segment]. For example, when # segments = 2 (maxK = 1) and
 minNumInSeg = 2, at least 4 time points are needed.</p></li>
 </ul>
-<div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb61"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data_obj_merged_imp_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/impute_groups.html">impute_groups</a></span><span class="op">(</span><span class="va">data_obj_merged_list</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Group IFNbeta: no missing values.</span></span>
 <span><span class="co">#&gt; Group IFNgamma: no missing values.</span></span>
@@ -1196,7 +1320,7 @@ minNumInSeg = 2, at least 4 time points are needed.</p></li>
 <span><span class="co">#&gt; Group untreated: no missing values.</span></span></code></pre></div>
 <p>A subset of features is used for demonstration as
 <code><a href="../reference/run_Trendy.html">run_Trendy()</a></code> can be time-consuming.</p>
-<div class="sourceCode" id="cb57"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb62"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1234</span><span class="op">)</span></span>
 <span><span class="va">random_features</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/AnnotationDbi/man/Bimap-envirAPI.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">data_obj_merged_imp_list</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>, <span class="fl">50</span><span class="op">)</span></span>
 <span></span>
@@ -1236,7 +1360,7 @@ minNumInSeg = 2, at least 4 time points are needed.</p></li>
 <span><span class="co">#&gt; Trendy analysis is not performed for group untreated: number of time points (3) less than required ((maxK + 1) * minNumInSeg = 4</span></span></code></pre>
 <p>Use <code><a href="../reference/plot_segments.html">plot_segments()</a></code>to plot the fitted segments and
 breakpoints for selected features.</p>
-<div class="sourceCode" id="cb61"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb66"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_segments.html">plot_segments</a></span><span class="op">(</span><span class="va">data_obj_merged_imp_list</span>,</span>
 <span>    <span class="va">example_res_list</span>,</span>
 <span>    feature <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Slc25a51"</span>, <span class="st">"Aunip"</span><span class="op">)</span>, <span class="co"># example features</span></span>
@@ -1253,7 +1377,7 @@ breakpoints for selected features.</p>
 temporal patterns (combination of trends of each segment) of features
 with <code><a href="../reference/summarise_Trendy.html">summarise_Trendy()</a></code> and
 <code><a href="../reference/extract_segment_trends.html">extract_segment_trends()</a></code>.</p>
-<div class="sourceCode" id="cb64"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb69"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_breakpoints.html">plot_breakpoints</a></span><span class="op">(</span><span class="va">example_res_list</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Warning in (function (..., deparse.level = 1) : number of columns of result is</span></span>
 <span><span class="co">#&gt; not a multiple of vector length (arg 13)</span></span>
@@ -1262,7 +1386,7 @@ with <code><a href="../reference/summarise_Trendy.html">summarise_Trendy()</a></
 <span><span class="co">#&gt; Warning in (function (..., deparse.level = 1) : number of columns of result is</span></span>
 <span><span class="co">#&gt; not a multiple of vector length (arg 8)</span></span></code></pre></div>
 <p><img src="TiDEomics_files/figure-html/trendy-summary-1.png" class="r-plt" alt="" width="384"></p>
-<div class="sourceCode" id="cb65"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb70"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="va">trendy_summary</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/summarise_Trendy.html">summarise_Trendy</a></span><span class="op">(</span><span class="va">example_res_list</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Warning in (function (..., deparse.level = 1) : number of columns of result is</span></span>
@@ -1300,7 +1424,7 @@ with <code><a href="../reference/summarise_Trendy.html">summarise_Trendy()</a></
 <span><span class="co">#&gt; IFNbeta.Sigmar1          1   down_up</span></span>
 <span><span class="co">#&gt; IFNbeta.Aunip           -1 down_down</span></span>
 <span><span class="co">#&gt; IFNbeta.Egln1            1   down_up</span></span></code></pre>
-<div class="sourceCode" id="cb67"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb72"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">trendy_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/extract_segment_trends.html">extract_segment_trends</a></span><span class="op">(</span><span class="va">trendy_summary</span><span class="op">)</span></span>
 <span><span class="va">trendy_list</span><span class="op">$</span><span class="va">IFNbeta</span></span></code></pre></div>
 <pre style="max-height: 300px;"><code><span><span class="co">#&gt; $up_down</span></span>
@@ -1361,7 +1485,7 @@ always included (auto-skipped if only 1 group or time point present).
 <code>Subject:Time</code> with Subject) as a variance component
 capturing group-specific temporal patterns. Sufficient replicates per
 combination are required for stable estimates.</p>
-<div class="sourceCode" id="cb69"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb74"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># filter genes for variance decomposition:</span></span>
 <span><span class="co"># at least 50% values &gt; 0 in at least 2 groups</span></span>
 <span><span class="va">decomp_filter_genes</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/group_specific_features.html">group_specific_features</a></span><span class="op">(</span><span class="va">property_tb</span>,</span>
@@ -1376,11 +1500,12 @@ combination are required for stable estimates.</p>
 <span>    assay <span class="op">=</span> <span class="fl">1</span>, core <span class="op">=</span> <span class="fl">2</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; LMM: exp ~ (1|Group) + (1|Time)  |  Output: Group, Time, Residual</span></span>
+<span><span class="co">#&gt; 340 features evaluated: 267 successful; 0 errors; 73 warnings; 0 skipped before fitting for insufficient observations or variance.</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/plot_variance.html">plot_variance</a></span><span class="op">(</span><span class="va">var_decomp</span>, rank <span class="op">=</span> <span class="st">"Time"</span>, top_n <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Features not specified. Plotting top 20 features ranked by Time.</span></span></code></pre></div>
 <p><img src="TiDEomics_files/figure-html/variance-decomposition-1.png" class="r-plt" alt="" width="576"></p>
-<div class="sourceCode" id="cb70"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb75"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_variance.html">plot_variance</a></span><span class="op">(</span><span class="va">var_decomp</span>, rank <span class="op">=</span> <span class="st">"Group"</span>, top_n <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Features not specified. Plotting top 20 features ranked by Group.</span></span></code></pre></div>
 <p><img src="TiDEomics_files/figure-html/variance-decomposition-2.png" class="r-plt" alt="" width="576"></p>
@@ -1389,16 +1514,17 @@ combination are required for stable estimates.</p>
 <h3 id="wgcna-co-expression-modules">WGCNA (co-expression modules)<a class="anchor" aria-label="anchor" href="#wgcna-co-expression-modules"></a>
 </h3>
 <p>Detailed tutorials of weighted gene correlation network analysis (<a href="https://cran.r-project.org/web/packages/WGCNA/index.html" class="external-link">WGCNA</a>)
-<span class="citation">(Langfelder and Horvath 2008, 2012)</span> can be
-found <a href="https://github.com/edo98811/WGCNA_official_documentation/" class="external-link">online</a>.
+<span class="citation">(Zhang and Horvath 2005; Langfelder and Horvath
+2008, 2012)</span> can be found <a href="https://github.com/edo98811/WGCNA_official_documentation/" class="external-link">online</a>.
 The following is a brief demonstration of how to prepare input and run
 WGCNA with TiDEomics functions.</p>
 <p><strong>Filtering strategies</strong>:</p>
 <ul>
-<li><p>Features with too many missing values will be automatically
-removed with <code><a href="https://rdrr.io/pkg/WGCNA/man/goodGenes.html" class="external-link">WGCNA::goodGenes()</a></code> included in the
-<code><a href="../reference/prepare_WGCNA.html">prepare_WGCNA()</a></code> function, and can also be pre-filtered with
-the calculated feature property (output of
+<li><p>Features and samples with excessive missing values will be
+automatically removed by WGCNA’s quality control functions
+<code><a href="https://rdrr.io/pkg/WGCNA/man/goodSamples.html" class="external-link">WGCNA::goodSamples()</a></code> and <code><a href="https://rdrr.io/pkg/WGCNA/man/goodGenes.html" class="external-link">WGCNA::goodGenes()</a></code>
+included in the <code><a href="../reference/prepare_WGCNA.html">prepare_WGCNA()</a></code> function, and can also be
+pre-filtered with the calculated feature property (output of
 <code><a href="../reference/calc_feature_property.html">calc_feature_property()</a></code> and
 <code><a href="../reference/summarise_feature_property.html">summarise_feature_property()</a></code>).</p></li>
 <li><p>Residual variance can be used to exclude noisy features.</p></li>
@@ -1406,23 +1532,31 @@ the calculated feature property (output of
 WGCNA, see <a href="https://edo98811.github.io/WGCNA_official_documentation/faq.html" class="external-link">WGCNA
 FAQ</a>.</p></li>
 </ul>
-<div class="sourceCode" id="cb71"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Example filtering by residual variance &lt; Q3</span></span>
+<div class="sourceCode" id="cb76"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Example filtering by residual variance &lt;= Q3</span></span>
 <span><span class="va">var_res_q3</span> <span class="op">&lt;-</span> <span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">quantile</a></span><span class="op">(</span><span class="va">var_decomp</span><span class="op">$</span><span class="va">Residual</span>, <span class="fl">0.75</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="va">filter_wgcna</span> <span class="op">&lt;-</span> <span class="va">var_decomp</span> <span class="op">|&gt;</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Residual</span> <span class="op">&lt;</span> <span class="va">var_res_q3</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span><span class="va">filter_wgcna</span> <span class="op">&lt;-</span> <span class="va">var_decomp</span> <span class="op">|&gt;</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Residual</span> <span class="op">&lt;=</span> <span class="va">var_res_q3</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="va">Feature</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">data_obj_wgcna</span> <span class="op">&lt;-</span> <span class="va">data_obj</span><span class="op">[</span><span class="va">filter_wgcna</span>, <span class="op">]</span></span></code></pre></div>
 <p><strong>Prepare data format and choose power</strong>:</p>
 <p><code><a href="../reference/prepare_WGCNA.html">prepare_WGCNA()</a></code> prepares the input for WGCNA and helps
 to choose the soft-thresholding power. Check the scale-free topology fit
-indices to confirm that the chosen power is appropriate.</p>
+indices to confirm that the chosen power is appropriate. The returned
+<code>custom_powerEstimate</code> is the lowest power at which the
+signed scale-free fit (signed R^2) exceeds <code>RsquaredCut</code>,
+consistent with the “Scale independence” panel of the diagnostic plot.
+WGCNA’s default <code>powerEstimate</code> uses the unsigned R^2 and may
+therefore be the same as, or differ from,
+<code>custom_powerEstimate</code>. <code>custom_powerEstimate</code> is
+preferred in this workflow because it accounts for the direction of the
+connectivity distribution.</p>
 <p>Reasonable powers are less than 15 for unsigned or signed hybrid
 networks, and less than 30 for signed networks, to reach scale-free
 topology fit index &gt; 0.8, and mean connectivity (mean.k) not too high
 (in the hundreds or above). See <a href="https://edo98811.github.io/WGCNA_official_documentation/faq.html" class="external-link">WGCNA
 FAQ</a> for details.</p>
-<div class="sourceCode" id="cb72"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb77"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">wgcna_input</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/prepare_WGCNA.html">prepare_WGCNA</a></span><span class="op">(</span><span class="va">data_obj_wgcna</span>, assay <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>    powers <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">20</span><span class="op">)</span>,</span>
 <span>    networkType <span class="op">=</span> <span class="st">"signed"</span>, RsquaredCut <span class="op">=</span> <span class="fl">0.8</span></span>
@@ -1452,11 +1586,14 @@ FAQ</a> for details.</p>
 <span><span class="co">#&gt; 18    18    0.839 -1.340          0.934    2.16      1.46  10.50</span></span>
 <span><span class="co">#&gt; 19    19    0.858 -1.370          0.949    1.86      1.22   9.42</span></span>
 <span><span class="co">#&gt; 20    20    0.873 -1.380          0.961    1.61      1.05   8.51</span></span>
+<span><span class="co">#&gt; WGCNA powerEstimate: 17 (unsigned SFT.R.sq &gt; 0.8); custom_powerEstimate: 17 (signed R-squared &gt; 0.8).</span></span>
 <span><span class="va">wgcna_input</span><span class="op">$</span><span class="va">plot</span></span></code></pre>
 <p><img src="TiDEomics_files/figure-html/choose-power-1.png" class="r-plt" alt="" width="576"></p>
-<div class="sourceCode" id="cb74"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">picked_power</span> <span class="op">&lt;-</span> <span class="va">wgcna_input</span><span class="op">$</span><span class="va">powerEstimate</span></span>
+<div class="sourceCode" id="cb79"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">picked_power</span> <span class="op">&lt;-</span> <span class="va">wgcna_input</span><span class="op">$</span><span class="va">custom_powerEstimate</span> <span class="co"># using signed R^2</span></span>
 <span><span class="va">picked_power</span></span></code></pre></div>
+<pre style="max-height: 300px;"><code><span><span class="co">#&gt; [1] 17</span></span>
+<span><span class="va">wgcna_input</span><span class="op">$</span><span class="va">powerEstimate</span> <span class="co"># using unsigned R^2</span></span></code></pre>
 <pre style="max-height: 300px;"><code><span><span class="co">#&gt; [1] 17</span></span></code></pre>
 <p><strong>Run WGCNA</strong>:</p>
 <p>Use <code><a href="../reference/run_WGCNA.html">run_WGCNA()</a></code> with the output of
@@ -1468,7 +1605,7 @@ and returns the module assignment for each feature. Parameters for
 <code><a href="https://rdrr.io/pkg/WGCNA/man/blockwiseModules.html" class="external-link">WGCNA::blockwiseModules()</a></code> can be set with
 <code><a href="../reference/run_WGCNA.html">run_WGCNA()</a></code>, e.g., <code>corType</code> for correlation
 method.</p>
-<div class="sourceCode" id="cb76"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb82"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">net</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_WGCNA.html">run_WGCNA</a></span><span class="op">(</span><span class="va">wgcna_input</span>,</span>
 <span>    power <span class="op">=</span> <span class="va">picked_power</span>,</span>
 <span>    <span class="co"># corType = "pearson", # other option is "bicor"</span></span>
@@ -1502,7 +1639,7 @@ method.</p>
 <pre><code><span><span class="co">#&gt; Warning in par(usr): argument 1 does not name a graphical parameter</span></span></code></pre>
 <p><img src="TiDEomics_files/figure-html/run-wgcna-3.png" class="r-plt" alt="" width="576"><img src="TiDEomics_files/figure-html/run-wgcna-4.png" class="r-plt" alt="" width="576"><img src="TiDEomics_files/figure-html/run-wgcna-5.png" class="r-plt" alt="" width="576"><img src="TiDEomics_files/figure-html/run-wgcna-6.png" class="r-plt" alt="" width="576"></p>
 <p><strong>Extract modules</strong>: show module sizes</p>
-<div class="sourceCode" id="cb80"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb86"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">gene_module</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/WGCNA_module.html">WGCNA_module</a></span><span class="op">(</span><span class="va">net</span>, exclude_grey <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">gene_module</span> <span class="op">|&gt;</span></span>
@@ -1518,24 +1655,24 @@ method.</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> 5         26</span></span></code></pre>
 <p>Module metrics (size, mean kME, etc.) can be summarised with
 <code><a href="../reference/summarise_module_metrics.html">summarise_module_metrics()</a></code>:</p>
-<div class="sourceCode" id="cb82"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb88"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/summarise_module_metrics.html">summarise_module_metrics</a></span><span class="op">(</span><span class="va">net</span><span class="op">)</span></span></code></pre></div>
-<pre style="max-height: 300px;"><code><span><span class="co">#&gt;   Module Size Proportion   MeanKME  MeanKME2 MedianKME     SDKME    MinKME</span></span>
-<span><span class="co">#&gt; 1     M1   98  0.3843137 0.7166913 0.5313366 0.7320244 0.1336884 0.3196666</span></span>
-<span><span class="co">#&gt; 2     M2   38  0.1490196 0.6866064 0.4943502 0.7007783 0.1534317 0.3302328</span></span>
-<span><span class="co">#&gt; 3     M3   32  0.1254902 0.7590110 0.5892009 0.7500435 0.1163005 0.5432322</span></span>
-<span><span class="co">#&gt; 4     M4   31  0.1215686 0.7595552 0.5868847 0.7715531 0.1014526 0.4817727</span></span>
-<span><span class="co">#&gt; 5     M5   26  0.1019608 0.7114097 0.5250610 0.7268856 0.1404120 0.4715007</span></span>
-<span><span class="co">#&gt;      MaxKME</span></span>
-<span><span class="co">#&gt; 1 0.9491812</span></span>
-<span><span class="co">#&gt; 2 0.9751396</span></span>
-<span><span class="co">#&gt; 3 0.9680882</span></span>
-<span><span class="co">#&gt; 4 0.9387840</span></span>
-<span><span class="co">#&gt; 5 0.9187550</span></span></code></pre>
+<pre style="max-height: 300px;"><code><span><span class="co">#&gt;   Module Size Proportion   MeanKME  MeanKME2 MedianKME     SDKME    Q25KME</span></span>
+<span><span class="co">#&gt; 1     M1   98  0.3843137 0.7166913 0.5313366 0.7320244 0.1336884 0.6388258</span></span>
+<span><span class="co">#&gt; 2     M2   38  0.1490196 0.6866064 0.4943502 0.7007783 0.1534317 0.5900192</span></span>
+<span><span class="co">#&gt; 3     M3   32  0.1254902 0.7590110 0.5892009 0.7500435 0.1163005 0.6704224</span></span>
+<span><span class="co">#&gt; 4     M4   31  0.1215686 0.7595552 0.5868847 0.7715531 0.1014526 0.7021215</span></span>
+<span><span class="co">#&gt; 5     M5   26  0.1019608 0.7114097 0.5250610 0.7268856 0.1404120 0.5842224</span></span>
+<span><span class="co">#&gt;      Q75KME    MinKME    MaxKME</span></span>
+<span><span class="co">#&gt; 1 0.8151648 0.3196666 0.9491812</span></span>
+<span><span class="co">#&gt; 2 0.8095460 0.3302328 0.9751396</span></span>
+<span><span class="co">#&gt; 3 0.8511722 0.5432322 0.9680882</span></span>
+<span><span class="co">#&gt; 4 0.8317364 0.4817727 0.9387840</span></span>
+<span><span class="co">#&gt; 5 0.8323094 0.4715007 0.9187550</span></span></code></pre>
 <p><strong>Plot module profiles</strong>:</p>
-<div class="sourceCode" id="cb84"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb90"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_modules_v.html">plot_modules_v</a></span><span class="op">(</span><span class="va">gene_module</span>,</span>
-<span>    <span class="va">data_obj_merged</span>, scale <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>    <span class="va">data_obj_merged</span>, assay <span class="op">=</span> <span class="fl">2</span>, scale <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>    ylabel <span class="op">=</span> <span class="st">"Z-score of log2(CPM + 1)"</span>,</span>
 <span>    height_ratio <span class="op">=</span> <span class="fl">2</span></span>
 <span><span class="op">)</span></span>
@@ -1553,25 +1690,16 @@ efficiently on gene sets and ranked gene list.</p>
 <p>For ranked gene list (e.g., ranked by Time or Group contribution from
 variance decomposition), use <code><a href="../reference/enrichGO_rank.html">enrichGO_rank()</a></code> and plot with
 <code><a href="https://rdrr.io/pkg/enrichplot/man/gseaplot2.html" class="external-link">enrichplot::gseaplot2()</a></code>.</p>
-<div class="sourceCode" id="cb85"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb91"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">gse_group</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/enrichGO_rank.html">enrichGO_rank</a></span><span class="op">(</span><span class="va">var_decomp</span>,</span>
 <span>    gene_rank_by <span class="op">=</span> <span class="st">"Group"</span>,</span>
 <span>    OrgDb <span class="op">=</span> <span class="va">org.Mm.eg.db</span>,</span>
-<span>    keyType <span class="op">=</span> <span class="st">"SYMBOL"</span>, category <span class="op">=</span> <span class="st">"BP"</span>,</span>
+<span>    keyType <span class="op">=</span> <span class="st">"SYMBOL"</span>, category <span class="op">=</span> <span class="st">"CC"</span>,</span>
+<span>    pvalueCutoff <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>    go_rank_by <span class="op">=</span> <span class="st">"p.adjust"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning in gsea(geneList = geneList, gene_sets = geneSets, weight = weight, :</span></span>
-<span><span class="co">#&gt; There were 3643 pathways for which P-values were not calculated properly due to</span></span>
-<span><span class="co">#&gt; unbalanced gene-level statistic values. For such pathways pvalue, NES and</span></span>
-<span><span class="co">#&gt; log2err are set to NA. You can try to increase nPermSimple.</span></span>
-<span><span class="co">#&gt; Warning in calculate_qvalue(gsea_res$pvalue): Invalid p-values detected (NA,</span></span>
-<span><span class="co">#&gt; non-finite, &lt;0, or &gt;1). qvalue will be computed on valid p-values only.</span></span>
-<span><span class="co">#&gt; Warning in enrichit::gsea_gson(geneList = geneList, exponent = exponent, : NA</span></span>
-<span><span class="co">#&gt; values detected in gene set IDs. Replacing with string 'NA'.</span></span>
-<span><span class="co">#&gt; Warning in enrichit::gsea_gson(geneList = geneList, exponent = exponent, :</span></span>
-<span><span class="co">#&gt; Duplicate gene set IDs detected: NA... (Total 1). Unique suffixes added.</span></span>
-<span><span class="co">#&gt; Removing NA ID gene sets for BP.</span></span>
+<span><span class="co">#&gt; Removing NA ID gene sets for CC.</span></span>
 <span></span>
-<span><span class="fu">enrichplot</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/enrichplot/man/gseaplot2.html" class="external-link">gseaplot2</a></span><span class="op">(</span><span class="va">gse_group</span><span class="op">[[</span><span class="st">"BP"</span><span class="op">]</span><span class="op">]</span>, geneSetID <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, base_size <span class="op">=</span> <span class="fl">8</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">enrichplot</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/enrichplot/man/gseaplot2.html" class="external-link">gseaplot2</a></span><span class="op">(</span><span class="va">gse_group</span><span class="op">$</span><span class="va">all</span><span class="op">[[</span><span class="st">"CC"</span><span class="op">]</span><span class="op">]</span>, geneSetID <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, base_size <span class="op">=</span> <span class="fl">8</span><span class="op">)</span></span></code></pre></div>
 <p><img src="TiDEomics_files/figure-html/go_rank-1.png" class="r-plt" alt="" width="480"></p>
 <p>For multiple defined gene sets (e.g. WGCNA modules, DE genes by
 feature classification), use <code><a href="../reference/enrichGO_list.html">enrichGO_list()</a></code> and plot with
@@ -1579,7 +1707,7 @@ feature classification), use <code><a href="../reference/enrichGO_list.html">enr
 <p>Optionally, use <code>simplify = TRUE</code> with
 <code><a href="../reference/enrichGO_list.html">enrichGO_list()</a></code> to simplify the GO results by removing
 redundant terms (default: FALSE).</p>
-<div class="sourceCode" id="cb86"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb92"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">background_wgcna</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">wgcna_input</span><span class="op">$</span><span class="va">data</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">go_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/enrichGO_list.html">enrichGO_list</a></span><span class="op">(</span></span>
@@ -1593,52 +1721,22 @@ redundant terms (default: FALSE).</p>
 <span><span class="co">#&gt; GO category not specified. Using all three: BP, MF, CC.</span></span>
 <span><span class="co">#&gt; Performing GO enrichment for category: BP</span></span>
 <span><span class="co">#&gt; Processing gene list: 1</span></span>
-<span><span class="co">#&gt; 'select()' returned 1:1 mapping between keys and columns</span></span>
-<span><span class="co">#&gt; 'select()' returned 1:1 mapping between keys and columns</span></span>
 <span><span class="co">#&gt; Processing gene list: 2</span></span>
-<span><span class="co">#&gt; 'select()' returned 1:1 mapping between keys and columns</span></span>
-<span><span class="co">#&gt; 'select()' returned 1:1 mapping between keys and columns</span></span>
 <span><span class="co">#&gt; Processing gene list: 3</span></span>
-<span><span class="co">#&gt; 'select()' returned 1:1 mapping between keys and columns</span></span>
-<span><span class="co">#&gt; 'select()' returned 1:1 mapping between keys and columns</span></span>
 <span><span class="co">#&gt; Processing gene list: 4</span></span>
-<span><span class="co">#&gt; 'select()' returned 1:1 mapping between keys and columns</span></span>
-<span><span class="co">#&gt; 'select()' returned 1:1 mapping between keys and columns</span></span>
 <span><span class="co">#&gt; Processing gene list: 5</span></span>
-<span><span class="co">#&gt; 'select()' returned 1:1 mapping between keys and columns</span></span>
-<span><span class="co">#&gt; 'select()' returned 1:1 mapping between keys and columns</span></span>
 <span><span class="co">#&gt; Performing GO enrichment for category: MF</span></span>
 <span><span class="co">#&gt; Processing gene list: 1</span></span>
-<span><span class="co">#&gt; 'select()' returned 1:1 mapping between keys and columns</span></span>
-<span><span class="co">#&gt; 'select()' returned 1:1 mapping between keys and columns</span></span>
 <span><span class="co">#&gt; Processing gene list: 2</span></span>
-<span><span class="co">#&gt; 'select()' returned 1:1 mapping between keys and columns</span></span>
-<span><span class="co">#&gt; 'select()' returned 1:1 mapping between keys and columns</span></span>
 <span><span class="co">#&gt; Processing gene list: 3</span></span>
-<span><span class="co">#&gt; 'select()' returned 1:1 mapping between keys and columns</span></span>
-<span><span class="co">#&gt; 'select()' returned 1:1 mapping between keys and columns</span></span>
 <span><span class="co">#&gt; Processing gene list: 4</span></span>
-<span><span class="co">#&gt; 'select()' returned 1:1 mapping between keys and columns</span></span>
-<span><span class="co">#&gt; 'select()' returned 1:1 mapping between keys and columns</span></span>
 <span><span class="co">#&gt; Processing gene list: 5</span></span>
-<span><span class="co">#&gt; 'select()' returned 1:1 mapping between keys and columns</span></span>
-<span><span class="co">#&gt; 'select()' returned 1:1 mapping between keys and columns</span></span>
 <span><span class="co">#&gt; Performing GO enrichment for category: CC</span></span>
 <span><span class="co">#&gt; Processing gene list: 1</span></span>
-<span><span class="co">#&gt; 'select()' returned 1:1 mapping between keys and columns</span></span>
-<span><span class="co">#&gt; 'select()' returned 1:1 mapping between keys and columns</span></span>
 <span><span class="co">#&gt; Processing gene list: 2</span></span>
-<span><span class="co">#&gt; 'select()' returned 1:1 mapping between keys and columns</span></span>
-<span><span class="co">#&gt; 'select()' returned 1:1 mapping between keys and columns</span></span>
 <span><span class="co">#&gt; Processing gene list: 3</span></span>
-<span><span class="co">#&gt; 'select()' returned 1:1 mapping between keys and columns</span></span>
-<span><span class="co">#&gt; 'select()' returned 1:1 mapping between keys and columns</span></span>
 <span><span class="co">#&gt; Processing gene list: 4</span></span>
-<span><span class="co">#&gt; 'select()' returned 1:1 mapping between keys and columns</span></span>
-<span><span class="co">#&gt; 'select()' returned 1:1 mapping between keys and columns</span></span>
 <span><span class="co">#&gt; Processing gene list: 5</span></span>
-<span><span class="co">#&gt; 'select()' returned 1:1 mapping between keys and columns</span></span>
-<span><span class="co">#&gt; 'select()' returned 1:1 mapping between keys and columns</span></span>
 <span><span class="co">#&gt; Merging GO enrichment results across gene lists for each category.</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/plot_GO.html">plot_GO</a></span><span class="op">(</span><span class="va">go_list</span><span class="op">$</span><span class="va">all</span>, plot_dotplot <span class="op">=</span> <span class="cn">TRUE</span>,</span>
@@ -1659,7 +1757,7 @@ via <code><a href="../reference/enrich_msigdb.html">enrich_msigdb()</a></code>, 
 <code><a href="https://igordot.github.io/msigdbr/reference/msigdbr.html" class="external-link">msigdbr::msigdbr()</a></code> and runs a hypergeometric test across
 user-selected collections (Hallmark, GO, etc.) or specific gene
 sets.</p>
-<div class="sourceCode" id="cb90"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb96"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Mouse Hallmark gene sets</span></span>
 <span><span class="va">hallmark_msigdb</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/enrich_msigdb.html">enrich_msigdb</a></span><span class="op">(</span><span class="va">gene_module</span>, universe <span class="op">=</span> <span class="va">background_wgcna</span>,</span>
 <span>    minGSSize <span class="op">=</span> <span class="fl">5</span>, category <span class="op">=</span> <span class="st">"MH"</span>, species <span class="op">=</span> <span class="st">"Mus musculus"</span>, db_species <span class="op">=</span> <span class="st">"MM"</span><span class="op">)</span></span>
@@ -1696,7 +1794,7 @@ pathways) can be performed with <code><a href="../reference/enrichR_list.html">e
 <code><a href="https://rdrr.io/pkg/enrichR/man/enrichr.html" class="external-link">enrichR::enrichr()</a></code>. Available databases can be checked with
 <code><a href="https://rdrr.io/pkg/enrichR/man/listEnrichrDbs.html" class="external-link">enrichR::listEnrichrDbs()</a></code>.</p>
 <p><code><a href="../reference/enrichGO_list.html">enrichGO_list()</a></code>, <code><a href="../reference/enrich_msigdb.html">enrich_msigdb()</a></code> and
-<code><a href="../reference/enrichR_list.html">enrichR_list()</a></code> all return a named list of data.frames (one
+<code><a href="../reference/enrichR_list.html">enrichR_list()</a></code> all return a named list of data frames (one
 per category for <code>enrichGO_list</code>, one for
 <code><a href="../reference/enrich_msigdb.html">enrich_msigdb()</a></code>, one per database for
 <code><a href="../reference/enrichR_list.html">enrichR_list()</a></code>) with <code>Cluster</code> and
@@ -1712,61 +1810,45 @@ enrichment<a class="anchor" aria-label="anchor" href="#integrated-visualisation-
 <code><a href="../reference/plot_modules_v.html">plot_modules_v()</a></code> above but horizontally aligned with
 annotation of the modules with their top enriched GO terms. The plotting
 function is adapted from ClusterGVis package <span class="citation">(Zhang et al. 2026)</span>.</p>
-<div class="sourceCode" id="cb91"><pre class="downlit sourceCode r">
+<p><code><a href="../reference/plot_modules_h.html">plot_modules_h()</a></code> supports extensive customisation,
+e.g. <code>group_annotation</code> controls whether groups are labelled
+above the heatmap by names (default), colour strips, both, or neither.
+See <code><a href="../reference/plot_modules_h.html">?plot_modules_h</a></code> for details.</p>
+<div class="sourceCode" id="cb97"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_modules_h.html">plot_modules_h</a></span><span class="op">(</span><span class="va">gene_module</span>,</span>
-<span>    <span class="va">data_obj_merged</span>, scale <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>    <span class="va">data_obj_merged</span>, assay <span class="op">=</span> <span class="fl">2</span>, scale <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>    ylabel <span class="op">=</span> <span class="st">"Z-score of log2(CPM + 1)"</span>,</span>
 <span>    enrich_list <span class="op">=</span> <span class="va">go_list</span><span class="op">$</span><span class="va">all</span>,</span>
 <span>    enrich_category <span class="op">=</span> <span class="st">"BP"</span>,</span>
 <span>    heatmap_width <span class="op">=</span> <span class="fl">6</span>,</span>
 <span>    heatmap_height <span class="op">=</span> <span class="fl">8</span></span>
-<span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning: Removed 294 rows containing non-finite outside the scale range</span></span>
-<span><span class="co">#&gt; (`stat_summary()`).</span></span>
-<span><span class="co">#&gt; Warning: Removed 114 rows containing non-finite outside the scale range</span></span>
-<span><span class="co">#&gt; (`stat_summary()`).</span></span>
-<span><span class="co">#&gt; Warning: Removed 96 rows containing non-finite outside the scale range</span></span>
-<span><span class="co">#&gt; (`stat_summary()`).</span></span>
-<span><span class="co">#&gt; Warning: Removed 93 rows containing non-finite outside the scale range</span></span>
-<span><span class="co">#&gt; (`stat_summary()`).</span></span>
-<span><span class="co">#&gt; Warning: Removed 78 rows containing non-finite outside the scale range</span></span>
-<span><span class="co">#&gt; (`stat_summary()`).</span></span></code></pre></div>
+<span><span class="op">)</span></span></code></pre></div>
 <p><img src="TiDEomics_files/figure-html/plot-wgcna-modules-go-1.png" class="r-plt" alt="" width="768"></p>
 <p>Multiple enrichment categories (e.g. GO BP, CC, MF, MSigDB
 collections, enrichR databases) can be displayed side-by-side by passing
 a vector to <code>enrich_category</code>. Features of interest can be
 marked on the heatmap or shown as an annotation column via
 <code>mark_features</code> and
-<code>enrich_category = "Hub features"</code>. The
-<code>enrich_p_threshold</code> parameter controls per-category p-value
-colour-coding of enrichment terms; set to <code>NA</code> for “Hub
-features”, which use auto-assigned colours instead.</p>
+<code>enrich_category = "Features"</code>. The
+<code>enrich_threshold</code> parameter controls per-category p-value
+colour-coding of enrichment terms; set to <code>NA</code> for
+“Features”, which use auto-assigned colours instead.</p>
 <p>Hub features can be extracted by WGCNA module membership (the
 correlation of the feature with the corresponding module eigengene) with
 <code><a href="../reference/extract_hubs.html">extract_hubs()</a></code></p>
-<div class="sourceCode" id="cb92"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb98"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">hub_features</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/extract_hubs.html">extract_hubs</a></span><span class="op">(</span><span class="va">net</span>, top_n <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/plot_modules_h.html">plot_modules_h</a></span><span class="op">(</span><span class="va">gene_module</span>,</span>
-<span>    <span class="va">data_obj_merged</span>, scale <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>    <span class="va">data_obj_merged</span>, assay <span class="op">=</span> <span class="fl">2</span>, scale <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>    ylabel <span class="op">=</span> <span class="st">"Z-score of log2(CPM + 1)"</span>,</span>
 <span>    enrich_list <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">go_list</span><span class="op">$</span><span class="va">all</span>, <span class="va">hallmark_msigdb</span><span class="op">)</span>,</span>
 <span>    enrich_category <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"BP"</span>, <span class="st">"CC"</span>, <span class="st">"MH"</span><span class="op">)</span>,</span>
-<span>    enrich_p_threshold <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.05</span>, <span class="fl">0.05</span>, <span class="fl">0.05</span><span class="op">)</span>,</span>
+<span>    enrich_threshold <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.05</span>, <span class="fl">0.05</span>, <span class="fl">0.05</span><span class="op">)</span>,</span>
 <span>    mark_features <span class="op">=</span> <span class="va">hub_features</span>,</span>
 <span>    heatmap_width <span class="op">=</span> <span class="fl">6</span>,</span>
 <span>    heatmap_height <span class="op">=</span> <span class="fl">8</span></span>
-<span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning: Removed 294 rows containing non-finite outside the scale range</span></span>
-<span><span class="co">#&gt; (`stat_summary()`).</span></span>
-<span><span class="co">#&gt; Warning: Removed 114 rows containing non-finite outside the scale range</span></span>
-<span><span class="co">#&gt; (`stat_summary()`).</span></span>
-<span><span class="co">#&gt; Warning: Removed 96 rows containing non-finite outside the scale range</span></span>
-<span><span class="co">#&gt; (`stat_summary()`).</span></span>
-<span><span class="co">#&gt; Warning: Removed 93 rows containing non-finite outside the scale range</span></span>
-<span><span class="co">#&gt; (`stat_summary()`).</span></span>
-<span><span class="co">#&gt; Warning: Removed 78 rows containing non-finite outside the scale range</span></span>
-<span><span class="co">#&gt; (`stat_summary()`).</span></span></code></pre></div>
+<span><span class="op">)</span></span></code></pre></div>
 <p><img src="TiDEomics_files/figure-html/plot-wgcna-modules-multi-1.png" class="r-plt" alt="" width="1440"></p>
 </div>
 <div class="section level3">
@@ -1775,13 +1857,13 @@ correlation of the feature with the corresponding module eigengene) with
 <p>Selected features can be plotted with <code><a href="../reference/plot_trend.html">plot_trend()</a></code>,
 which shows the mean and standard deviation of replicates at each time
 point.</p>
-<div class="sourceCode" id="cb93"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb99"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_trend.html">plot_trend</a></span><span class="op">(</span><span class="va">data_obj</span>, assay <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>    features <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Abtb1"</span>, <span class="st">"Dram1"</span>, <span class="st">"Ifi27"</span>, <span class="st">"Nufip1"</span><span class="op">)</span>,</span>
 <span>    title <span class="op">=</span> <span class="st">"Example features"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Group not specified. Plotting all groups: IFNbeta, IFNgamma, LPS, untreated</span></span></code></pre></div>
 <p><img src="TiDEomics_files/figure-html/plot-feature-1.png" class="r-plt" alt="" width="576"></p>
-<div class="sourceCode" id="cb94"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb100"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co"># Or pre-calculate mean and sd with calc_mean_sd()</span></span>
 <span><span class="va">table_mean_sd_orig</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/calc_mean_sd.html">calc_mean_sd</a></span><span class="op">(</span><span class="va">data_obj</span><span class="op">)</span><span class="op">$</span><span class="va">orig</span></span>
@@ -1792,7 +1874,7 @@ point.</p>
 <p><img src="TiDEomics_files/figure-html/plot-feature-2.png" class="r-plt" alt="" width="576"></p>
 <p>Visualisation of features with high &amp; low residual variance
 justify the filtering strategy for WGCNA input.</p>
-<div class="sourceCode" id="cb95"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb101"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_trend.html">plot_trend</a></span><span class="op">(</span><span class="va">data_obj</span>, assay <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>    features <span class="op">=</span> <span class="va">var_decomp</span> <span class="op">|&gt;</span></span>
 <span>        <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="va">Residual</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">utils</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fl">12</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="va">Feature</span><span class="op">)</span>,</span>
@@ -1800,7 +1882,7 @@ justify the filtering strategy for WGCNA input.</p>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; Group not specified. Plotting all groups: IFNbeta, IFNgamma, LPS, untreated</span></span></code></pre></div>
 <p><img src="TiDEomics_files/figure-html/plot-residual-1.png" class="r-plt" alt="" width="576"></p>
-<div class="sourceCode" id="cb96"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb102"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="../reference/plot_trend.html">plot_trend</a></span><span class="op">(</span><span class="va">data_obj</span>, assay <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>    features <span class="op">=</span> <span class="va">var_decomp</span> <span class="op">|&gt;</span></span>
@@ -1819,13 +1901,20 @@ preprocessing steps in a single call, including input creation,
 normalisation, merging replicates, variance decomposition, and feature
 filtering. It is convenient for standard analyses, while running each
 step individually allows for more control over parameters.</p>
-<div class="sourceCode" id="cb97"><pre class="downlit sourceCode r">
+<p>By default, <code><a href="../reference/prepare_tide.html">prepare_tide()</a></code> keeps features with mean
+values greater than <code>feature_threshold</code> (or non-NA when
+<code>feature_threshold</code> is NULL) in at least 50% time points in
+at least two groups. It then retains features with residual variance at
+or below the 75th percentile, applied separately to the original and
+time-0-normalised data.</p>
+<div class="sourceCode" id="cb103"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">tide</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/prepare_tide.html">prepare_tide</a></span><span class="op">(</span></span>
 <span>    data <span class="op">=</span> <span class="va">tutorial_data</span>,</span>
 <span>    sample_ann <span class="op">=</span> <span class="va">tutorial_sample_info</span>,</span>
 <span>    filter_ratio <span class="op">=</span> <span class="fl">0.5</span>,</span>
+<span>    feature_threshold <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>    min_groups <span class="op">=</span> <span class="fl">2</span>,</span>
-<span>    keep <span class="op">=</span> <span class="st">"below_quantile"</span>,</span>
+<span>    keep <span class="op">=</span> <span class="st">"quantile"</span>,</span>
 <span>    residual_threshold <span class="op">=</span> <span class="fl">0.75</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; No Subject column specified. Samples treated as independent. For repeated-measures designs, set subject_col to the column identifying biological subjects.</span></span>
@@ -1838,16 +1927,23 @@ step individually allows for more control over parameters.</p>
 <span><span class="co">#&gt; Cross-group filter (Exp_ratio &gt;= 0.5 in &gt;= 2 groups): kept 340 of 500 features (68%)</span></span>
 <span><span class="co">#&gt; --- assay: orig ---</span></span>
 <span><span class="co">#&gt; LMM: exp ~ (1|Group) + (1|Time)  |  Output: Group, Time, Residual</span></span>
-<span><span class="co">#&gt; Residual filter (below_quantile): kept 255 of 340 features (75%)</span></span>
+<span><span class="co">#&gt; 340 features evaluated: 267 successful; 0 errors; 73 warnings; 0 skipped before fitting for insufficient observations or variance.</span></span>
+<span><span class="co">#&gt; Residual filter (quantile): kept 255 of 340 features (75%)</span></span>
 <span><span class="co">#&gt; --- assay: norm ---</span></span>
 <span><span class="co">#&gt; LMM: exp ~ (1|Group) + (1|Time)  |  Output: Group, Time, Residual</span></span>
-<span><span class="co">#&gt; Residual filter (below_quantile): kept 255 of 340 features (75%)</span></span>
+<span><span class="co">#&gt; 340 features evaluated: 267 successful; 0 errors; 73 warnings; 0 skipped before fitting for insufficient observations or variance.</span></span>
+<span><span class="co">#&gt; Residual filter (quantile): kept 255 of 340 features (75%)</span></span>
 <span><span class="va">tide</span><span class="op">$</span><span class="va">filter_summary</span></span></code></pre></div>
-<pre style="max-height: 300px;"><code><span><span class="co">#&gt;                stage assay n_features pct_kept                       threshold</span></span>
-<span><span class="co">#&gt; 1              input  &lt;NA&gt;        500      100                            &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 2 cross_group_filter  &lt;NA&gt;        340       68 Exp_ratio &gt;= 0.5 in &gt;= 2 groups</span></span>
-<span><span class="co">#&gt; 3    residual_filter  orig        255       51          below_quantile = 69.03</span></span>
-<span><span class="co">#&gt; 4    residual_filter  norm        255       51          below_quantile = 69.03</span></span></code></pre>
+<pre style="max-height: 300px;"><code><span><span class="co">#&gt;                stage assay n_features pct_kept residual_cutoff</span></span>
+<span><span class="co">#&gt; 1              input  &lt;NA&gt;        500      100              NA</span></span>
+<span><span class="co">#&gt; 2 cross_group_filter  &lt;NA&gt;        340       68              NA</span></span>
+<span><span class="co">#&gt; 3    residual_filter  orig        255       51        69.02961</span></span>
+<span><span class="co">#&gt; 4    residual_filter  norm        255       51        69.02961</span></span>
+<span><span class="co">#&gt;                         threshold</span></span>
+<span><span class="co">#&gt; 1                            &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 2 Exp_ratio &gt;= 0.5 in &gt;= 2 groups</span></span>
+<span><span class="co">#&gt; 3                quantile = 69.03</span></span>
+<span><span class="co">#&gt; 4                quantile = 69.03</span></span></code></pre>
 <p>Variance decomposition and filtering are run on both
 <code>"orig"</code> and <code>"norm"</code> assays. The returned list
 <code>tide</code> contains:</p>
@@ -1868,7 +1964,7 @@ step individually allows for more control over parameters.</p>
 <tr class="odd">
 <td><code>tide$se</code></td>
 <td>Unmerged SE, all features</td>
-<td>Correlation matrix, PCA, UMAP, Pairwise DE, plot_trend</td>
+<td>Correlation matrix, PCA, UMAP, DE, plot_trend</td>
 <td><code>data_obj</code></td>
 </tr>
 <tr class="even">
@@ -1950,7 +2046,7 @@ step individually allows for more control over parameters.</p>
 <p>Pairwise DE, WGCNA and enrichment can be run on the returned
 elements, and the results can be appended to the list for centralised
 storage.</p>
-<div class="sourceCode" id="cb99"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb105"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">tide</span><span class="op">$</span><span class="va">DE</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>    between_group <span class="op">=</span> <span class="va">DE_between_group_out</span>,</span>
 <span>    between_time  <span class="op">=</span> <span class="va">DE_between_time_out</span></span>
@@ -1976,14 +2072,14 @@ TiDEomics data can be passed to other Bioconductor tools for further
 custom analysis and visualisation. For example, <a href="https://bioconductor.org/packages/iSEE" class="external-link">iSEE</a> interactive
 SummarizedExperiment browser can be used to explore the data in an
 interactive Shiny app.</p>
-<div class="sourceCode" id="cb100"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb106"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">iSEE</span><span class="fu">::</span><span class="fu">iSEE</span><span class="op">(</span><span class="va">data_obj</span><span class="op">)</span></span></code></pre></div>
 <p><code><a href="../reference/prepare_tide.html">prepare_tide()</a></code> output can be converted to a <a href="https://bioconductor.org/packages/DeeDeeExperiment" class="external-link"><code>DeeDeeExperiment</code></a>
 object for formatted summary. The nested DE and enrichment results can
 be flattened with <code><a href="../reference/flatten_DE.html">flatten_DE()</a></code> or
 <code><a href="../reference/flatten_enrich.html">flatten_enrich()</a></code> before passing to the
 <code>DeeDeeExperiment</code> constructor.</p>
-<div class="sourceCode" id="cb101"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb107"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Flatten nested results</span></span>
 <span><span class="va">de_flat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/flatten_DE.html">flatten_DE</a></span><span class="op">(</span><span class="va">tide</span><span class="op">$</span><span class="va">DE</span><span class="op">)</span></span>
 <span><span class="va">enrich_flat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/flatten_enrich.html">flatten_enrich</a></span><span class="op">(</span><span class="va">tide</span><span class="op">$</span><span class="va">enrichment</span><span class="op">)</span></span>
@@ -1994,8 +2090,6 @@ be flattened with <code><a href="../reference/flatten_DE.html">flatten_DE()</a><
 <span>    de_results <span class="op">=</span> <span class="va">de_flat</span>,</span>
 <span>    enrich_results <span class="op">=</span> <span class="va">enrich_flat</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning: replacing previous import 'BiocGenerics::transform' by</span></span>
-<span><span class="co">#&gt; 'IRanges::transform' when loading 'DESeq2'</span></span>
 <span><span class="co">#&gt; Warning in DeeDeeExperiment::DeeDeeExperiment(sce = tide$se, de_results = de_flat, : Could not match FEA 'clusterProfiler_GO_modules_BP_1' to any DE contrast.</span></span>
 <span><span class="co">#&gt; Available DE results: between_group_IFNgamma-IFNbeta_T0, between_group_IFNgamma-IFNbeta_T2, between_group_IFNgamma-IFNbeta_T4, between_group_IFNgamma-IFNbeta_T6, between_group_IFNgamma-IFNbeta_T8, between_group_IFNgamma-IFNbeta_T24, between_group_LPS-IFNbeta_T0, between_group_LPS-IFNbeta_T2, between_group_LPS-IFNbeta_T4, between_group_LPS-IFNbeta_T6, between_group_LPS-IFNbeta_T8, between_group_LPS-IFNbeta_T24, between_group_untreated-IFNbeta_T0, between_group_untreated-IFNbeta_T8, between_group_untreated-IFNbeta_T24, between_group_IFNbeta-IFNgamma_T0, between_group_IFNbeta-IFNgamma_T2, between_group_IFNbeta-IFNgamma_T4, between_group_IFNbeta-IFNgamma_T6, between_group_IFNbeta-IFNgamma_T8, between_group_IFNbeta-IFNgamma_T24, between_group_LPS-IFNgamma_T0, between_group_LPS-IFNgamma_T2, between_group_LPS-IFNgamma_T4, between_group_LPS-IFNgamma_T6, between_group_LPS-IFNgamma_T8, between_group_LPS-IFNgamma_T24, between_group_untreated-IFNgamma_T0, between_group_untreated-IFNgamma_T8, between_group_untreated-IFNgamma_T24, between_group_IFNbeta-LPS_T0, between_group_IFNbeta-LPS_T2, between_group_IFNbeta-LPS_T4, between_group_IFNbeta-LPS_T6, between_group_IFNbeta-LPS_T8, between_group_IFNbeta-LPS_T24, between_group_IFNgamma-LPS_T0, between_group_IFNgamma-LPS_T2, between_group_IFNgamma-LPS_T4, between_group_IFNgamma-LPS_T6, between_group_IFNgamma-LPS_T8, between_group_IFNgamma-LPS_T24, between_group_untreated-LPS_T0, between_group_untreated-LPS_T8, between_group_untreated-LPS_T24, between_group_IFNbeta-untreated_T0, between_group_IFNbeta-untreated_T8, between_group_IFNbeta-untreated_T24, between_group_IFNgamma-untreated_T0, between_group_IFNgamma-untreated_T8, between_group_IFNgamma-untreated_T24, between_group_LPS-untreated_T0, between_group_LPS-untreated_T8, between_group_LPS-untreated_T24, between_time_IFNbeta_t2-t0, between_time_IFNbeta_t4-t0, between_time_IFNbeta_t6-t0, between_time_IFNbeta_t8-t0, between_time_IFNbeta_t24-t0, between_time_IFNbeta_t4-t2, between_time_IFNbeta_t6-t2, between_time_IFNbeta_t8-t2, between_time_IFNbeta_t24-t2, between_time_IFNbeta_t6-t4, between_time_IFNbeta_t8-t4, between_time_IFNbeta_t24-t4, between_time_IFNbeta_t8-t6, between_time_IFNbeta_t24-t6, between_time_IFNbeta_t24-t8, between_time_IFNgamma_t2-t0, between_time_IFNgamma_t4-t0, between_time_IFNgamma_t6-t0, between_time_IFNgamma_t8-t0, between_time_IFNgamma_t24-t0, between_time_IFNgamma_t4-t2, between_time_IFNgamma_t6-t2, between_time_IFNgamma_t8-t2, between_time_IFNgamma_t24-t2, between_time_IFNgamma_t6-t4, between_time_IFNgamma_t8-t4, between_time_IFNgamma_t24-t4, between_time_IFNgamma_t8-t6, between_time_IFNgamma_t24-t6, between_time_IFNgamma_t24-t8, between_time_LPS_t2-t0, between_time_LPS_t4-t0, between_time_LPS_t6-t0, between_time_LPS_t8-t0, between_time_LPS_t24-t0, between_time_LPS_t4-t2, between_time_LPS_t6-t2, between_time_LPS_t8-t2, between_time_LPS_t24-t2, between_time_LPS_t6-t4, between_time_LPS_t8-t4, between_time_LPS_t24-t4, between_time_LPS_t8-t6, between_time_LPS_t24-t6, between_time_LPS_t24-t8, between_time_untreated_t8-t0, between_time_untreated_t24-t0, between_time_untreated_t24-t8</span></span>
 <span><span class="co">#&gt;  Consider naming your enrich_results starting with one of the following prefixes: 'topGO_', 'clusterProfiler_','GeneTonic_', 'DAVID_','gsea_', 'fgsea_', 'enrichr_', 'gPro_',followed by the contrast name</span></span>
@@ -2140,9 +2234,9 @@ missing values.</p></li>
 <div class="section level2">
 <h2 id="session-information">Session information<a class="anchor" aria-label="anchor" href="#session-information"></a>
 </h2>
-<div class="sourceCode" id="cb102"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb108"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<pre style="max-height: 300px;"><code><span><span class="co">#&gt; R version 4.6.0 (2026-04-24 ucrt)</span></span>
+<pre style="max-height: 300px;"><code><span><span class="co">#&gt; R version 4.6.1 (2026-06-24 ucrt)</span></span>
 <span><span class="co">#&gt; Platform: x86_64-w64-mingw32/x64</span></span>
 <span><span class="co">#&gt; Running under: Windows 11 x64 (build 26200)</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -2164,104 +2258,104 @@ missing values.</p></li>
 <span><span class="co">#&gt; [8] base     </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; other attached packages:</span></span>
-<span><span class="co">#&gt;  [1] org.Mm.eg.db_3.23.0         AnnotationDbi_1.75.0       </span></span>
-<span><span class="co">#&gt;  [3] SummarizedExperiment_1.43.0 Biobase_2.73.1             </span></span>
-<span><span class="co">#&gt;  [5] GenomicRanges_1.65.1        Seqinfo_1.3.0              </span></span>
-<span><span class="co">#&gt;  [7] IRanges_2.47.1              S4Vectors_0.51.2           </span></span>
-<span><span class="co">#&gt;  [9] BiocGenerics_0.59.10        generics_0.1.4             </span></span>
+<span><span class="co">#&gt;  [1] org.Mm.eg.db_3.23.0         AnnotationDbi_1.75.2       </span></span>
+<span><span class="co">#&gt;  [3] SummarizedExperiment_1.43.0 Biobase_2.73.2             </span></span>
+<span><span class="co">#&gt;  [5] GenomicRanges_1.65.4        Seqinfo_1.3.2              </span></span>
+<span><span class="co">#&gt;  [7] IRanges_2.47.5              S4Vectors_0.51.10          </span></span>
+<span><span class="co">#&gt;  [9] BiocGenerics_0.59.12        generics_0.1.4             </span></span>
 <span><span class="co">#&gt; [11] MatrixGenerics_1.25.0       matrixStats_1.5.0          </span></span>
-<span><span class="co">#&gt; [13] TiDEomics_0.99.4            BiocStyle_2.41.0           </span></span>
+<span><span class="co">#&gt; [13] TiDEomics_0.99.7            BiocStyle_2.41.0           </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; loaded via a namespace (and not attached):</span></span>
-<span><span class="co">#&gt;   [1] segmented_2.2-1             fs_2.1.0                   </span></span>
-<span><span class="co">#&gt;   [3] bitops_1.0-9                enrichplot_1.33.0          </span></span>
-<span><span class="co">#&gt;   [5] httr_1.4.8                  RColorBrewer_1.1-3         </span></span>
-<span><span class="co">#&gt;   [7] doParallel_1.0.17           ggsci_5.1.0                </span></span>
+<span><span class="co">#&gt;   [1] segmented_2.2-2             fs_2.1.0                   </span></span>
+<span><span class="co">#&gt;   [3] bitops_1.1-0                enrichplot_1.99.8          </span></span>
+<span><span class="co">#&gt;   [5] httr_1.4.9                  RColorBrewer_1.1-3         </span></span>
+<span><span class="co">#&gt;   [7] doParallel_1.0.17           ggsci_5.2.0                </span></span>
 <span><span class="co">#&gt;   [9] DeeDeeExperiment_1.3.0      dynamicTreeCut_1.63-1      </span></span>
-<span><span class="co">#&gt;  [11] tools_4.6.0                 backports_1.5.1            </span></span>
+<span><span class="co">#&gt;  [11] tools_4.6.1                 backports_1.5.1            </span></span>
 <span><span class="co">#&gt;  [13] utf8_1.2.6                  R6_2.6.1                   </span></span>
 <span><span class="co">#&gt;  [15] lazyeval_0.2.3              GetoptLong_1.1.1           </span></span>
 <span><span class="co">#&gt;  [17] withr_3.0.3                 gridExtra_2.3.1            </span></span>
-<span><span class="co">#&gt;  [19] preprocessCore_1.75.0       WGCNA_1.74                 </span></span>
+<span><span class="co">#&gt;  [19] preprocessCore_1.75.1       WGCNA_1.74                 </span></span>
 <span><span class="co">#&gt;  [21] cli_3.6.6                   textshaping_1.0.5          </span></span>
 <span><span class="co">#&gt;  [23] scatterpie_0.2.6            labeling_0.4.3             </span></span>
 <span><span class="co">#&gt;  [25] sass_0.4.10                 S7_0.2.2                   </span></span>
-<span><span class="co">#&gt;  [27] askpass_1.2.1               pbapply_1.7-4              </span></span>
+<span><span class="co">#&gt;  [27] askpass_1.2.1               pbapply_1.7-5              </span></span>
 <span><span class="co">#&gt;  [29] ggridges_0.5.7              pkgdown_2.2.1              </span></span>
-<span><span class="co">#&gt;  [31] systemfonts_1.3.2           yulab.utils_0.2.4          </span></span>
-<span><span class="co">#&gt;  [33] gson_0.2.0                  foreign_0.8-91             </span></span>
-<span><span class="co">#&gt;  [35] DOSE_4.7.2                  limma_3.69.2               </span></span>
-<span><span class="co">#&gt;  [37] rstudioapi_0.19.0           impute_1.87.0              </span></span>
-<span><span class="co">#&gt;  [39] RSQLite_3.53.3              gridGraphics_0.5-1         </span></span>
-<span><span class="co">#&gt;  [41] shape_1.4.6.1               crosstalk_1.2.2            </span></span>
-<span><span class="co">#&gt;  [43] gtools_3.9.5                car_3.1-5                  </span></span>
-<span><span class="co">#&gt;  [45] dplyr_1.2.1                 GO.db_3.23.1               </span></span>
-<span><span class="co">#&gt;  [47] Matrix_1.7-5                abind_1.4-8                </span></span>
-<span><span class="co">#&gt;  [49] PCAtools_2.25.0             lifecycle_1.0.5            </span></span>
-<span><span class="co">#&gt;  [51] edgeR_4.11.4                yaml_2.3.12                </span></span>
-<span><span class="co">#&gt;  [53] carData_3.0-6               gplots_3.3.0               </span></span>
-<span><span class="co">#&gt;  [55] qvalue_2.45.0               SparseArray_1.13.2         </span></span>
-<span><span class="co">#&gt;  [57] grid_4.6.0                  blob_1.3.0                 </span></span>
-<span><span class="co">#&gt;  [59] promises_1.5.0              dqrng_0.4.1                </span></span>
-<span><span class="co">#&gt;  [61] crayon_1.5.3                ggtangle_0.1.2             </span></span>
-<span><span class="co">#&gt;  [63] lattice_0.22-9              msigdbr_26.1.0             </span></span>
-<span><span class="co">#&gt;  [65] beachmat_2.29.0             cowplot_1.2.0              </span></span>
-<span><span class="co">#&gt;  [67] KEGGREST_1.53.1             magick_2.9.1               </span></span>
-<span><span class="co">#&gt;  [69] pillar_1.11.1               knitr_1.51                 </span></span>
-<span><span class="co">#&gt;  [71] ComplexHeatmap_2.29.0       rjson_0.2.23               </span></span>
-<span><span class="co">#&gt;  [73] boot_1.3-32                 codetools_0.2-20           </span></span>
-<span><span class="co">#&gt;  [75] glue_1.8.1                  ggiraph_0.9.6              </span></span>
-<span><span class="co">#&gt;  [77] ggfun_0.2.1                 fontLiberation_0.1.0       </span></span>
-<span><span class="co">#&gt;  [79] data.table_1.18.4           vctrs_0.7.3                </span></span>
-<span><span class="co">#&gt;  [81] png_0.1-9                   treeio_1.37.0              </span></span>
-<span><span class="co">#&gt;  [83] Rdpack_2.6.6                gtable_0.3.6               </span></span>
-<span><span class="co">#&gt;  [85] assertthat_0.2.1            cachem_1.1.0               </span></span>
-<span><span class="co">#&gt;  [87] xfun_0.60                   rbibutils_2.4.1            </span></span>
-<span><span class="co">#&gt;  [89] S4Arrays_1.13.0             mime_0.13                  </span></span>
-<span><span class="co">#&gt;  [91] reformulas_0.4.4            survival_3.8-9             </span></span>
-<span><span class="co">#&gt;  [93] aisdk_1.4.12                SingleCellExperiment_1.35.2</span></span>
-<span><span class="co">#&gt;  [95] iterators_1.0.14            statmod_1.5.2              </span></span>
-<span><span class="co">#&gt;  [97] nlme_3.1-170                ggtree_4.3.0               </span></span>
-<span><span class="co">#&gt;  [99] bit64_4.8.2                 fontquiver_0.2.1           </span></span>
-<span><span class="co">#&gt; [101] bslib_0.11.0                irlba_2.3.7                </span></span>
-<span><span class="co">#&gt; [103] KernSmooth_2.23-26          otel_0.2.0                 </span></span>
-<span><span class="co">#&gt; [105] rpart_4.1.27                colorspace_2.1-3           </span></span>
-<span><span class="co">#&gt; [107] DBI_1.3.0                   Hmisc_5.2-6                </span></span>
-<span><span class="co">#&gt; [109] nnet_7.3-20                 DESeq2_1.53.2              </span></span>
-<span><span class="co">#&gt; [111] tidyselect_1.2.1            processx_3.9.0             </span></span>
-<span><span class="co">#&gt; [113] curl_7.1.0                  bit_4.6.0                  </span></span>
-<span><span class="co">#&gt; [115] compiler_4.6.0              httr2_1.3.0                </span></span>
-<span><span class="co">#&gt; [117] htmlTable_2.5.0             plotly_4.12.0              </span></span>
+<span><span class="co">#&gt;  [31] systemfonts_1.3.2           yulab.utils_0.2.5          </span></span>
+<span><span class="co">#&gt;  [33] gson_0.2.2                  foreign_0.8-92             </span></span>
+<span><span class="co">#&gt;  [35] DOSE_4.7.3                  dichromat_2.0-1            </span></span>
+<span><span class="co">#&gt;  [37] limma_3.99.3                rstudioapi_0.19.0          </span></span>
+<span><span class="co">#&gt;  [39] impute_1.87.0               RSQLite_3.53.3             </span></span>
+<span><span class="co">#&gt;  [41] gridGraphics_0.5-1          shape_1.4.6.1              </span></span>
+<span><span class="co">#&gt;  [43] crosstalk_1.2.2             gtools_3.9.5               </span></span>
+<span><span class="co">#&gt;  [45] car_3.1-5                   dplyr_1.2.1                </span></span>
+<span><span class="co">#&gt;  [47] GO.db_3.23.1                Matrix_1.7-6               </span></span>
+<span><span class="co">#&gt;  [49] abind_1.4-8                 PCAtools_2.25.1            </span></span>
+<span><span class="co">#&gt;  [51] lifecycle_1.0.5             edgeR_4.99.10              </span></span>
+<span><span class="co">#&gt;  [53] yaml_2.3.12                 carData_3.0-6              </span></span>
+<span><span class="co">#&gt;  [55] gplots_3.3.0                qvalue_2.45.0              </span></span>
+<span><span class="co">#&gt;  [57] SparseArray_1.13.4          grid_4.6.1                 </span></span>
+<span><span class="co">#&gt;  [59] blob_1.3.0                  promises_1.5.0             </span></span>
+<span><span class="co">#&gt;  [61] dqrng_0.4.1                 crayon_1.5.3               </span></span>
+<span><span class="co">#&gt;  [63] ggtangle_0.1.4              lattice_0.23-1             </span></span>
+<span><span class="co">#&gt;  [65] msigdbr_26.1.1              beachmat_2.29.3            </span></span>
+<span><span class="co">#&gt;  [67] cowplot_1.2.0               KEGGREST_1.53.6            </span></span>
+<span><span class="co">#&gt;  [69] magick_2.9.1                pillar_1.11.1              </span></span>
+<span><span class="co">#&gt;  [71] knitr_1.52                  ComplexHeatmap_2.29.0      </span></span>
+<span><span class="co">#&gt;  [73] rjson_0.2.23                boot_1.3-32                </span></span>
+<span><span class="co">#&gt;  [75] codetools_0.2-20            glue_1.8.1                 </span></span>
+<span><span class="co">#&gt;  [77] ggiraph_0.9.6               ggfun_0.2.2                </span></span>
+<span><span class="co">#&gt;  [79] fontLiberation_0.1.0        data.table_1.18.6.1        </span></span>
+<span><span class="co">#&gt;  [81] vctrs_0.7.3                 png_0.1-9                  </span></span>
+<span><span class="co">#&gt;  [83] treeio_1.37.1               Rdpack_2.6.6               </span></span>
+<span><span class="co">#&gt;  [85] gtable_0.3.6                assertthat_0.2.1           </span></span>
+<span><span class="co">#&gt;  [87] cachem_1.1.0                xfun_0.62                  </span></span>
+<span><span class="co">#&gt;  [89] rbibutils_2.4.1             S4Arrays_1.13.2            </span></span>
+<span><span class="co">#&gt;  [91] mime_0.13                   reformulas_0.4.4           </span></span>
+<span><span class="co">#&gt;  [93] survival_3.8-12             aisdk_1.4.12               </span></span>
+<span><span class="co">#&gt;  [95] SingleCellExperiment_1.35.2 iterators_1.0.14           </span></span>
+<span><span class="co">#&gt;  [97] statmod_1.5.2               nlme_3.1-171               </span></span>
+<span><span class="co">#&gt;  [99] ggtree_4.3.0                bit64_4.8.6                </span></span>
+<span><span class="co">#&gt; [101] fontquiver_0.2.1            bslib_0.12.0               </span></span>
+<span><span class="co">#&gt; [103] irlba_2.4.1                 KernSmooth_2.23-27         </span></span>
+<span><span class="co">#&gt; [105] otel_0.2.0                  rpart_4.1.27               </span></span>
+<span><span class="co">#&gt; [107] colorspace_2.1-4            DBI_1.3.0                  </span></span>
+<span><span class="co">#&gt; [109] Hmisc_5.3-0                 nnet_7.3-21                </span></span>
+<span><span class="co">#&gt; [111] DESeq2_1.53.6               tidyselect_1.2.1           </span></span>
+<span><span class="co">#&gt; [113] processx_3.9.0              bit_4.6.0                  </span></span>
+<span><span class="co">#&gt; [115] compiler_4.6.1              httr2_1.3.0                </span></span>
+<span><span class="co">#&gt; [117] htmlTable_2.5.0             plotly_4.12.1              </span></span>
 <span><span class="co">#&gt; [119] randtests_1.0.2             desc_1.4.3                 </span></span>
-<span><span class="co">#&gt; [121] fontBitstreamVera_0.1.1     DelayedArray_0.39.3        </span></span>
-<span><span class="co">#&gt; [123] bookdown_0.47               checkmate_2.3.4            </span></span>
+<span><span class="co">#&gt; [121] fontBitstreamVera_0.1.1     DelayedArray_0.39.8        </span></span>
+<span><span class="co">#&gt; [123] bookdown_0.48               checkmate_2.3.4            </span></span>
 <span><span class="co">#&gt; [125] scales_1.4.0                caTools_1.18.4             </span></span>
 <span><span class="co">#&gt; [127] callr_3.8.0                 rappdirs_0.3.4             </span></span>
 <span><span class="co">#&gt; [129] stringr_1.6.0               digest_0.6.39              </span></span>
-<span><span class="co">#&gt; [131] minqa_1.2.8                 rmarkdown_2.31             </span></span>
+<span><span class="co">#&gt; [131] minqa_1.2.8                 rmarkdown_2.32             </span></span>
 <span><span class="co">#&gt; [133] XVector_0.53.0              htmltools_0.5.9            </span></span>
 <span><span class="co">#&gt; [135] pkgconfig_2.0.3             base64enc_0.1-6            </span></span>
-<span><span class="co">#&gt; [137] umap_0.2.10.0               lme4_2.0-6                 </span></span>
+<span><span class="co">#&gt; [137] umap_0.2.10.0               lme4_2.1-0                 </span></span>
 <span><span class="co">#&gt; [139] sparseMatrixStats_1.25.0    fastmap_1.2.0              </span></span>
 <span><span class="co">#&gt; [141] rlang_1.3.0                 GlobalOptions_0.1.4        </span></span>
 <span><span class="co">#&gt; [143] htmlwidgets_1.6.4           shiny_1.14.0               </span></span>
 <span><span class="co">#&gt; [145] DelayedMatrixStats_1.35.0   ggh4x_0.3.1                </span></span>
 <span><span class="co">#&gt; [147] farver_2.1.2                jquerylib_0.1.4            </span></span>
 <span><span class="co">#&gt; [149] jsonlite_2.0.0              BiocParallel_1.47.0        </span></span>
-<span><span class="co">#&gt; [151] GOSemSim_2.39.2             BiocSingular_1.29.0        </span></span>
-<span><span class="co">#&gt; [153] magrittr_2.0.5              Formula_1.2-5              </span></span>
-<span><span class="co">#&gt; [155] ggplotify_0.1.3             patchwork_1.3.2            </span></span>
+<span><span class="co">#&gt; [151] GOSemSim_2.39.4             BiocSingular_1.29.2        </span></span>
+<span><span class="co">#&gt; [153] magrittr_2.0.5              Formula_1.2-6              </span></span>
+<span><span class="co">#&gt; [155] ggplotify_0.1.4             patchwork_1.3.2            </span></span>
 <span><span class="co">#&gt; [157] Rcpp_1.1.2                  babelgene_22.9             </span></span>
-<span><span class="co">#&gt; [159] reticulate_1.46.0           ape_5.8-1                  </span></span>
-<span><span class="co">#&gt; [161] ggnewscale_0.5.2            gdtools_0.5.1              </span></span>
-<span><span class="co">#&gt; [163] stringi_1.8.7               MASS_7.3-66                </span></span>
+<span><span class="co">#&gt; [159] reticulate_1.47.0           ape_5.8-1                  </span></span>
+<span><span class="co">#&gt; [161] ggnewscale_0.5.2            gdtools_0.5.2              </span></span>
+<span><span class="co">#&gt; [163] stringi_1.8.9               MASS_7.3-66                </span></span>
 <span><span class="co">#&gt; [165] plyr_1.8.9                  shinyFiles_0.9.3           </span></span>
-<span><span class="co">#&gt; [167] parallel_4.6.0              ggrepel_0.9.8              </span></span>
-<span><span class="co">#&gt; [169] Biostrings_2.81.5           splines_4.6.0              </span></span>
+<span><span class="co">#&gt; [167] parallel_4.6.1              ggrepel_0.9.8              </span></span>
+<span><span class="co">#&gt; [169] Biostrings_2.81.9           splines_4.6.1              </span></span>
 <span><span class="co">#&gt; [171] circlize_0.4.18             locfit_1.5-9.12            </span></span>
-<span><span class="co">#&gt; [173] igraph_2.3.3                ggpubr_1.0.0               </span></span>
+<span><span class="co">#&gt; [173] igraph_2.3.4                ggpubr_1.0.0               </span></span>
 <span><span class="co">#&gt; [175] fastcluster_1.3.0           ggsignif_0.6.4             </span></span>
-<span><span class="co">#&gt; [177] enrichit_0.2.0              reshape2_1.4.5             </span></span>
+<span><span class="co">#&gt; [177] enrichit_0.2.7              reshape2_1.4.5             </span></span>
 <span><span class="co">#&gt; [179] ScaledMatrix_1.21.0         evaluate_1.0.5             </span></span>
 <span><span class="co">#&gt; [181] BiocManager_1.30.27         nloptr_2.2.1               </span></span>
 <span><span class="co">#&gt; [183] foreach_1.5.2               tweenr_2.0.3               </span></span>
@@ -2269,15 +2363,15 @@ missing values.</p></li>
 <span><span class="co">#&gt; [187] tidyr_1.3.2                 purrr_1.2.2                </span></span>
 <span><span class="co">#&gt; [189] polyclip_1.10-7             clue_0.3-68                </span></span>
 <span><span class="co">#&gt; [191] ggplot2_4.0.3               Trendy_1.35.0              </span></span>
-<span><span class="co">#&gt; [193] ggforce_0.5.0               rsvd_1.0.5                 </span></span>
-<span><span class="co">#&gt; [195] broom_1.0.13                xtable_1.8-8               </span></span>
-<span><span class="co">#&gt; [197] RSpectra_0.16-2             tidytree_0.4.8             </span></span>
-<span><span class="co">#&gt; [199] tidydr_0.0.6                rstatix_1.0.0              </span></span>
-<span><span class="co">#&gt; [201] later_1.4.8                 viridisLite_0.4.3          </span></span>
-<span><span class="co">#&gt; [203] ragg_1.5.2                  tibble_3.3.1               </span></span>
-<span><span class="co">#&gt; [205] clusterProfiler_4.21.0      aplot_0.3.1                </span></span>
-<span><span class="co">#&gt; [207] memoise_2.0.1               writexl_1.5.4              </span></span>
-<span><span class="co">#&gt; [209] cluster_2.1.8.2</span></span></code></pre>
+<span><span class="co">#&gt; [193] BiocBaseUtils_1.15.1        ggforce_0.5.0              </span></span>
+<span><span class="co">#&gt; [195] rsvd_1.0.6                  broom_1.0.13               </span></span>
+<span><span class="co">#&gt; [197] xtable_1.8-8                RSpectra_0.16-2            </span></span>
+<span><span class="co">#&gt; [199] tidytree_0.4.8              tidydr_0.0.7               </span></span>
+<span><span class="co">#&gt; [201] rstatix_1.1.0               later_1.4.8                </span></span>
+<span><span class="co">#&gt; [203] viridisLite_0.4.3           ragg_1.5.2                 </span></span>
+<span><span class="co">#&gt; [205] tibble_3.3.1                clusterProfiler_4.21.4     </span></span>
+<span><span class="co">#&gt; [207] aplot_0.3.2                 memoise_2.0.1              </span></span>
+<span><span class="co">#&gt; [209] writexl_2.0.1               cluster_2.1.8.3</span></span></code></pre>
 </div>
 <div class="section level2 unnumbered">
 <h2 class="unnumbered" id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
@@ -2352,6 +2446,11 @@ Yu, Guangchuang, Li-Gen Wang, Yanyan Han, and Qing-Yu He. 2012.
 <span>“clusterProfiler: An r Package for Comparing Biological Themes
 Among Gene Clusters.”</span> <em>OMICS: A Journal of Integrative
 Biology</em> 16 (5): 284–87. <a href="https://doi.org/10.1089/omi.2011.0118" class="external-link">https://doi.org/10.1089/omi.2011.0118</a>.
+</div>
+<div id="ref-WGCNA_0" class="csl-entry">
+Zhang, Bin, and Steve Horvath. 2005. <span>“A General Framework for
+Weighted Gene Co-Expression Network Analysis.”</span> <em>Statistical
+Applications in Genetics and Molecular Biology</em> 4 (1): 1128.
 </div>
 <div id="ref-ClusterGVis" class="csl-entry">
 Zhang, Jun, Hongyuan Li, Wenjun Tao, and Jun Zhou. 2026.

@@ -7,7 +7,12 @@ consistent styling.
 ## Usage
 
 ``` r
-theme_custom(base_size = 8, panel_border = FALSE, legend_position = "right")
+theme_custom(
+  base_size = 8,
+  panel_border = FALSE,
+  legend_position = "right",
+  base_family = "sans"
+)
 ```
 
 ## Arguments
@@ -24,6 +29,10 @@ theme_custom(base_size = 8, panel_border = FALSE, legend_position = "right")
 
   Legend position (default: "right").
 
+- base_family:
+
+  Base font family (default: "sans").
+
 ## Value
 
 A ggplot2 theme object.
@@ -32,7 +41,6 @@ A ggplot2 theme object.
 
 ``` r
 library(ggplot2)
-#> Warning: package 'ggplot2' was built under R version 4.6.1
 ggplot(mtcars, aes(wt, mpg)) +
     geom_point() +
     theme_custom(base_size = 10)

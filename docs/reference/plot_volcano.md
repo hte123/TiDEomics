@@ -79,8 +79,8 @@ plot_volcano(
 
 - logFC_thres:
 
-  (Optional) Log2 fold change threshold for highlighting DE features,
-  default is NULL (using threshold when
+  Log2 fold change threshold for highlighting DE features, default is
+  NULL (using threshold when
   [`DE_between_group()`](https://hte123.github.io/TiDEomics/reference/DE_between_group.md)
   or
   [`DE_between_time()`](https://hte123.github.io/TiDEomics/reference/DE_between_time.md)
@@ -88,8 +88,8 @@ plot_volcano(
 
 - adjP_thres:
 
-  (Optional) Adjusted p-value threshold for highlighting DE features,
-  default is NULL (using threshold when
+  Adjusted p-value threshold for highlighting DE features, default is
+  NULL (using threshold when
   [`DE_between_group()`](https://hte123.github.io/TiDEomics/reference/DE_between_group.md)
   or
   [`DE_between_time()`](https://hte123.github.io/TiDEomics/reference/DE_between_time.md)
@@ -97,12 +97,11 @@ plot_volcano(
 
 - label:
 
-  (Optional) Whether to label names of DE features on the plot (default
-  is FALSE)
+  Whether to label names of DE features on the plot (default is FALSE)
 
 - fontsize:
 
-  (Optional) Font size for the plot (default is 8)
+  Font size for the plot (default is 8)
 
 - ...:
 

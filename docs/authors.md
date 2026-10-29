@@ -11,13 +11,13 @@ Source:
 [`DESCRIPTION`](https://github.com/hte123/TiDEomics/blob/HEAD/DESCRIPTION)
 
 He T (2026). *TiDEomics: Time-course Differential Expression analysis of
-omics data*. R package version 0.99.4,
-<https://github.com/hte123/TiDEomics>.
+omics data*. R package version 0.99.7,
+<https://bioconductor.org/packages/TiDEomics/>.
 
     @Manual{,
       title = {TiDEomics: Time-course Differential Expression analysis of omics data},
       author = {Tianen He},
       year = {2026},
-      note = {R package version 0.99.4},
-      url = {https://github.com/hte123/TiDEomics},
+      note = {R package version 0.99.7},
+      url = {https://bioconductor.org/packages/TiDEomics/},
     }

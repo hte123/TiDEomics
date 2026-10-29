@@ -6,7 +6,7 @@ Returns an invisible placeholder grob if `df` has no rows.
 ## Usage
 
 ``` r
-.multicol_textbox_col_grob(df, ...)
+.multicol_textbox_col_grob(df, text_padding = NULL, ...)
 ```
 
 ## Arguments

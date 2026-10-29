@@ -17,12 +17,12 @@ plot_breakpoints(res_list, group = NULL, fontsize = 8, ...)
 
 - group:
 
-  (Optional) A character vector of group names to be plotted. If NULL,
-  all groups in the input list will be used (default is NULL)
+  A character vector of group names to be plotted. If NULL, all groups
+  in the input list will be used (default is NULL)
 
 - fontsize:
 
-  (Optional) Font size for the plot (default is 8)
+  Font size for the plot (default is 8)
 
 - ...:
 

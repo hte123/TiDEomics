@@ -19,7 +19,7 @@ versions of each, ready for downstream analysis."><meta property="og:image" cont
 
     <a class="navbar-brand me-2" href="../index.html">TiDEomics</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.7</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -30,9 +30,15 @@ versions of each, ready for downstream analysis."><meta property="og:image" cont
       <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../articles/TiDEomics.html">Get started</a></li>
 <li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
-  <button class="nav-link dropdown-toggle" type="button" id="dropdown-applications" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Applications</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-applications"><li><a class="dropdown-item" href="../articles/TiDEomics_application_1_0.99.4.html">Transcriptome of macrophage response to six immune stimuli</a></li>
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-tutorials-applications" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Tutorials &amp; Applications</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-tutorials-applications"><li><a class="dropdown-item" href="../articles/index.html">All articles</a></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Tutorials</h6></li>
+    <li><a class="dropdown-item" href="../articles/TiDEomics.html">TiDEomics main tutorial</a></li>
+    <li><a class="dropdown-item" href="../articles/TiDEomics_multi.html">Multi-dataset/multi-omics tutorial</a></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Applications</h6></li>
+    <li><a class="dropdown-item" href="../articles/TiDEomics_application_1_0.99.7.html">Transcriptome of macrophage response to six immune stimuli</a></li>
   </ul></li>
+<li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
 <li class="nav-item"><a class="external-link nav-link" href="https://github.com/hte123/TiDEomics/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
@@ -75,7 +81,7 @@ versions of each, ready for downstream analysis.</p>
 <span>  feature_threshold <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  filter_ratio <span class="op">=</span> <span class="fl">0.5</span>,</span>
 <span>  min_groups <span class="op">=</span> <span class="fl">2</span>,</span>
-<span>  keep <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"below_quantile"</span>, <span class="st">"top_n"</span>, <span class="st">"threshold"</span><span class="op">)</span>,</span>
+<span>  keep <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"quantile"</span>, <span class="st">"top_n"</span>, <span class="st">"threshold"</span><span class="op">)</span>,</span>
 <span>  residual_threshold <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  n_keep <span class="op">=</span> <span class="fl">5000</span>,</span>
 <span>  interaction <span class="op">=</span> <span class="cn">FALSE</span>,</span>
@@ -125,15 +131,17 @@ samples are assigned to batch 1.</p></dd>
 
 
 <dt id="arg-feature-threshold">feature_threshold<a class="anchor" aria-label="anchor" href="#arg-feature-threshold"></a></dt>
-<dd><p>Threshold for <code><a href="calc_feature_property.html">calc_feature_property()</a></code>. Feature
-values &gt; feature_threshold are considered expressed (default: 0).</p></dd>
+<dd><p>Threshold for <code><a href="calc_feature_property.html">calc_feature_property()</a></code>: a numeric
+value, features with values &gt; feature_threshold are considered expressed;
+or NULL, any non-NA value is considered expressed. (default: 0)</p></dd>
 
 
 <dt id="arg-filter-ratio">filter_ratio<a class="anchor" aria-label="anchor" href="#arg-filter-ratio"></a></dt>
 <dd><p>Minimum ratio of time points a feature must be expressed
 in, to be considered expressed in a group (default: 0.5, meaning that a
-feature must be &gt; feature_threshold in &gt;=50% time points in a group to be
-considered expressed). Passed to <code><a href="group_specific_features.html">group_specific_features()</a></code>.</p></dd>
+feature must be &gt; feature_threshold, or non-NA when feature_threshold is
+NULL, in &gt;=50% time points in a group to be considered expressed). Passed
+to <code><a href="group_specific_features.html">group_specific_features()</a></code>.</p></dd>
 
 
 <dt id="arg-min-groups">min_groups<a class="anchor" aria-label="anchor" href="#arg-min-groups"></a></dt>
@@ -144,19 +152,19 @@ with the above filter_ratio, to pass the cross group filter
 
 <dt id="arg-keep">keep<a class="anchor" aria-label="anchor" href="#arg-keep"></a></dt>
 <dd><p>How to select features after variance decomposition:
-<code>"below_quantile"</code> (default): keep features with residual variance below
-<code>residual_threshold</code> quantile (0-1 scale).
+<code>"quantile"</code> (default): keep features with residual variance at or below
+the <code>residual_threshold</code> quantile (0-1 scale).
 <code>"top_n"</code>: keep the top <code>n_keep</code> lowest-residual features.
 <code>"threshold"</code>: keep features with residual percentage below
 <code>residual_threshold</code> (0-100 scale; use 100 to skip filtering).</p></dd>
 
 
 <dt id="arg-residual-threshold">residual_threshold<a class="anchor" aria-label="anchor" href="#arg-residual-threshold"></a></dt>
-<dd><p>Numeric: when <code>keep = "below_quantile"</code>,
+<dd><p>Numeric: when <code>keep = "quantile"</code>,
 the quantile of residual variance to use as cutoff (0-1 scale).
 When <code>keep = "threshold"</code>, the percentage cutoff
 (0-100 scale, 100 = keep all features).
-(default: NULL, auto-assigned as 0.75 for "below_quantile",
+(default: NULL, auto-assigned as 0.75 for "quantile",
 100 for "threshold")</p></dd>
 
 
@@ -195,8 +203,8 @@ computed from <code>orig</code> / <code>norm</code> assay);</p></li>
 <li><p><code>feature_property</code> (feature property summary, all features);</p></li>
 <li><p><code>filter_summary</code> (per-stage filtering statistics);</p></li>
 <li><p><code>group_specific_filter</code> (a vector of group-specific features,
-removed by the cross-group filter);
-11-13. <code>DE</code>, <code>enrichment</code>, <code>WGCNA</code> (empty on initialization).</p></li>
+removed by the cross-group filter);</p></li>
+<li><p>, 12. , 13. <code>DE</code>, <code>enrichment</code>, <code>WGCNA</code> (empty on initialization).</p></li>
 </ol></div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -228,16 +236,23 @@ variance, calculated from <code><a href="decomp_variance.html">decomp_variance()
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Cross-group filter (Exp_ratio &gt;= 0.5 in &gt;= 2 groups): kept 340 of 500 features (68%)</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> --- assay: orig ---</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> LMM: exp ~ (1|Group) + (1|Time)  |  Output: Group, Time, Residual</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 340 features evaluated: 267 successful; 0 errors; 73 warnings; 0 skipped before fitting for insufficient observations or variance.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Residual filter (threshold): kept 334 of 340 features (98.2%)</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> --- assay: norm ---</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> LMM: exp ~ (1|Group) + (1|Time)  |  Output: Group, Time, Residual</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 340 features evaluated: 267 successful; 0 errors; 73 warnings; 0 skipped before fitting for insufficient observations or variance.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Residual filter (threshold): kept 333 of 340 features (97.9%)</span>
 <span class="r-in"><span><span class="va">tide</span><span class="op">$</span><span class="va">filter_summary</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                stage assay n_features pct_kept                       threshold</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1              input  &lt;NA&gt;        500    100.0                            &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 cross_group_filter  &lt;NA&gt;        340     68.0 Exp_ratio &gt;= 0.5 in &gt;= 2 groups</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3    residual_filter  orig        334     66.8       skipped (threshold = 100)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4    residual_filter  norm        333     66.6       skipped (threshold = 100)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                stage assay n_features pct_kept residual_cutoff</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1              input  &lt;NA&gt;        500    100.0              NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 cross_group_filter  &lt;NA&gt;        340     68.0              NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3    residual_filter  orig        334     66.8             100</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4    residual_filter  norm        333     66.6             100</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                         threshold</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1                            &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 Exp_ratio &gt;= 0.5 in &gt;= 2 groups</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3       skipped (threshold = 100)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4       skipped (threshold = 100)</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">TiDEomics</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.7</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -18,9 +18,15 @@
       <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../articles/TiDEomics.html">Get started</a></li>
 <li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
-  <button class="nav-link dropdown-toggle" type="button" id="dropdown-applications" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Applications</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-applications"><li><a class="dropdown-item" href="../articles/TiDEomics_application_1_0.99.4.html">Transcriptome of macrophage response to six immune stimuli</a></li>
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-tutorials-applications" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Tutorials &amp; Applications</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-tutorials-applications"><li><a class="dropdown-item" href="../articles/index.html">All articles</a></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Tutorials</h6></li>
+    <li><a class="dropdown-item" href="../articles/TiDEomics.html">TiDEomics main tutorial</a></li>
+    <li><a class="dropdown-item" href="../articles/TiDEomics_multi.html">Multi-dataset/multi-omics tutorial</a></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Applications</h6></li>
+    <li><a class="dropdown-item" href="../articles/TiDEomics_application_1_0.99.7.html">Transcriptome of macrophage response to six immune stimuli</a></li>
   </ul></li>
+<li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
 <li class="nav-item"><a class="external-link nav-link" href="https://github.com/hte123/TiDEomics/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
@@ -61,12 +67,12 @@ function, containing the abundance data and associated sample information.</p></
 
 
 <dt id="arg-fontsize">fontsize<a class="anchor" aria-label="anchor" href="#arg-fontsize"></a></dt>
-<dd><p>(Optional) An integer specifying the font size for the plot
+<dd><p>Font size for the plot (default is 8)
 (default is 8).</p></dd>
 
 
 <dt id="arg-signif">signif<a class="anchor" aria-label="anchor" href="#arg-signif"></a></dt>
-<dd><p>(Optional) A logical value indicating whether to perform
+<dd><p>A logical value indicating whether to perform
 significance testing between groups and add significance annotations
 to the plot (default is FALSE).</p></dd>
 

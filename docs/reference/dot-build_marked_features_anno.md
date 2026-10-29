@@ -1,10 +1,10 @@
 # Build marked-feature term_list for multi-column textbox
 
 Build a per-module term_list from `mark_features` for use as a column in
-`.anno_multicol_textbox`. Accepts a named list (per-category colours
-from [`ggsci::pal_jco()`](https://nanx.me/ggsci/reference/pal_jco.html))
-or a character vector (all black). Colours are taken from
-`mark_state$feat_col`.
+`.anno_multicol_textbox`. Accepts a named list or a character vector.
+Colours are taken from `mark_state$feat_col`, including any custom
+`feature_colours` supplied to
+[`plot_modules_h()`](https://hte123.github.io/TiDEomics/reference/plot_modules_h.md).
 
 ## Usage
 
@@ -23,7 +23,8 @@ or a character vector (all black). Colours are taken from
 - mark_features:
 
   A named list of character vectors, mapping category names to feature
-  IDs, or a plain character vector of feature IDs (all shown in black).
+  IDs, or a plain character vector of feature IDs (shown in black by
+  default).
 
 - module_df:
 

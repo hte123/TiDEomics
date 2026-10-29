@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">TiDEomics</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.7</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -18,9 +18,15 @@
       <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../articles/TiDEomics.html">Get started</a></li>
 <li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
-  <button class="nav-link dropdown-toggle" type="button" id="dropdown-applications" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Applications</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-applications"><li><a class="dropdown-item" href="../articles/TiDEomics_application_1_0.99.4.html">Transcriptome of macrophage response to six immune stimuli</a></li>
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-tutorials-applications" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Tutorials &amp; Applications</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-tutorials-applications"><li><a class="dropdown-item" href="../articles/index.html">All articles</a></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Tutorials</h6></li>
+    <li><a class="dropdown-item" href="../articles/TiDEomics.html">TiDEomics main tutorial</a></li>
+    <li><a class="dropdown-item" href="../articles/TiDEomics_multi.html">Multi-dataset/multi-omics tutorial</a></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Applications</h6></li>
+    <li><a class="dropdown-item" href="../articles/TiDEomics_application_1_0.99.7.html">Transcriptome of macrophage response to six immune stimuli</a></li>
   </ul></li>
+<li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
 <li class="nav-item"><a class="external-link nav-link" href="https://github.com/hte123/TiDEomics/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
@@ -62,7 +68,10 @@
 <span>  fontsize <span class="op">=</span> <span class="fl">8</span>,</span>
 <span>  cellwidth <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  cellheight <span class="op">=</span> <span class="fl">1</span>,</span>
-<span>  title <span class="op">=</span> <span class="st">"Correlation between samples"</span>,</span>
+<span>  title <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  shared_only <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  names <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  plot_cophenetic <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -72,13 +81,14 @@
 
 
 <dl><dt id="arg-se-obj">se_obj<a class="anchor" aria-label="anchor" href="#arg-se-obj"></a></dt>
-<dd><p>A SummarizedExperiment object created by <code><a href="create_input.html">create_input()</a></code></p></dd>
+<dd><p>A SummarizedExperiment object created by <code><a href="create_input.html">create_input()</a></code>,
+or a named list of SummarizedExperiment objects (one per dataset).</p></dd>
 
 
 <dt id="arg-assay">assay<a class="anchor" aria-label="anchor" href="#arg-assay"></a></dt>
-<dd><p>Assay to use: <code>"orig"</code> for original data, <code>"norm"</code> for
-normalised-to-start data. Numeric indices (1, 2) are also accepted.
-(default is 1, the original data).</p></dd>
+<dd><p>The assay to use in the SummarizedExperiment object: a numeric
+index or character name, e.g. 1 or "orig" for original data, 2 or "norm"
+for time 0 normalised data. (Default: 1.)</p></dd>
 
 
 <dt id="arg-use">use<a class="anchor" aria-label="anchor" href="#arg-use"></a></dt>
@@ -116,7 +126,7 @@ FALSE)</p></dd>
 
 
 <dt id="arg-fontsize">fontsize<a class="anchor" aria-label="anchor" href="#arg-fontsize"></a></dt>
-<dd><p>Font size for the heatmap and annotations (default is 8)</p></dd>
+<dd><p>Font size for the plot (default is 8)</p></dd>
 
 
 <dt id="arg-cellwidth">cellwidth<a class="anchor" aria-label="anchor" href="#arg-cellwidth"></a></dt>
@@ -128,7 +138,27 @@ FALSE)</p></dd>
 
 
 <dt id="arg-title">title<a class="anchor" aria-label="anchor" href="#arg-title"></a></dt>
-<dd><p>Title of the heatmap (default is "Correlation between samples")</p></dd>
+<dd><p>Title of the heatmap. If NULL, auto-generated as
+"Sample correlation (<method>)" with the method capitalised
+(e.g. "Sample correlation (Spearman)") (default: NULL)</method></p></dd>
+
+
+<dt id="arg-shared-only">shared_only<a class="anchor" aria-label="anchor" href="#arg-shared-only"></a></dt>
+<dd><p>Logical, whether to subset each dataset to the features
+shared by all datasets before computing correlations (default is FALSE;
+only applies when <code>se_obj</code> is a list of multiple datasets)</p></dd>
+
+
+<dt id="arg-names">names<a class="anchor" aria-label="anchor" href="#arg-names"></a></dt>
+<dd><p>Optional character vector of dataset names for the per-heatmap
+titles. Default: NULL, i.e. the names of <code>se_obj</code> (when a list).
+Only applies when <code>se_obj</code> is a list of multiple datasets.</p></dd>
+
+
+<dt id="arg-plot-cophenetic">plot_cophenetic<a class="anchor" aria-label="anchor" href="#arg-plot-cophenetic"></a></dt>
+<dd><p>Logical, whether to include the pairwise Pearson
+correlations of cophenetic distances in the combined plot title
+(default is FALSE) in addition to reporting by text.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
@@ -137,14 +167,28 @@ FALSE)</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A heatmap showing the correlation between samples.</p>
+    <p>A heatmap showing the correlation between samples. With a named
+list of datasets, all heatmaps share the same colour scale,
+including pairwise correlations of cophenetic distances in the
+combined title when <code>plot_cophenetic</code> is TRUE,
+and are returned invisibly as a named list of Heatmap objects.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
+    <p>With a named list of datasets that share the same samples,
+the per-dataset dendrograms are compared pairwise using Pearson
+correlations of their cophenetic distances (see <code><a href="https://rdrr.io/r/stats/cophenetic.html" class="external-link">?stats::cophenetic</a></code>).</p>
     </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">example_obj</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">example_obj_2</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">plot_cor_matrix</span><span class="op">(</span><span class="va">example_obj</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="plot_cor_matrix-1.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span><span class="fu">plot_cor_matrix</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>Exp1 <span class="op">=</span> <span class="va">example_obj</span>, Exp2 <span class="op">=</span> <span class="va">example_obj_2</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Cophenetic correlation between datasets (Pearson): 0.83</span>
+<span class="r-plt img"><img src="plot_cor_matrix-2.png" alt="" width="700" height="433"></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

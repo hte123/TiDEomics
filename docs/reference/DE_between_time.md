@@ -21,46 +21,46 @@ DE_between_time(
 
 - se_obj:
 
-  A SummarizedExperiment object created by `create_input`
+  A SummarizedExperiment object created by
+  [`create_input()`](https://hte123.github.io/TiDEomics/reference/create_input.md)
 
 - group:
 
-  (Optional) A character vector specifying which groups to analyse. If
-  NULL, all groups in the 'Group' column will be used. (default is NULL)
+  A character vector specifying which groups to analyse. If NULL, all
+  groups in the 'Group' column will be used. (default is NULL)
 
 - filter:
 
-  (Optional) Minimum number of replicates required in both conditions
-  for a feature to be tested. If NULL, the minimum number of replicates
-  across all groups and time points will be used. (default is NULL)
+  Minimum number of replicates required in both conditions for a feature
+  to be tested. If NULL, the minimum number of replicates across all
+  groups and time points will be used. (default is NULL)
 
 - assay:
 
-  Assay to use: `"orig"` for original data, `"norm"` for
-  normalised-to-start data. Numeric indices (1, 2) are also accepted. No
-  default, must be specified explicitly. The selected assay should
-  contain log-transformed, normalised values (e.g. log2-CPM for RNA-seq,
-  log2-intensity for proteomics). A warning is issued if the data
+  The assay to use in the SummarizedExperiment object: a numeric index
+  or character name, e.g. 1 or "orig" for original data, 2 or "norm" for
+  time 0 normalised data. The selected assay should contain
+  log-transformed, normalised values. A warning is issued if the data
   appears to be un-logged raw counts.
 
 - adjP_thres:
 
-  (Optional) Threshold for adjusted p-value to consider a feature as
-  differentially expressed (default is 0.05)
+  Threshold for adjusted p-value to consider a feature as differentially
+  expressed (default is 0.05)
 
 - logFC_thres:
 
-  (Optional) Threshold for log2 fold change to consider a feature as
-  differentially expressed (default is 1)
+  Threshold for log2 fold change to consider a feature as differentially
+  expressed (default is 1)
 
 - trend:
 
-  (Optional) Logical, passed to
-  [`limma::eBayes()`](https://rdrr.io/pkg/limma/man/ebayes.html). Set to
-  `TRUE` for RNA-seq count-derived data to model the mean-variance
-  trend. Leave as `FALSE` (default) for microarray, proteomics,
-  metabolomics, or other log-intensity data where the mean-variance
-  relationship is typically flat.
+  Logical, passed to
+  [`limma::eBayes()`](https://rdrr.io/pkg/limma/man/ebayes.html). Use
+  `TRUE` only when the mean-variance relationship is expected to vary
+  with abundance. The default `FALSE` is usually appropriate for
+  log-transformed, normalised data unless diagnostics support modelling
+  a mean-variance trend.
 
 ## Value
 
@@ -78,9 +78,6 @@ for visualisation.
 
 ``` r
 data(example_obj)
-example_obj <- normalise_to_start(example_obj)
-#> Normalising to group baseline at each feature's first non-NA time point.
-
 DE_between_time_out <- DE_between_time(example_obj, assay = 1)
 #> Non-NA replicate number filter not specified. Using minimum number of replicates across all groups and time points: 0
 #> Comparing group IFNbeta time 2 to 0: keeping 100 of 100 features (100.0%)

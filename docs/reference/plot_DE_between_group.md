@@ -42,15 +42,15 @@ plot_DE_between_group(
 
 - adjP_thres:
 
-  (Optional) Threshold for adjusted p-value to consider a feature as
-  differentially expressed, for re-filtering the DE features. (default
-  is NULL, no re-filtering)
+  Threshold for adjusted p-value to consider a feature as differentially
+  expressed, for re-filtering the DE features. (default is NULL, no
+  re-filtering)
 
 - logFC_thres:
 
-  (Optional) Threshold for log2 fold change to consider a feature as
-  differentially expressed, for re-filtering the DE features. (default
-  is NULL, no re-filtering)
+  Threshold for log2 fold change to consider a feature as differentially
+  expressed, for re-filtering the DE features. (default is NULL, no
+  re-filtering)
 
 ## Value
 

@@ -15,6 +15,11 @@ enrichGO_rank(
   category = NULL,
   pvalueCutoff = 0.05,
   pAdjustMethod = "BH",
+  simplify = FALSE,
+  simplify_cutoff = 0.7,
+  simplify_by = "p.adjust",
+  simplify_select_fun = min,
+  simplify_measure = "Wang",
   ...
 )
 ```
@@ -40,30 +45,61 @@ enrichGO_rank(
 
 - keyType:
 
-  (Optional) Available options are `AnnotationDbi::keytypes(OrgDb)`
-  (default is "SYMBOL")
+  Available options are `AnnotationDbi::keytypes(OrgDb)` (default is
+  "SYMBOL")
 
 - go_rank_by:
 
-  (Optional) Variable in the GO enrichment result to rank the GO terms
-  by (default is "p.adjust", other options include "pvalue", "qvalue",
-  "NES", "setSize", "enrichmentScore", etc.)
+  Variable in the GO enrichment result to rank the GO terms by (default
+  is "p.adjust", other options include "pvalue", "qvalue", "NES",
+  "setSize", "enrichmentScore", etc.)
 
 - category:
 
-  (Optional) GO category to analyze (default is all three of BP, MF, CC)
+  GO category to analyze (default is all three of BP, MF, CC)
 
 - pvalueCutoff:
 
-  (Optional) Parameter of
+  Parameter of
   [`clusterProfiler::gseGO()`](https://rdrr.io/pkg/clusterProfiler/man/gseGO.html)
   (default is 0.05)
 
 - pAdjustMethod:
 
-  (Optional) Parameter of
+  Parameter of
   [`clusterProfiler::gseGO()`](https://rdrr.io/pkg/clusterProfiler/man/gseGO.html)
   (default is "BH")
+
+- simplify:
+
+  Whether to simplify the GO terms by removing redundant terms with
+  [`clusterProfiler::simplify()`](https://rdrr.io/pkg/clusterProfiler/man/simplify-methods.html)
+  (default is FALSE)
+
+- simplify_cutoff:
+
+  Parameter of
+  [`clusterProfiler::simplify()`](https://rdrr.io/pkg/clusterProfiler/man/simplify-methods.html),
+  cutoff for similarity when simplifying GO terms (default is 0.7)
+
+- simplify_by:
+
+  Parameter of
+  [`clusterProfiler::simplify()`](https://rdrr.io/pkg/clusterProfiler/man/simplify-methods.html),
+  method to choose the representative term (default is "p.adjust")
+
+- simplify_select_fun:
+
+  Parameter of
+  [`clusterProfiler::simplify()`](https://rdrr.io/pkg/clusterProfiler/man/simplify-methods.html),
+  function to select the representative term (default is `min`)
+
+- simplify_measure:
+
+  Parameter of
+  [`clusterProfiler::simplify()`](https://rdrr.io/pkg/clusterProfiler/man/simplify-methods.html),
+  method to calculate similarity when simplifying GO terms (default is
+  "Wang")
 
 - ...:
 
@@ -72,7 +108,9 @@ enrichGO_rank(
 
 ## Value
 
-A list of `gseaResult` objects containing the GSEA results
+A list containing `all`, a list of `gseaResult` objects with the GSEA
+results. If `simplify = TRUE`, the output also contains `simplified`, a
+list of simplified `gseaResult` objects.
 
 ## Examples
 
@@ -80,7 +118,6 @@ A list of `gseaResult` objects containing the GSEA results
 if (requireNamespace("org.Mm.eg.db", quietly = TRUE)) {
     library(org.Mm.eg.db)
     data(example_obj)
-    example_obj <- normalise_to_start(example_obj)
 
     var_decomp <- decomp_variance(example_obj,
         features = rownames(example_obj)[1:100], assay = 1)
@@ -88,11 +125,11 @@ if (requireNamespace("org.Mm.eg.db", quietly = TRUE)) {
         OrgDb = org.Mm.eg.db, keyType = "SYMBOL",
         category = "BP")
 }
-#> Normalising to group baseline at each feature's first non-NA time point.
 #> LMM: exp ~ (1|Group) + (1|Time)  |  Output: Group, Time, Residual
-#> Warning: There were 4907 pathways for which P-values were not calculated properly due to unbalanced gene-level statistic values. For such pathways pvalue, NES and log2err are set to NA. You can try to increase nPermSimple.
+#> 100 features evaluated: 71 successful; 0 errors; 29 warnings; 0 skipped before fitting for insufficient observations or variance.
+#> Warning: There were 1 pathways for which P-values were not calculated properly; pvalue, NES and log2err are set to NA for them. The usual cause is an unbalanced gene-level statistic (no genes on one side of the ranking), which makes the permutation null degenerate; a gene set covering the whole ranked list is excluded before this point. You can try to increase nPermSimple, or pass reportNA = TRUE to keep these rows.
 #> Warning: Invalid p-values detected (NA, non-finite, <0, or >1). qvalue will be computed on valid p-values only.
-#> Warning: NA values detected in gene set IDs. Replacing with string 'NA'.
-#> Warning: Duplicate gene set IDs detected: NA... (Total 1). Unique suffixes added.
-#> Removing NA ID gene sets for BP.
+#> Warning: 1 of 151 gene set(s) have no estimable p-value and were dropped (pvalue, NES and log2err are NA for them). Pass reportNA = TRUE to keep them, or raise nPermSimple.
+#> No significant GO terms found for category: BP
+#> No significant GO terms found in any category.
 ```

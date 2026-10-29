@@ -19,7 +19,7 @@ prepare_tide(
   feature_threshold = 0,
   filter_ratio = 0.5,
   min_groups = 2,
-  keep = c("below_quantile", "top_n", "threshold"),
+  keep = c("quantile", "top_n", "threshold"),
   residual_threshold = NULL,
   n_keep = 5000,
   interaction = FALSE,
@@ -69,16 +69,18 @@ prepare_tide(
 - feature_threshold:
 
   Threshold for
-  [`calc_feature_property()`](https://hte123.github.io/TiDEomics/reference/calc_feature_property.md).
-  Feature values \> feature_threshold are considered expressed (default:
-  0).
+  [`calc_feature_property()`](https://hte123.github.io/TiDEomics/reference/calc_feature_property.md):
+  a numeric value, features with values \> feature_threshold are
+  considered expressed; or NULL, any non-NA value is considered
+  expressed. (default: 0)
 
 - filter_ratio:
 
   Minimum ratio of time points a feature must be expressed in, to be
   considered expressed in a group (default: 0.5, meaning that a feature
-  must be \> feature_threshold in \>=50% time points in a group to be
-  considered expressed). Passed to
+  must be \> feature_threshold, or non-NA when feature_threshold is
+  NULL, in \>=50% time points in a group to be considered expressed).
+  Passed to
   [`group_specific_features()`](https://hte123.github.io/TiDEomics/reference/group_specific_features.md).
 
 - min_groups:
@@ -90,19 +92,19 @@ prepare_tide(
 
 - keep:
 
-  How to select features after variance decomposition:
-  `"below_quantile"` (default): keep features with residual variance
-  below `residual_threshold` quantile (0-1 scale). `"top_n"`: keep the
-  top `n_keep` lowest-residual features. `"threshold"`: keep features
-  with residual percentage below `residual_threshold` (0-100 scale; use
-  100 to skip filtering).
+  How to select features after variance decomposition: `"quantile"`
+  (default): keep features with residual variance at or below the
+  `residual_threshold` quantile (0-1 scale). `"top_n"`: keep the top
+  `n_keep` lowest-residual features. `"threshold"`: keep features with
+  residual percentage below `residual_threshold` (0-100 scale; use 100
+  to skip filtering).
 
 - residual_threshold:
 
-  Numeric: when `keep = "below_quantile"`, the quantile of residual
-  variance to use as cutoff (0-1 scale). When `keep = "threshold"`, the
+  Numeric: when `keep = "quantile"`, the quantile of residual variance
+  to use as cutoff (0-1 scale). When `keep = "threshold"`, the
   percentage cutoff (0-100 scale, 100 = keep all features). (default:
-  NULL, auto-assigned as 0.75 for "below_quantile", 100 for "threshold")
+  NULL, auto-assigned as 0.75 for "quantile", 100 for "threshold")
 
 - n_keep:
 
@@ -150,8 +152,9 @@ filtering done per assay.
 9.  `filter_summary` (per-stage filtering statistics);
 
 10. `group_specific_filter` (a vector of group-specific features,
-    removed by the cross-group filter); 11-13. `DE`, `enrichment`,
-    `WGCNA` (empty on initialization).
+    removed by the cross-group filter);
+
+11. , 12. , 13. `DE`, `enrichment`, `WGCNA` (empty on initialization).
 
 ## Details
 
@@ -202,14 +205,21 @@ tide <- prepare_tide(tutorial_data, tutorial_sample_info,
 #> Cross-group filter (Exp_ratio >= 0.5 in >= 2 groups): kept 340 of 500 features (68%)
 #> --- assay: orig ---
 #> LMM: exp ~ (1|Group) + (1|Time)  |  Output: Group, Time, Residual
+#> 340 features evaluated: 267 successful; 0 errors; 73 warnings; 0 skipped before fitting for insufficient observations or variance.
 #> Residual filter (threshold): kept 334 of 340 features (98.2%)
 #> --- assay: norm ---
 #> LMM: exp ~ (1|Group) + (1|Time)  |  Output: Group, Time, Residual
+#> 340 features evaluated: 267 successful; 0 errors; 73 warnings; 0 skipped before fitting for insufficient observations or variance.
 #> Residual filter (threshold): kept 333 of 340 features (97.9%)
 tide$filter_summary
-#>                stage assay n_features pct_kept                       threshold
-#> 1              input  <NA>        500    100.0                            <NA>
-#> 2 cross_group_filter  <NA>        340     68.0 Exp_ratio >= 0.5 in >= 2 groups
-#> 3    residual_filter  orig        334     66.8       skipped (threshold = 100)
-#> 4    residual_filter  norm        333     66.6       skipped (threshold = 100)
+#>                stage assay n_features pct_kept residual_cutoff
+#> 1              input  <NA>        500    100.0              NA
+#> 2 cross_group_filter  <NA>        340     68.0              NA
+#> 3    residual_filter  orig        334     66.8             100
+#> 4    residual_filter  norm        333     66.6             100
+#>                         threshold
+#> 1                            <NA>
+#> 2 Exp_ratio >= 0.5 in >= 2 groups
+#> 3       skipped (threshold = 100)
+#> 4       skipped (threshold = 100)
 ```

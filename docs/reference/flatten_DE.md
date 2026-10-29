@@ -49,9 +49,11 @@ tide <- prepare_tide(tutorial_data, tutorial_sample_info,
 #> Cross-group filter (Exp_ratio >= 0.5 in >= 2 groups): kept 340 of 500 features (68%)
 #> --- assay: orig ---
 #> LMM: exp ~ (1|Group) + (1|Time)  |  Output: Group, Time, Residual
+#> 340 features evaluated: 267 successful; 0 errors; 73 warnings; 0 skipped before fitting for insufficient observations or variance.
 #> Residual filter (threshold): kept 334 of 340 features (98.2%)
 #> --- assay: norm ---
 #> LMM: exp ~ (1|Group) + (1|Time)  |  Output: Group, Time, Residual
+#> 340 features evaluated: 267 successful; 0 errors; 73 warnings; 0 skipped before fitting for insufficient observations or variance.
 #> Residual filter (threshold): kept 333 of 340 features (97.9%)
 tide$DE <- DE_between_group(tide$se, assay = "norm",
     filter = 1, trend = TRUE)

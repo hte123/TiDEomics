@@ -1,6 +1,6 @@
-# Check that x is a list of SummarizedExperiment objects
+# Check that x is a named list of SummarizedExperiment objects
 
-Check that x is a list of SummarizedExperiment objects
+Check that x is a named list of SummarizedExperiment objects
 
 ## Usage
 

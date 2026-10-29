@@ -33,7 +33,9 @@ If certain time points are missing in some groups, NA values are added.
 
 - assay:
 
-  The assay index in the SummarizedExperiment object to use
+  The assay to use in the SummarizedExperiment object: a numeric index
+  or character name, e.g. 1 or "orig" for original data, 2 or "norm" for
+  time 0 normalised data. (Required, no default.)
 
 - scale:
 

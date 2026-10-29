@@ -21,7 +21,7 @@ groups over time."><meta property="og:image" content="https://hte123.github.io/T
 
     <a class="navbar-brand me-2" href="../index.html">TiDEomics</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.7</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -32,9 +32,15 @@ groups over time."><meta property="og:image" content="https://hte123.github.io/T
       <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../articles/TiDEomics.html">Get started</a></li>
 <li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
-  <button class="nav-link dropdown-toggle" type="button" id="dropdown-applications" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Applications</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-applications"><li><a class="dropdown-item" href="../articles/TiDEomics_application_1_0.99.4.html">Transcriptome of macrophage response to six immune stimuli</a></li>
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-tutorials-applications" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Tutorials &amp; Applications</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-tutorials-applications"><li><a class="dropdown-item" href="../articles/index.html">All articles</a></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Tutorials</h6></li>
+    <li><a class="dropdown-item" href="../articles/TiDEomics.html">TiDEomics main tutorial</a></li>
+    <li><a class="dropdown-item" href="../articles/TiDEomics_multi.html">Multi-dataset/multi-omics tutorial</a></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Applications</h6></li>
+    <li><a class="dropdown-item" href="../articles/TiDEomics_application_1_0.99.7.html">Transcriptome of macrophage response to six immune stimuli</a></li>
   </ul></li>
+<li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
 <li class="nav-item"><a class="external-link nav-link" href="https://github.com/hte123/TiDEomics/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
@@ -85,46 +91,45 @@ groups over time.</p>
 
 
 <dl><dt id="arg-se-obj">se_obj<a class="anchor" aria-label="anchor" href="#arg-se-obj"></a></dt>
-<dd><p>A SummarizedExperiment object</p></dd>
+<dd><p>A SummarizedExperiment object created by <code><a href="create_input.html">create_input()</a></code></p></dd>
 
 
 <dt id="arg-group">group<a class="anchor" aria-label="anchor" href="#arg-group"></a></dt>
-<dd><p>(Optional) A character vector specifying which group to be
-compared to. If NULL, all groups in the 'Group' column will be compared to.
-(default is NULL)</p></dd>
+<dd><p>A character vector specifying which group to be
+compared to. If NULL, all groups in the 'Group' column will be
+compared to. (default is NULL)</p></dd>
 
 
 <dt id="arg-filter">filter<a class="anchor" aria-label="anchor" href="#arg-filter"></a></dt>
-<dd><p>(Optional) Minimum number of replicates required in both
+<dd><p>Minimum number of replicates required in both
 conditions for a feature to be tested. If NULL, the minimum number of
-replicates across all groups and time points will be used. (default is NULL)</p></dd>
+replicates across all groups and time points will be used.
+(default is NULL)</p></dd>
 
 
 <dt id="arg-assay">assay<a class="anchor" aria-label="anchor" href="#arg-assay"></a></dt>
-<dd><p>Assay to use: <code>"orig"</code> for original data, <code>"norm"</code> for
-normalised-to-start data. Numeric indices (1, 2) are also accepted.
-No default, must be specified explicitly. The selected assay should
-contain log-transformed, normalised values (e.g. log2-CPM for RNA-seq,
-log2-intensity for proteomics). A warning is issued if the data appears
-to be un-logged raw counts.</p></dd>
+<dd><p>The assay to use in the SummarizedExperiment object: a numeric
+index or character name, e.g. 1 or "orig" for original data, 2 or "norm"
+for time 0 normalised data. The selected assay should
+contain log-transformed, normalised values. A warning is issued if the
+data appears to be un-logged raw counts.</p></dd>
 
 
 <dt id="arg-adjp-thres">adjP_thres<a class="anchor" aria-label="anchor" href="#arg-adjp-thres"></a></dt>
-<dd><p>(Optional) Threshold for adjusted p-value to consider a
+<dd><p>Threshold for adjusted p-value to consider a
 feature as differentially expressed (default is 0.05)</p></dd>
 
 
 <dt id="arg-logfc-thres">logFC_thres<a class="anchor" aria-label="anchor" href="#arg-logfc-thres"></a></dt>
-<dd><p>(Optional) Threshold for log2 fold change to consider a
+<dd><p>Threshold for log2 fold change to consider a
 feature as differentially expressed (default is 1)</p></dd>
 
 
 <dt id="arg-trend">trend<a class="anchor" aria-label="anchor" href="#arg-trend"></a></dt>
-<dd><p>(Optional) Logical, passed to <code><a href="https://rdrr.io/pkg/limma/man/ebayes.html" class="external-link">limma::eBayes()</a></code>.
-Set to <code>TRUE</code> for RNA-seq count-derived data to model the mean-variance
-trend. Leave as <code>FALSE</code> (default) for microarray, proteomics,
-metabolomics, or other log-intensity data where the mean-variance
-relationship is typically flat.</p></dd>
+<dd><p>Logical, passed to <code><a href="https://rdrr.io/pkg/limma/man/ebayes.html" class="external-link">limma::eBayes()</a></code>. Use <code>TRUE</code> only when the
+mean-variance relationship is expected to vary with abundance. The
+default <code>FALSE</code> is usually appropriate for log-transformed, normalised
+data unless diagnostics support modelling a mean-variance trend.</p></dd>
 
 </dl></div>
     <div class="section level2">

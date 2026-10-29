@@ -2,17 +2,19 @@
 
 TiDEomics provides a workflow for **multi-group time-course** omics data
 analysis, analysing **time-dominant**, **group-dominant**, and
-**group-specific temporal** effects through pairwise differential
-expression, variance decomposition, and co-expression module analysis
-(WGCNA). A **residual variance** filtering strategy prioritises features
-with structured differential expression. It supports datasets with
-missing values (e.g. mass spectrometry-based proteomics) and operates on
-`SummarizedExperiment` objects for compatibility with the Bioconductor
-ecosystem.
+**group-specific temporal** effects through pairwise and time-course
+differential expression, variance decomposition, and co-expression
+module analysis (WGCNA). A **residual variance** filtering strategy
+prioritises features with structured differential expression.
+Multi-dataset/multi-omics analysis uses shared features for
+cross-dataset/omics comparison and consensus module identification. The
+package supports datasets with missing values (e.g. mass
+spectrometry-based proteomics) and operates on `SummarizedExperiment`
+objects for compatibility with the Bioconductor ecosystem.
 
 ## Details
 
-Key functionality:
+Key functionalities:
 
 - **Data preparation & normalisation:**
   [`create_input()`](https://hte123.github.io/TiDEomics/reference/create_input.md),
@@ -37,6 +39,7 @@ Key functionality:
   [`plot_umap_by_group()`](https://hte123.github.io/TiDEomics/reference/plot_umap_by_group.md)
 
 - **Feature properties & variance decomposition:**
+  [`calc_mean_sd()`](https://hte123.github.io/TiDEomics/reference/calc_mean_sd.md),
   [`calc_feature_property()`](https://hte123.github.io/TiDEomics/reference/calc_feature_property.md),
   [`summarise_feature_property()`](https://hte123.github.io/TiDEomics/reference/summarise_feature_property.md),
   [`group_specific_features()`](https://hte123.github.io/TiDEomics/reference/group_specific_features.md),
@@ -44,9 +47,10 @@ Key functionality:
   [`plot_variance()`](https://hte123.github.io/TiDEomics/reference/plot_variance.md),
   [`plot_trend()`](https://hte123.github.io/TiDEomics/reference/plot_trend.md)
 
-- **Pairwise differential expression:**
+- **Differential expression (pairwise and time-course):**
   [`DE_between_group()`](https://hte123.github.io/TiDEomics/reference/DE_between_group.md),
   [`DE_between_time()`](https://hte123.github.io/TiDEomics/reference/DE_between_time.md),
+  [`DE_timecourse()`](https://hte123.github.io/TiDEomics/reference/DE_timecourse.md),
   [`plot_DE_between_group()`](https://hte123.github.io/TiDEomics/reference/plot_DE_between_group.md),
   [`plot_DE_between_time()`](https://hte123.github.io/TiDEomics/reference/plot_DE_between_time.md),
   [`plot_volcano()`](https://hte123.github.io/TiDEomics/reference/plot_volcano.md)
@@ -54,6 +58,7 @@ Key functionality:
 - **Segmentation regression with Trendy:**
   [`run_Trendy()`](https://hte123.github.io/TiDEomics/reference/run_Trendy.md),
   [`summarise_Trendy()`](https://hte123.github.io/TiDEomics/reference/summarise_Trendy.md),
+  [`extract_segment_trends()`](https://hte123.github.io/TiDEomics/reference/extract_segment_trends.md),
   [`plot_segments()`](https://hte123.github.io/TiDEomics/reference/plot_segments.md),
   [`plot_breakpoints()`](https://hte123.github.io/TiDEomics/reference/plot_breakpoints.md)
 
@@ -67,6 +72,14 @@ Key functionality:
   [`plot_modules_v()`](https://hte123.github.io/TiDEomics/reference/plot_modules_v.md),
   [`summarise_module_pattern()`](https://hte123.github.io/TiDEomics/reference/summarise_module_pattern.md),
   [`summarise_module_metrics()`](https://hte123.github.io/TiDEomics/reference/summarise_module_metrics.md)
+
+- **Multi-dataset/multi-omics integration:**
+  [`combine_tide()`](https://hte123.github.io/TiDEomics/reference/combine_tide.md),
+  [`run_consensus_WGCNA()`](https://hte123.github.io/TiDEomics/reference/run_consensus_WGCNA.md),
+  [`extract_consensus_hubs()`](https://hte123.github.io/TiDEomics/reference/extract_consensus_hubs.md),
+  [`plot_scatter()`](https://hte123.github.io/TiDEomics/reference/plot_scatter.md),
+  [`plot_upset_h()`](https://hte123.github.io/TiDEomics/reference/plot_upset_h.md),
+  [`plot_upset_v()`](https://hte123.github.io/TiDEomics/reference/plot_upset_v.md)
 
 - **Functional enrichment:**
   [`enrichGO_list()`](https://hte123.github.io/TiDEomics/reference/enrichGO_list.md),
@@ -87,11 +100,15 @@ independent samples and repeated measures.
 
 See
 [`vignette("TiDEomics")`](https://hte123.github.io/TiDEomics/articles/TiDEomics.md)
-for a step-by-step tutorial.
+for the main tutorial and
+[`vignette("TiDEomics_multi")`](https://hte123.github.io/TiDEomics/articles/TiDEomics_multi.md)
+for multi-dataset/multi-omics analysis.
 
 ## See also
 
 Useful links:
+
+- <https://bioconductor.org/packages/TiDEomics>
 
 - <https://hte123.github.io/TiDEomics>
 

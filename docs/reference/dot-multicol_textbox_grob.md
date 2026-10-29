@@ -14,6 +14,7 @@ for downstream header decoration.
   background_gp = grid::gpar(fill = "#F7F7F7", col = "#CCCCCC"),
   padding = unit(c(0, 0, 0, 0), "mm"),
   column_widths_mm = NULL,
+  text_padding = NULL,
   ...
 )
 ```
@@ -43,6 +44,10 @@ for downstream header decoration.
 
   Optional numeric vector of pre-computed column widths in mm. If NULL,
   auto-computed from grob widths.
+
+- text_padding:
+
+  Optional padding passed to each category textbox.
 
 - ...:
 

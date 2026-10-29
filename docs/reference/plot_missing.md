@@ -19,14 +19,13 @@ plot_missing(se_obj, fontsize = 8, signif = FALSE, ...)
 
 - fontsize:
 
-  (Optional) An integer specifying the font size for the plot (default
-  is 8).
+  Font size for the plot (default is 8) (default is 8).
 
 - signif:
 
-  (Optional) A logical value indicating whether to perform significance
-  testing between groups and add significance annotations to the plot
-  (default is FALSE).
+  A logical value indicating whether to perform significance testing
+  between groups and add significance annotations to the plot (default
+  is FALSE).
 
 - ...:
 

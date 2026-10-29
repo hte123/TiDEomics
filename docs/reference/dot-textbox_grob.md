@@ -1,8 +1,8 @@
 # Local textbox grob
 
-Stacks text strings vertically with per-string graphical parameters.
-Adapted from `ComplexHeatmap:::textbox_grob` to avoid dependency on
-unexported ComplexHeatmap internals.
+Stacks text strings vertically with per-string graphical parameters
+(color, fontsize, fontfamily, fontface). Added `term_space` to allow
+extra spacing.
 
 ## Usage
 
@@ -22,7 +22,8 @@ unexported ComplexHeatmap internals.
   padding = unit(4, "pt"),
   first_text_from = "top",
   add_new_line = FALSE,
-  word_wrap = FALSE
+  word_wrap = FALSE,
+  term_space = NULL
 )
 ```
 
@@ -100,7 +101,19 @@ unexported ComplexHeatmap internals.
 
   Logical; enable word wrapping (default: `FALSE`).
 
+- term_space:
+
+  Optional vertical spacing after a complete term when terms are
+  separated onto different lines. `NULL` preserves the original
+  `line_space` behavior.
+
 ## Value
 
 A [`grid::gTree`](https://rdrr.io/r/grid/grid.grob.html) of class
 `"textbox"`.
+
+## Details
+
+Adapted from `ComplexHeatmap:::textbox_grob` to avoid dependency on
+unexported ComplexHeatmap internal functions, including .recycle_gp and
+.subset_gp (ComplexHeatmap:::recycle_gp, ComplexHeatmap:::subset_gp).

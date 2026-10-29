@@ -23,8 +23,7 @@ plot_cv(se_obj, fontsize = 8)
 
 - fontsize:
 
-  (Optional) An integer specifying the font size for the plot (default
-  is 8).
+  Font size for the plot (default is 8) (default is 8).
 
 ## Value
 

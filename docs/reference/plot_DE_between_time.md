@@ -38,8 +38,7 @@ plot_DE_between_time(
 
 - fontsize:
 
-  Font size for the heatmap displaying the number of DE features between
-  time points (default is 8)
+  Font size for the plot (default is 8)
 
 - nrow:
 
@@ -55,15 +54,15 @@ plot_DE_between_time(
 
 - adjP_thres:
 
-  (Optional) Threshold for adjusted p-value to consider a feature as
-  differentially expressed, for re-filtering the DE features. (default
-  is NULL, no re-filtering)
+  Threshold for adjusted p-value to consider a feature as differentially
+  expressed, for re-filtering the DE features. (default is NULL, no
+  re-filtering)
 
 - logFC_thres:
 
-  (Optional) Threshold for log2 fold change to consider a feature as
-  differentially expressed, for re-filtering the DE features. (default
-  is NULL, no re-filtering)
+  Threshold for log2 fold change to consider a feature as differentially
+  expressed, for re-filtering the DE features. (default is NULL, no
+  re-filtering)
 
 ## Value
 
@@ -76,8 +75,6 @@ of DE features.
 
 ``` r
 data(example_obj)
-example_obj <- normalise_to_start(example_obj)
-#> Normalising to group baseline at each feature's first non-NA time point.
 
 DE_between_time_out <- DE_between_time(example_obj, assay = 1)
 #> Non-NA replicate number filter not specified. Using minimum number of replicates across all groups and time points: 0

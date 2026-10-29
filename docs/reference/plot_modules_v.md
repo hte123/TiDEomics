@@ -16,8 +16,8 @@ plot_modules_v(
   module,
   se_obj_merged,
   scale = TRUE,
-  assay = 2,
-  ylabel = "Log2 abundance normalised to Time 0",
+  assay,
+  ylabel = NULL,
   suffix = "",
   device = "png",
   save = NULL,
@@ -25,7 +25,8 @@ plot_modules_v(
   height = 8,
   height_ratio = 2,
   fontsize = 8,
-  res = 300
+  res = 300,
+  names = NULL
 )
 ```
 
@@ -38,9 +39,9 @@ plot_modules_v(
 - se_obj_merged:
 
   A SummarizedExperiment object, with one value for each feature at each
-  time point in each group (replicates merged). The colData of the
-  object should contain columns "Sample", "Group", and "Time". The
-  object can be produced by
+  time point in each group (replicates merged), or a named list of such
+  objects (one per dataset). The colData of the object should contain
+  columns "Sample", "Group", and "Time". The object can be produced by
   [`split_groups()`](https://hte123.github.io/TiDEomics/reference/split_groups.md),
   [`merge_replicates()`](https://hte123.github.io/TiDEomics/reference/merge_replicates.md)
   and
@@ -53,12 +54,16 @@ plot_modules_v(
 
 - assay:
 
-  The assay index in the SummarizedExperiment object to use (default is
-  2, time 0 normalised data)
+  The assay to use in the SummarizedExperiment object: a numeric index
+  or character name, e.g. 1 or "orig" for original data, 2 or "norm" for
+  time 0 normalised data. (Required, no default.)
 
 - ylabel:
 
-  Y axis label prefix (default is "Abundance")
+  Y axis label. A single character string shared by all datasets, or a
+  character vector with one entry per dataset (multi-input only).
+  Default: NULL, i.e. "Z-score of log2 abundance" when scale = TRUE,
+  "Log2 abundance" otherwise.
 
 - suffix:
 
@@ -87,18 +92,26 @@ plot_modules_v(
 
 - fontsize:
 
-  Font size (default is 8)
+  Font size for the plot (default is 8)
 
 - res:
 
   Resolution of the saved image (except pdf format) (default is 300
   (ppi))
 
+- names:
+
+  Optional character vector of dataset names for the plot subtitles when
+  multi-dataset. Default: NULL, i.e. the names of `se_obj_merged`.
+
 ## Value
 
-Two plots aligned vertically by groups: the top one is a line plot of
-module feature mean expression profiles, the bottom one is a heatmap of
-feature expression across time points.
+For a single SummarizedExperiment, two plots aligned vertically by
+groups: the top one is a line plot of module feature mean expression
+profiles, the bottom one is a heatmap of feature expression across time
+points. For a named list of datasets, the per-dataset plot pairs are
+stacked vertically, with each dataset's line plot annotated with its
+name as a subtitle and an overall title "Module profiles: ...".
 
 ## Examples
 
@@ -114,10 +127,19 @@ data(example_net)
 example_module <- WGCNA_module(example_net)
 
 plot_modules_v(example_module |> dplyr::filter(Module != '0'),
-    example_obj_merged, scale = TRUE,
+    example_obj_merged, assay = 2, scale = TRUE,
     ylabel = "Z-score of log2 (expression)",
     height_ratio = 2,
     fontsize = 6)
+#> Warning: Removed 204 rows containing non-finite outside the scale range
+#> (`stat_summary()`).
+
+
+plot_modules_v(example_module |> dplyr::filter(Module != '0'),
+    list(Exp1 = example_obj_merged, Exp2 = example_obj_merged),
+    assay = 2, scale = TRUE, height_ratio = 2, fontsize = 6)
+#> Warning: Removed 204 rows containing non-finite outside the scale range
+#> (`stat_summary()`).
 #> Warning: Removed 204 rows containing non-finite outside the scale range
 #> (`stat_summary()`).
 ```

@@ -34,10 +34,6 @@ https://github.com/edo98811/WGCNA_official_documentation/blob/main/FemaleLiver-0
 ## Examples
 
 ``` r
-data(example_obj)
-example_obj <- normalise_to_start(example_obj)
-#> Normalising to group baseline at each feature's first non-NA time point.
-
 data("example_net")
 plot_WGCNA(example_net, fontsize = 8)
 

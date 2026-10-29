@@ -55,11 +55,10 @@ variable (Group or Time) and only the top n features are plotted if
 
 ``` r
 data(example_obj)
-example_obj <- normalise_to_start(example_obj)
-#> Normalising to group baseline at each feature's first non-NA time point.
 
 var_decomp <- decomp_variance(example_obj, assay = 1)
 #> LMM: exp ~ (1|Group) + (1|Time)  |  Output: Group, Time, Residual
+#> 100 features evaluated: 71 successful; 0 errors; 29 warnings; 0 skipped before fitting for insufficient observations or variance.
 plot_variance(var_decomp, rank = "Time", top_n = 20)
 #> Features not specified. Plotting top 20 features ranked by Time.
 ```

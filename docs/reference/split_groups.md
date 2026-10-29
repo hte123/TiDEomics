@@ -24,7 +24,5 @@ object. Each object in the list corresponds to one group of samples.
 
 ``` r
 data(example_obj)
-example_obj <- normalise_to_start(example_obj)
-#> Normalising to group baseline at each feature's first non-NA time point.
 example_obj_list <- split_groups(example_obj)
 ```

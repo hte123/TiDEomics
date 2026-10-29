@@ -23,15 +23,14 @@ plot_distribution(se_obj, facet_by = NULL, fontsize = 8)
 
 - facet_by:
 
-  (Optional) A character string specifying the variable to facet the
-  plot by. It can be one of "Group", "Time", or "Sample". If NULL, no
-  faceting will be applied and a single density plot will be generated
-  for all samples (default is NULL).
+  A character string specifying the variable to facet the plot by. It
+  can be one of "Group", "Time", or "Sample". If NULL, no faceting will
+  be applied and a single density plot will be generated for all samples
+  (default is NULL).
 
 - fontsize:
 
-  (Optional) An integer specifying the font size for the plot (default
-  is 8).
+  Font size for the plot (default is 8) (default is 8).
 
 ## Value
 

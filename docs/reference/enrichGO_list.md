@@ -36,8 +36,8 @@ enrichGO_list(
 
 - keyType:
 
-  (Optional) Available options are `AnnotationDbi::keytypes(OrgDb)`
-  (default is "SYMBOL")
+  Available options are `AnnotationDbi::keytypes(OrgDb)` (default is
+  "SYMBOL")
 
 - OrgDb:
 
@@ -55,56 +55,55 @@ enrichGO_list(
 
 - pAdjustMethod:
 
-  (Optional) Parameter of
+  Parameter of
   [`clusterProfiler::enrichGO()`](https://rdrr.io/pkg/clusterProfiler/man/enrichGO.html)
   (default is "BH")
 
 - pvalueCutoff:
 
-  (Optional) Parameter of
+  Parameter of
   [`clusterProfiler::enrichGO()`](https://rdrr.io/pkg/clusterProfiler/man/enrichGO.html)
   (default is 0.05)
 
 - qvalueCutoff:
 
-  (Optional) Parameter of
+  Parameter of
   [`clusterProfiler::enrichGO()`](https://rdrr.io/pkg/clusterProfiler/man/enrichGO.html)
   (default is 0.05)
 
 - category:
 
-  (Optional) GO category to analyze (default is all three of BP, MF, CC)
+  GO category to analyze (default is all three of BP, MF, CC)
 
 - simplify:
 
-  (Optional) Whether to simplify the GO terms by removing redundant
-  terms with
+  Whether to simplify the GO terms by removing redundant terms with
   [`clusterProfiler::simplify()`](https://rdrr.io/pkg/clusterProfiler/man/simplify-methods.html)
   function. (default is FALSE)
 
 - simplify_cutoff:
 
-  (Optional) Parameter of
+  Parameter of
   [`clusterProfiler::simplify()`](https://rdrr.io/pkg/clusterProfiler/man/simplify-methods.html),
   cutoff for similarity when simplifying GO terms (default is 0.7)
 
 - simplify_by:
 
-  (Optional) Parameter of
+  Parameter of
   [`clusterProfiler::simplify()`](https://rdrr.io/pkg/clusterProfiler/man/simplify-methods.html),
   method to choose representative term when simplifying GO terms
   (default is "p.adjust")
 
 - simplify_select_fun:
 
-  (Optional) Parameter of
+  Parameter of
   [`clusterProfiler::simplify()`](https://rdrr.io/pkg/clusterProfiler/man/simplify-methods.html),
   function to select representative term when simplifying GO terms
   (default is `min`)
 
 - simplify_measure:
 
-  (Optional) Parameter of
+  Parameter of
   [`clusterProfiler::simplify()`](https://rdrr.io/pkg/clusterProfiler/man/simplify-methods.html),
   method to calculate similarity when simplifying GO terms (default is
   "Wang")
@@ -142,9 +141,7 @@ if (requireNamespace("org.Mm.eg.db", quietly = TRUE)) {
 #> Loading required package: AnnotationDbi
 #> Loading required package: stats4
 #> Loading required package: BiocGenerics
-#> Warning: package 'BiocGenerics' was built under R version 4.6.1
 #> Loading required package: generics
-#> Warning: package 'generics' was built under R version 4.6.1
 #> 
 #> Attaching package: 'generics'
 #> The following objects are masked from 'package:base':
@@ -188,13 +185,14 @@ if (requireNamespace("org.Mm.eg.db", quietly = TRUE)) {
 #> The following object is masked from 'package:grDevices':
 #> 
 #>     windows
-#> clusterProfiler v4.21.0 Learn more at https://yulab-smu.top/contribution-knowledge-mining/
+#> clusterProfiler v4.21.4 Learn more at https://yulab-smu.top/contribution-knowledge-mining/
 #> 
 #> Please cite:
 #> 
-#> S Xu, E Hu, Y Cai, Z Xie, X Luo, L Zhan, W Tang, Q Wang, B Liu, R Wang,
-#> W Xie, T Wu, L Xie, G Yu. Using clusterProfiler to characterize
-#> multiomics data. Nature Protocols. 2024, 19(11):3292-3320
+#> Guangchuang Yu, Li-Gen Wang, Yanyan Han and Qing-Yu He.
+#> clusterProfiler: an R package for comparing biological themes among
+#> gene clusters. OMICS: A Journal of Integrative Biology. 2012,
+#> 16(5):284-287
 #> 
 #> Attaching package: 'clusterProfiler'
 #> The following object is masked from 'package:AnnotationDbi':
@@ -211,10 +209,6 @@ if (requireNamespace("org.Mm.eg.db", quietly = TRUE)) {
 #>     filter
 #> Performing GO enrichment for category: BP
 #> Processing gene list: 1
-#> 'select()' returned 1:1 mapping between keys and columns
-#> 'select()' returned 1:1 mapping between keys and columns
 #> Processing gene list: 2
-#> 'select()' returned 1:1 mapping between keys and columns
-#> 'select()' returned 1:1 mapping between keys and columns
 #> Merging GO enrichment results across gene lists for each category.
 ```

@@ -58,9 +58,9 @@ decomp_variance(
 
 - assay:
 
-  Assay to use: `"orig"` for original data, `"norm"` for
-  normalised-to-start data. Numeric indices (1, 2) are also accepted. No
-  default, must be specified explicitly.
+  The assay to use in the SummarizedExperiment object: a numeric index
+  or character name, e.g. 1 or "orig" for original data, 2 or "norm" for
+  time 0 normalised data. (Required, no default.)
 
 - core:
 
@@ -78,9 +78,7 @@ https://github.com/aifimmunology/PALMO/blob/main/R/lmeVariance.R
 
 ``` r
 data(example_obj)
-example_obj <- normalise_to_start(example_obj)
-#> Normalising to group baseline at each feature's first non-NA time point.
-
 var_decomp <- decomp_variance(example_obj, assay = 1)
 #> LMM: exp ~ (1|Group) + (1|Time)  |  Output: Group, Time, Residual
+#> 100 features evaluated: 71 successful; 0 errors; 29 warnings; 0 skipped before fitting for insufficient observations or variance.
 ```

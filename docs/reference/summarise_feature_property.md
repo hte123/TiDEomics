@@ -9,7 +9,8 @@ them into a single data frame, and returns this summary data frame. Each
 row in the resulting data frame represents a feature, and the columns
 contain the properties of that feature for each group, including the
 feature name, group name, proportion of NA values for that feature in
-that group, randomness p-value, and maximum fold change over time.
+that group, randomness p-value, and maximum and net fold change over
+time.
 
 ## Usage
 
@@ -30,8 +31,8 @@ summarise_feature_property(se_obj_merged_list)
 A data frame summarizing the feature properties across all groups, with
 each row representing a feature and columns containing the properties
 including the feature name, group name, and the proportion of NA values
-for that feature in that group, randomness p-value, and maximum fold
-change over time.
+for that feature in that group, randomness p-value, and maximum and net
+fold change over time.
 
 ## Examples
 

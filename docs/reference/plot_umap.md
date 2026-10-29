@@ -20,7 +20,9 @@ plot_umap(
   ylim_max = NULL,
   umap_neighbors = NULL,
   fontsize = 8,
-  assay = 1
+  assay = 1,
+  shared_only = FALSE,
+  names = NULL
 )
 ```
 
@@ -29,7 +31,8 @@ plot_umap(
 - se_obj:
 
   A SummarizedExperiment object created by
-  [`create_input()`](https://hte123.github.io/TiDEomics/reference/create_input.md)
+  [`create_input()`](https://hte123.github.io/TiDEomics/reference/create_input.md),
+  or a named list of SummarizedExperiment objects (one per dataset)
 
 - seed:
 
@@ -48,22 +51,22 @@ plot_umap(
 - xlim_min:
 
   Minimum x-axis limit when drawing ellipses (default: NULL,
-  auto-computed as 1.5×min UMAP x)
+  auto-computed with 0.35x padding around the UMAP x range)
 
 - xlim_max:
 
   Maximum x-axis limit when drawing ellipses (default: NULL,
-  auto-computed as 1.5×max UMAP x)
+  auto-computed with 0.35x padding around the UMAP x range)
 
 - ylim_min:
 
   Minimum y-axis limit when drawing ellipses (default: NULL,
-  auto-computed as 1.5×min UMAP y)
+  auto-computed with 0.35x padding around the UMAP y range)
 
 - ylim_max:
 
   Maximum y-axis limit when drawing ellipses (default: NULL,
-  auto-computed as 1.5×max UMAP y)
+  auto-computed with 0.35x padding around the UMAP y range)
 
 - umap_neighbors:
 
@@ -77,20 +80,48 @@ plot_umap(
 
 - assay:
 
-  Assay index to use, where 1 is the original data and 2 is normalised
-  to time 0 (if available) (default is 1)
+  The assay to use in the SummarizedExperiment object: a numeric index
+  or character name, e.g. 1 or "orig" for original data, 2 or "norm" for
+  time 0 normalised data. (Default: 1.)
+
+- shared_only:
+
+  Logical, whether to subset each dataset to the features shared by all
+  datasets before UMAP (default is FALSE; only applies when `se_obj` is
+  a list of multiple datasets)
+
+- names:
+
+  Optional character vector of dataset names for the plot titles.
+  Default: NULL, i.e. the names of `se_obj` (when a list).
 
 ## Value
 
-A list of UMAP plots showing the distribution of samples. And a data
-frame containing UMAP coordinates and sample annotations for custom
-plotting.
+A list with `p_list` (a named list of ggplot objects) and `umap_layout`
+(a data frame containing UMAP coordinates and sample annotations for
+custom plotting). When `se_obj` is a named list of datasets, both are
+named lists (one per dataset) and the combined UMAP plots are returned
+as `plot`.
 
 ## Examples
 
 ``` r
 data(example_obj)
-umap_layout <- plot_umap(example_obj)
+data(example_obj_2)
+umap_out <- plot_umap(example_obj)
 #> Using n_neighbors = 8
 #> Warning: Using size for a discrete variable is not advised.
+umap_out$p_list
+#> $p3
+
+#> 
+#> $p1
+
+#> 
+umap_multi <- plot_umap(list(Exp1 = example_obj, Exp2 = example_obj_2))
+#> Exp1: using n_neighbors = 8
+#> Warning: Using size for a discrete variable is not advised.
+#> Exp2: using n_neighbors = 8
+#> Warning: Using size for a discrete variable is not advised.
+umap_multi$plot
 ```

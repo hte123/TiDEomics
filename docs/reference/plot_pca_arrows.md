@@ -43,12 +43,13 @@ plot_pca_arrows(
 
 - fontsize:
 
-  Base font size (default: 8).
+  Font size for the plot (default is 8)
 
 - assay:
 
-  Assay index to use, where 1 is the original data and 2 is normalised
-  to time 0 (if available) (default: 1).
+  The assay to use in the SummarizedExperiment object: a numeric index
+  or character name, e.g. 1 or "orig" for original data, 2 or "norm" for
+  time 0 normalised data. (Default: 1.)
 
 ## Value
 
